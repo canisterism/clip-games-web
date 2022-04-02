@@ -1,9 +1,9 @@
-import { DocumentData } from "firebase/firestore/lite";
 import { useEffect, useState } from "react";
-import * as gateways from "../../gateways";
+import { Game } from "../../domain/game/model";
+import * as gateways from "../../gateway";
 
-export const useGames = (): DocumentData[] => {
-  const [games, setGames] = useState<DocumentData[]>([]);
+export const useGames = (): Game[] => {
+  const [games, setGames] = useState<Game[]>([]);
 
   useEffect(() => {
     (async () => {

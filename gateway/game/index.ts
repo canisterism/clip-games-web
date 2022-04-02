@@ -5,11 +5,15 @@ import {
   limit,
   query,
 } from "firebase/firestore/lite";
+import { Game } from "../../domain/game/model";
 import db from "../../firebase/db";
+import { converter } from "./converter";
 
-const getGames = (db: Firestore) => async () => {
+export const getGames = (db: Firestore) => async (): Promise<Game[]> => {
   const gameCollection = collection(db, "games");
-  const snapshot = await getDocs(query(gameCollection, limit(10)));
+  const snapshot = await getDocs(
+    query(gameCollection, limit(10)).withConverter<Game>(converter)
+  );
   const games = snapshot.docs.map((doc) => doc.data());
   return games;
 };
