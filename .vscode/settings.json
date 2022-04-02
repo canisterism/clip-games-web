@@ -1,0 +1,5 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true // importsを自動で並べ替える
+  }
+}
