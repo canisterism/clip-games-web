@@ -15,7 +15,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="h-screen py-16 px-0 flex flex-1 flex-col justify-center items-center">
+      <main className="py-16 px-0 flex flex-1 flex-col justify-center items-center">
         <h1 className="text-5xl font-mono text-center mb-5">
           Welcome to{" "}
           <a
@@ -25,33 +25,31 @@ const Home: NextPage = () => {
             clip-games
           </a>
         </h1>
-        <div className="flex">
-          <Image
-            width={200}
-            height={200}
-            src="https://picsum.photos/200"
-            alt="photo"
-          />
-
-          <Image
-            width={200}
-            height={200}
-            src="https://picsum.photos/200"
-            alt="photo"
-          />
-
-          <Image
-            width={200}
-            height={200}
-            src="https://picsum.photos/200"
-            alt="photo"
-          />
-        </div>
-        <ul>
+        <div className="grid grid-cols-3">
           {games.map((game) => {
-            return <li key={game.title}>{game.title}</li>;
+            return (
+              <div key={game.id} className="relative">
+                <Image
+                  width="100%"
+                  height="320px"
+                  layout="responsive"
+                  objectFit="contain"
+                  src={
+                    game.imageUrl ??
+                    "https://placehold.jp/eeeeee/cccccc/200x400.png?text=No%20Image"
+                  }
+                  alt="game image"
+                />
+
+                <div> {game.title}</div>
+                <div> {game.publisher}</div>
+                <div>
+                  {game.clipCount} | {game.ratingCount}
+                </div>
+              </div>
+            );
           })}
-        </ul>
+        </div>
       </main>
 
       <footer className="flex justify-center items-center flex-grow">
