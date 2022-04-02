@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+import Image from "next/image";
 import React from "react";
 import { useGames } from "./hooks/game";
 
@@ -24,7 +25,28 @@ const Home: NextPage = () => {
             clip-games
           </a>
         </h1>
+        <div className="flex">
+          <Image
+            width={200}
+            height={200}
+            src="https://picsum.photos/200"
+            alt="photo"
+          />
 
+          <Image
+            width={200}
+            height={200}
+            src="https://picsum.photos/200"
+            alt="photo"
+          />
+
+          <Image
+            width={200}
+            height={200}
+            src="https://picsum.photos/200"
+            alt="photo"
+          />
+        </div>
         <ul>
           {games.map((game) => {
             return <li key={game.title}>{game.title}</li>;
