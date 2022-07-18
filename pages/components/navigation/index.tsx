@@ -16,6 +16,7 @@ import {
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
+import NextLink from "next/link";
 
 export const Navigation = () => {
   const { isOpen, onToggle } = useDisclosure();
@@ -80,7 +81,7 @@ const MobileNavigation = () => {
     </Stack>
   );
 };
-const MobileNavigationItem = ({ label, href, subLabel, children }: NavItem) => {
+const MobileNavigationItem = ({ label, href, children }: NavItem) => {
   const { isOpen, onToggle } = useDisclosure();
   const linkHoverColor = useColorModeValue("gray.800", "white");
 
@@ -88,6 +89,7 @@ const MobileNavigationItem = ({ label, href, subLabel, children }: NavItem) => {
     <Stack onClick={children && onToggle}>
       <Flex
         as={Link}
+        href={href ?? "#"}
         py={2}
         key={label}
         align={"center"}
@@ -100,10 +102,42 @@ const MobileNavigationItem = ({ label, href, subLabel, children }: NavItem) => {
         >
           {label}
         </Text>
-        {children && <Icon as={ChevronDownIcon} boxSize={6}></Icon>}
+        {children && (
+          <Icon
+            as={ChevronDownIcon}
+            boxSize={6}
+            transition={"all .25s ease-in-out"}
+            transform={isOpen ? "rotate(180deg)" : ""}
+          ></Icon>
+        )}
       </Flex>
-      <Collapse in={isOpen}>children should be here</Collapse>
+      <Collapse in={isOpen}>
+        <Stack
+          borderLeft={1}
+          borderStyle={"solid"}
+          borderColor={useColorModeValue("gray.200", "gray.900")}
+          mt={4}
+          pl={4}
+        >
+          {children?.map((subItem) => {
+            return (
+              <MobileNavigationSubItem
+                key={subItem.label}
+                {...subItem}
+              ></MobileNavigationSubItem>
+            );
+          })}
+        </Stack>
+      </Collapse>
     </Stack>
+  );
+};
+
+const MobileNavigationSubItem = ({ label, subLabel, href }: NavItem) => {
+  return (
+    <NextLink href={href ?? "#"} passHref>
+      <Link py={2}>{label}</Link>
+    </NextLink>
   );
 };
 
