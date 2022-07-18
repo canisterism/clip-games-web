@@ -1,4 +1,8 @@
-import { ChevronDownIcon, HamburgerIcon } from "@chakra-ui/icons";
+import {
+  ChevronDownIcon,
+  ChevronRightIcon,
+  HamburgerIcon,
+} from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -162,26 +166,18 @@ const DesktopNavigation = () => {
               </Link>
             </PopoverTrigger>
             {item.children && (
-              <PopoverContent border={0} boxShadow={"xl"} rounded={"xl"}>
+              <PopoverContent
+                border={0}
+                boxShadow={"xl"}
+                rounded={"xl"}
+                minW={"sm"}
+              >
                 <Stack padding={4}>
                   {item.children.map((subItem) => (
-                    <Link
+                    <DesktopSubNavigation
                       key={subItem.label}
-                      rounded="md"
-                      href={subItem.href ?? "#"}
-                      p="2"
-                      _hover={{
-                        textDecoration: "none",
-                        color: linkHoverColor,
-                      }}
-                    >
-                      <Box>
-                        {subItem.label}
-                        <Text color={"gray.600"} fontSize={"sm"}>
-                          {subItem.subLabel}
-                        </Text>
-                      </Box>
-                    </Link>
+                      {...subItem}
+                    ></DesktopSubNavigation>
                   ))}
                 </Stack>
               </PopoverContent>
@@ -190,6 +186,45 @@ const DesktopNavigation = () => {
         );
       })}
     </Stack>
+  );
+};
+
+const DesktopSubNavigation = ({ label, subLabel, href }: NavItem) => {
+  const linkHoverColor = useColorModeValue("gray.800", "white");
+
+  return (
+    <Link
+      key={label}
+      rounded="md"
+      role={"group"}
+      href={href ?? "#"}
+      p="2"
+      _hover={{
+        textDecoration: "none",
+        bg: useColorModeValue("pink.50", "gray.900"),
+        color: linkHoverColor,
+      }}
+    >
+      <Stack direction={"row"} align={"center"}>
+        <Box flex={1}>
+          <Text _groupHover={{ color: "pink.400" }} transition={"all .3s ease"}>
+            {label}
+          </Text>
+
+          <Text color={"gray.600"} fontSize={"sm"}>
+            {subLabel}
+          </Text>
+        </Box>
+        <Flex
+          transition={"all .3s ease"}
+          transform={"translateX(-10px)"}
+          opacity={0}
+          _groupHover={{ opacity: "100%", transform: "translateX(0)" }}
+        >
+          <Icon as={ChevronRightIcon} color={"pink.400"}></Icon>
+        </Flex>
+      </Stack>
+    </Link>
   );
 };
 
