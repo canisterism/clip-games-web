@@ -2,7 +2,6 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Hero from "./components/hero";
 import { Navigation } from "./components/navigation";
-import { CompleteNavigation } from "./components/navigation/__navigation";
 
 import { useGames } from "./hooks/game";
 
@@ -17,7 +16,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Navigation></Navigation>
-      <CompleteNavigation></CompleteNavigation>
+      {/* <CompleteNavigation></CompleteNavigation> */}
       <main>
         <Hero></Hero>
       </main>
