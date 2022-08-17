@@ -15,5 +15,7 @@ services:
     user: postgres
     extra_hosts:
       - localhost:172.18.0.1
+    container_name: db
+
 volumes:
   postgres:
