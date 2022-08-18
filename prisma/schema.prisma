@@ -1,0 +1,17 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Platform {
+  id   String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name String @db.VarChar(255) @unique
+  publishedAt DateTime @db.Timestamp(0) @map("published_at")
+  documentId String? @db.VarChar(255) @unique @map("document_id")
+
+  @@map("platforms")
+}
