@@ -1,30 +1,55 @@
+import { auth } from "@/prisma/firebaseAdmin";
 import { PrismaClient } from "@prisma/client";
-import { fetchDocumentData } from "./utils";
+import { fetchDocumentDataList } from "./utils";
 
-const prisma = new PrismaClient();
-
-// const main = async () => {
-//     for (const [_, user] of Object.entries(result)) {
-//      console.log({ user });
-//     }
-//     console.log(`Import ${platform.name}`);
-//     const record = await prisma.platform.create({
-//       data: {
-//         name: platform.name,
-//         shortenedName: platform.id,
-//         publishedAt: new Date(platform.publishedAt.toDate().toDateString()),
-//       },
-//     });
-//     console.log(`Imported ${JSON.parse(JSON.stringify(record))}...`);
-//   }
-// };
+const prisma = new PrismaClient({ log: ["query", "info", "warn", "error"] });
 
 export const importUsers = async () => {
   try {
-    const result = await fetchDocumentData("users");
-    console.log({ result });
+    const usersDocuments = await fetchDocumentDataList("users");
+    const publicProfilesDocuments = await fetchDocumentDataList(
+      "public-profiles"
+    );
+
+    for await (const authUser of (await auth.listUsers()).users) {
+      const user = usersDocuments[authUser.uid];
+      const publicProfile = publicProfilesDocuments[authUser.uid];
+
+      const record = await prisma.user.upsert({
+        where: {
+          id: authUser.uid,
+        },
+        update: {
+          id: authUser.uid,
+          displayName: publicProfile.displayName,
+          description: publicProfile.description,
+          photoUrl: publicProfile.photoUrl,
+          notificationReadAt: user.notificationReadAt.toDate(),
+          createdAt: publicProfile.createdAt.toDate(),
+          updatedAt: publicProfile.updatedAt.toDate(),
+        },
+        create: {
+          id: authUser.uid,
+          displayName: publicProfile.displayName,
+          description: publicProfile.description,
+          photoUrl: publicProfile.photoUrl,
+          notificationReadAt: user.notificationReadAt.toDate(),
+          createdAt: publicProfile.createdAt.toDate(),
+          updatedAt: publicProfile.updatedAt.toDate(),
+        },
+      });
+      console.dir({ record });
+    }
   } catch (error) {
     console.error(error);
   }
   console.log("Finished to import Users.");
 };
+
+// id?: boolean
+// displayName?: boolean
+// description?: boolean
+// photoUrl?: boolean
+// notificationReadAt?: boolean
+// createdAt?: boolean
+// updatedAt?: boolean

@@ -1,19 +1,28 @@
 import { PrismaClient } from "@prisma/client";
-import { fetchDocumentData } from "./utils";
+import { dir } from "console";
+import { fetchDocumentDataList } from "./utils";
 
 const prisma = new PrismaClient();
 
 export const importPlatforms = async () => {
-  const platforms = await fetchDocumentData("hardwares");
+  const platforms = await fetchDocumentDataList("hardwares");
   for await (const [_, platform] of Object.entries(platforms)) {
-    // TODO: upsertにする
-    // const record = await prisma.platform.create({
-    //   data: {
-    //     name: platform.name,
-    //     shortenedName: platform.id,
-    //     publishedAt: new Date(platform.publishedAt.toDate().toDateString()),
-    //   },
-    // });
-    // console.log(`Imported ${JSON.parse(JSON.stringify(record))}...`);
+    dir(platform);
+    const record = await prisma.platform.upsert({
+      where: {
+        name: platform.name,
+      },
+      update: {
+        name: platform.name,
+        shortenedName: platform.id,
+        publishedAt: platform.publishedAt.toDate(),
+      },
+      create: {
+        name: platform.name,
+        shortenedName: platform.id,
+        publishedAt: platform.publishedAt.toDate(),
+      },
+    });
+    console.log(`Imported ${JSON.parse(JSON.stringify(record))}.`);
   }
 };
