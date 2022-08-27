@@ -1,12 +1,12 @@
 import { PrismaClient } from "@prisma/client";
-import { collection, getDocs, query } from "firebase/firestore/lite";
-import firestore from "./../../db/firebase/firestore";
+import { fetchDocumentData } from "./utils";
 
 const prisma = new PrismaClient();
 
 // const main = async () => {
-//   const platforms = await fetchAllPlatForms();
-//   for await (const platform of platforms) {
+//     for (const [_, user] of Object.entries(result)) {
+//      console.log({ user });
+//     }
 //     console.log(`Import ${platform.name}`);
 //     const record = await prisma.platform.create({
 //       data: {
@@ -19,30 +19,9 @@ const prisma = new PrismaClient();
 //   }
 // };
 
-async function fetchUsers() {
-  const usersCollection = collection(firestore, "users");
-  const snapshot = await getDocs(query(usersCollection));
-  const users = snapshot.docs
-    .map((doc) => doc.data())
-    .map((data) => {
-      return { [data.id as string]: data };
-    });
-  console.log({ users });
-  return users;
-}
-
-async function fetchProfiles() {
-  const profilesCollection = collection(firestore, "public-profiles");
-  const snapshot = await getDocs(query(profilesCollection));
-  const profiles = snapshot.docs.map((doc) => doc.data());
-  console.log({ profiles });
-  return profiles;
-}
-
 export const importUsers = async () => {
   try {
-    console.log("Start Importing Users...");
-    const result = await fetchUsers();
+    const result = await fetchDocumentData("users");
     console.log({ result });
   } catch (error) {
     console.error(error);
