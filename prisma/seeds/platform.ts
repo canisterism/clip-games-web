@@ -12,11 +12,7 @@ export const importPlatforms = async () => {
       where: {
         name: platform.name,
       },
-      update: {
-        name: platform.name,
-        shortenedName: platform.id,
-        publishedAt: platform.publishedAt.toDate(),
-      },
+      update: {},
       create: {
         name: platform.name,
         shortenedName: platform.id,

@@ -19,15 +19,7 @@ export const importUsers = async () => {
         where: {
           id: authUser.uid,
         },
-        update: {
-          id: authUser.uid,
-          displayName: publicProfile.displayName,
-          description: publicProfile.description,
-          photoUrl: publicProfile.photoUrl,
-          notificationReadAt: user.notificationReadAt.toDate(),
-          createdAt: publicProfile.createdAt.toDate(),
-          updatedAt: publicProfile.updatedAt.toDate(),
-        },
+        update: {},
         create: {
           id: authUser.uid,
           displayName: publicProfile.displayName,
