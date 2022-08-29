@@ -1,5 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-import { dir } from "console";
 import { fetchDocumentDataList } from "./utils";
 
 const prisma = new PrismaClient();
@@ -7,7 +6,6 @@ const prisma = new PrismaClient();
 export const importPlatforms = async () => {
   const platforms = await fetchDocumentDataList("hardwares");
   for await (const [_, platform] of Object.entries(platforms)) {
-    dir(platform);
     const record = await prisma.platform.upsert({
       where: {
         name: platform.name,

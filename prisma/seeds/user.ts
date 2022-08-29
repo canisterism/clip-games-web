@@ -37,11 +37,3 @@ export const importUsers = async () => {
   }
   console.log("Finished to import Users.");
 };
-
-// id?: boolean
-// displayName?: boolean
-// description?: boolean
-// photoUrl?: boolean
-// notificationReadAt?: boolean
-// createdAt?: boolean
-// updatedAt?: boolean
