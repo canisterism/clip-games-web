@@ -1,12 +1,14 @@
-import { importGames } from "@/prisma/seeds/game";
+import { importGenres } from "@/prisma/seeds/genre";
+import { importPlatforms } from "@/prisma/seeds/platform";
+import { importUsers } from "@/prisma/seeds/user";
 import { PrismaClient } from "@prisma/client";
 
 const client = new PrismaClient();
 
 async function main() {
-  // await importPlatforms();
-  // await importUsers();
-  importGames();
+  await importPlatforms();
+  await importUsers();
+  await importGenres();
 }
 
 main()
