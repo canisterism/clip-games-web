@@ -6,7 +6,7 @@ export const fetchDocumentDataList = async (
 ): Promise<{
   [key: string]: FirebaseFirestore.DocumentData;
 }> => {
-  const snapshots = await firestore.collection(collectionPath).get();
+  const snapshots = await firestore.collection(collectionPath).limit(10).get();
   const documentMap: { [key: string]: FirebaseFirestore.DocumentData } = {};
 
   for (const snapshot of snapshots.docs) {
