@@ -29,7 +29,7 @@ model Platform {
 }
 
 model Genre {
-  id    String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id    String      @id
   name  String      @unique @db.VarChar(255)
   games GameGenre[]
 
@@ -56,7 +56,7 @@ model GameGenre {
   Game    Game   @relation(fields: [gameId], references: [id])
   gameId  String
   Genre   Genre  @relation(fields: [genreId], references: [id])
-  genreId String @db.Uuid
+  genreId String
 
   @@id([gameId, genreId])
   @@map("game_genres")
