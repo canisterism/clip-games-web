@@ -1,7 +1,7 @@
 import { fetchDocumentDataList } from "@/prisma/seeds/utils";
 import { PrismaClient } from "@prisma/client";
 
-const prisma = new PrismaClient({ log: ["query", "info", "error", "warn"] });
+const prisma = new PrismaClient();
 
 export const importGenres = async () => {
   // 日本語化するためにゲーム全部取ってマッピングを作る
@@ -10,10 +10,6 @@ export const importGenres = async () => {
   for (const [_, game] of Object.entries(games)) {
     const genres = game.genre.split("/");
     for (const genre of genres) {
-      console.log("game.id");
-      console.dir(genre);
-      console.dir(GENRES_MAP[genre as keyof typeof GENRES_MAP]);
-
       await prisma.genre.upsert({
         where: {
           id: genre,
