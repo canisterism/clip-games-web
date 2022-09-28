@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                 String   @id
+  displayName        String   @map("display_name") @db.VarChar(255)
+  description        String   @default("") @db.Text()
+  photoUrl           String?  @map("photo_url") @db.Text()
+  notificationReadAt DateTime @default(now()) @map("notification_read_at") @db.Timestamp(0)
+  createdAt          DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt          DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(0)
+
+  @@map("users")
+}
+
+model Platform {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name          String   @unique @db.VarChar(255)
+  shortenedName String   @unique @map("shortened_name") @db.VarChar(255)
+  publishedAt   DateTime @map("published_at") @db.Timestamp(0)
+
+  @@map("platforms")
+}
+
+model Genre {
+  id    String      @id
+  name  String      @unique @db.VarChar(255)
+  games GameGenre[]
+
+  @@map("genres")
+}
+
+model Game {
+  // Firestoreから移行したゲームはdocumentID, それ以降のゲームはuuid
+  id          String    @id @default(dbgenerated("gen_random_uuid()"))
+  title       String    @unique @db.VarChar(255)
+  publishedAt DateTime? @map("published_at") @db.Timestamp(0)
+  price       Int?
+  imageUrl    String?   @map("image_url") @db.Text()
+  publisher   String?
+  wikiId      Int?
+
+  genres GameGenre[]
+
+  @@map("games")
+}
+
+model GameGenre {
+  name    String @unique @db.VarChar(255)
+  Game    Game   @relation(fields: [gameId], references: [id])
+  gameId  String
+  Genre   Genre  @relation(fields: [genreId], references: [id])
+  genreId String
+
+  @@id([gameId, genreId])
+  @@map("game_genres")
+}

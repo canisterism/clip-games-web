@@ -6,7 +6,7 @@ import {
   query,
 } from "firebase/firestore/lite";
 import { Game } from "../../domain/game/model";
-import db from "../../firebase/db";
+import db from "../../pages/firebase/firestore";
 import { converter } from "./converter";
 
 export const getGames = (db: Firestore) => async (): Promise<Game[]> => {
