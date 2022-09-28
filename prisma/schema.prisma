@@ -36,6 +36,14 @@ model Genre {
   @@map("genres")
 }
 
+model Publisher {
+  id    String @id @default(dbgenerated("gen_random_uuid()"))
+  name  String @unique @db.VarChar(255)
+  games Game[]
+
+  @@map("publishers")
+}
+
 model Game {
   // Firestoreから移行したゲームはdocumentID, それ以降のゲームはuuid
   id          String    @id @default(dbgenerated("gen_random_uuid()"))
@@ -43,19 +51,19 @@ model Game {
   publishedAt DateTime? @map("published_at") @db.Timestamp(0)
   price       Int?
   imageUrl    String?   @map("image_url") @db.Text()
-  publisher   String?
   wikiId      Int?
 
-  genres GameGenre[]
+  publisher   Publisher   @relation(fields: [publisherId], references: [id])
+  publisherId String
+  genres      GameGenre[]
 
   @@map("games")
 }
 
 model GameGenre {
-  name    String @unique @db.VarChar(255)
-  Game    Game   @relation(fields: [gameId], references: [id])
+  game    Game   @relation(fields: [gameId], references: [id])
   gameId  String
-  Genre   Genre  @relation(fields: [genreId], references: [id])
+  genre   Genre  @relation(fields: [genreId], references: [id])
   genreId String
 
   @@id([gameId, genreId])
