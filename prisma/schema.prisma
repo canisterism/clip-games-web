@@ -9,55 +9,63 @@ datasource db {
 
 model User {
   id                 String   @id
-  displayName        String   @map("display_name") @db.VarChar(255)
+  displayName        String   @db.VarChar(255)
   description        String   @default("") @db.Text()
-  photoUrl           String?  @map("photo_url") @db.Text()
-  notificationReadAt DateTime @default(now()) @map("notification_read_at") @db.Timestamp(0)
-  createdAt          DateTime @default(now()) @map("created_at") @db.Timestamp(0)
-  updatedAt          DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(0)
-
-  @@map("users")
+  photoUrl           String?  @db.Text()
+  notificationReadAt DateTime @default(now()) @db.Timestamp(0)
+  createdAt          DateTime @default(now()) @db.Timestamp(0)
+  updatedAt          DateTime @default(now()) @updatedAt @db.Timestamp(0)
 }
 
 model Platform {
-  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name          String   @unique @db.VarChar(255)
-  shortenedName String   @unique @map("shortened_name") @db.VarChar(255)
-  publishedAt   DateTime @map("published_at") @db.Timestamp(0)
-  games         Game[]
-
-  @@map("platforms")
+  id            String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name          String         @unique @db.VarChar(255)
+  shortenedName String         @unique @db.VarChar(255)
+  publishedAt   DateTime       @db.Timestamp(0)
+  gamePlatforms GamePlatform[]
 }
 
 model Genre {
-  id    String @id
-  name  String @unique @db.VarChar(255)
-  games Game[]
-
-  @@map("genres")
+  id         String      @id
+  name       String      @unique @db.VarChar(255)
+  gameGenres GameGenre[]
 }
 
 model Publisher {
   id    String @id @default(dbgenerated("gen_random_uuid()"))
   name  String @unique @db.VarChar(255)
   games Game[]
-
-  @@map("publishers")
 }
 
 model Game {
   // Firestoreから移行したゲームはdocumentID, それ以降のゲームはuuid
   id          String    @id @default(dbgenerated("gen_random_uuid()"))
   title       String    @unique @db.VarChar(255)
-  publishedAt DateTime? @map("published_at") @db.Timestamp(0)
+  publishedAt DateTime? @db.Timestamp(0)
   price       Int?
-  imageUrl    String?   @map("image_url") @db.Text()
+  imageUrl    String?   @db.Text()
   wikiId      Int?
 
-  publisher   Publisher  @relation(fields: [publisherId], references: [id])
-  publisherId String
-  genres      Genre[]
-  platforms   Platform[]
+  publisher    Publisher      @relation(fields: [publisherId], references: [id])
+  publisherId  String
+  GamePlatform GamePlatform[]
+  GameGenre    GameGenre[]
+}
 
-  @@map("games")
+model GamePlatform {
+  game       Game     @relation(fields: [gameId], references: [id])
+  gameId     String
+  platform   Platform @relation(fields: [platformId], references: [id])
+  platformId String   @db.Uuid
+
+  @@id([gameId, platformId])
+}
+
+model GameGenre {
+  game    Game   @relation(fields: [gameId], references: [id])
+  gameId  String
+  genre   Genre  @relation(fields: [genreId], references: [id])
+  genreId String
+
+  @@id([gameId, genreId])
 }
