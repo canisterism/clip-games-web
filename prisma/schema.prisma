@@ -15,6 +15,7 @@ model User {
   notificationReadAt DateTime @default(now()) @db.Timestamp(0)
   createdAt          DateTime @default(now()) @db.Timestamp(0)
   updatedAt          DateTime @default(now()) @updatedAt @db.Timestamp(0)
+  clips              Clip[]
 }
 
 model Platform {
@@ -69,4 +70,14 @@ model GameGenre {
   genreId String
 
   @@id([gameId, genreId])
+}
+
+model Clip {
+  game      Game     @relation(fields: [gameId], references: [id])
+  gameId    String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  createdAt DateTime
+
+  @@id([gameId, userId])
 }
