@@ -22,13 +22,13 @@ model Platform {
   name          String         @unique @db.VarChar(255)
   shortenedName String         @unique @db.VarChar(255)
   publishedAt   DateTime       @db.Timestamp(0)
-  gamePlatforms GamePlatform[]
+  games         GamePlatform[]
 }
 
 model Genre {
-  id         String      @id
-  name       String      @unique @db.VarChar(255)
-  gameGenres GameGenre[]
+  id    String      @id
+  name  String      @unique @db.VarChar(255)
+  games GameGenre[]
 }
 
 model Publisher {
@@ -46,10 +46,11 @@ model Game {
   imageUrl    String?   @db.Text()
   wikiId      Int?
 
-  publisher    Publisher      @relation(fields: [publisherId], references: [id])
-  publisherId  String
-  GamePlatform GamePlatform[]
-  GameGenre    GameGenre[]
+  publisher   Publisher      @relation(fields: [publisherId], references: [id])
+  publisherId String
+  platforms   GamePlatform[]
+  genres      GameGenre[]
+  clips       Clip[]
 }
 
 model GamePlatform {

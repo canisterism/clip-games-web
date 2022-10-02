@@ -27,17 +27,31 @@ export const importGames = async () => {
           },
         },
         genres: {
-          connectOrCreate: {
-            where: { id: game.genre },
-            create: {
-              id: game.genre,
-              name: toGenreName(game.genre),
+          create: [
+            {
+              genre: {
+                connectOrCreate: {
+                  where: {
+                    id: game.genre,
+                  },
+                  create: {
+                    id: game.genre,
+                    name: toGenreName(game.genre),
+                  },
+                },
+              },
             },
-          },
+          ],
         },
         platforms: {
-          connect: (game.hardwareIds as string[]).map((hardwareId) => {
-            return { shortenedName: hardwareId };
+          create: (game.hardwareIds as string[]).map((hardwareId) => {
+            return {
+              platform: {
+                connect: {
+                  shortenedName: hardwareId,
+                },
+              },
+            };
           }),
         },
         wikiId: game.wikiId,
