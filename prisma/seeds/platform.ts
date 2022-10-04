@@ -17,6 +17,6 @@ export const importPlatforms = async () => {
         publishedAt: platform.publishedAt.toDate(),
       },
     });
-    console.log(`Imported ${JSON.parse(JSON.stringify(record))}.`);
+    console.dir(record);
   }
 };

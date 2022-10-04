@@ -21,3 +21,10 @@ export const fetchDocumentDataList = async (
   }
   return documentMap;
 };
+
+export const fetchDocumentReference = async (
+  collectionPath: string,
+  id: string
+): Promise<FirebaseFirestore.DocumentReference | undefined> => {
+  return await firestore.collection(collectionPath).doc(id);
+};

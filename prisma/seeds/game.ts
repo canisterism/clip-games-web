@@ -1,48 +1,74 @@
 import { fetchDocumentDataList } from "@/prisma/seeds/utils";
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient({ log: ["query", "info", "error", "warn"] });
 
 export const importGames = async () => {
-  const games = await fetchDocumentDataList("games", 10);
+  const games = await fetchDocumentDataList("games");
 
   for (const [id, game] of Object.entries(games)) {
     console.dir(game);
 
-    await prisma.game.upsert({
-      where: {
-        id: id,
-      },
-      update: {},
-      create: {
-        id: id,
-        title: game.title,
-        publishedAt: game.publishedAt.toDate(),
-        price: game.price,
-        imageUrl: game.imageUrl,
-        publisher: {
-          connectOrCreate: {
-            where: { name: game.publisher },
-            create: { name: game.publisher },
-          },
+    try {
+      await prisma.game.upsert({
+        where: {
+          id: id,
         },
-        genres: {
-          connectOrCreate: {
-            where: { id: game.genre },
-            create: {
-              id: game.genre,
-              name: toGenreName(game.genre),
+        update: {},
+        create: {
+          id: id,
+          title: game.title,
+          publishedAt: game.publishedAt?.toDate(),
+          price: game.price,
+          imageUrl: game.imageUrl,
+          publisher: {
+            connectOrCreate: {
+              where: { name: game.publisher },
+              create: { name: game.publisher },
             },
           },
+          genres: {
+            create: (game.genre as string).split("/").map((genre) => {
+              return {
+                genre: {
+                  connectOrCreate: {
+                    where: {
+                      id: genre,
+                    },
+                    create: {
+                      id: genre,
+                      name: toGenreName(genre),
+                    },
+                  },
+                },
+              };
+            }),
+          },
+          platforms: {
+            create: (game.hardwareIds as string[]).map((hardwareId) => {
+              return {
+                platform: {
+                  connect: {
+                    shortenedName: hardwareId,
+                  },
+                },
+              };
+            }),
+          },
+          wikiId: game.wikiId,
         },
-        platforms: {
-          connect: (game.hardwareIds as string[]).map((hardwareId) => {
-            return { shortenedName: hardwareId };
-          }),
-        },
-        wikiId: game.wikiId,
-      },
-    });
+      });
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === "P2002"
+      ) {
+        console.warn(error.message);
+        console.warn(`id: ${id}, title: ${game.title}`);
+        continue;
+      }
+      throw error;
+    }
   }
 };
 
@@ -69,4 +95,5 @@ const GENRES_MAP = {
   ASTG: "アクションシューティング",
   etc: "その他",
   RACT: "レースアクション",
+  クイズ: "クイズ",
 };
