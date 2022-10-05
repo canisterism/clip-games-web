@@ -1,23 +1,17 @@
-import { importGenres } from "@/prisma/seeds/genre";
+import { importClips } from "@/prisma/seeds/clip";
+import { importGames } from "@/prisma/seeds/game";
 import { importPlatforms } from "@/prisma/seeds/platform";
-import { importPublishers } from "@/prisma/seeds/publishers";
+import { importReviews } from "@/prisma/seeds/review";
 import { importUsers } from "@/prisma/seeds/user";
-import { PrismaClient } from "@prisma/client";
-
-const client = new PrismaClient();
 
 async function main() {
   await importPlatforms();
   await importUsers();
-  await importGenres();
-  await importPublishers();
+  await importGames();
+  await importClips();
+  await importReviews();
 }
 
-main()
-  .catch((e) => {
-    console.error(e);
-    client.$disconnect();
-  })
-  .finally(() => {
-    client.$disconnect();
-  });
+main().catch((e) => {
+  console.error(e);
+});
