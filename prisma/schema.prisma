@@ -16,6 +16,7 @@ model User {
   createdAt          DateTime @default(now()) @db.Timestamp(0)
   updatedAt          DateTime @default(now()) @updatedAt @db.Timestamp(0)
   clips              Clip[]
+  Review             Review[]
 }
 
 model Platform {
@@ -52,6 +53,7 @@ model Game {
   platforms   GamePlatform[]
   genres      GameGenre[]
   clips       Clip[]
+  reviews     Review[]
 }
 
 model GamePlatform {
@@ -78,6 +80,20 @@ model Clip {
   user      User     @relation(fields: [userId], references: [id])
   userId    String
   createdAt DateTime @default(now()) @db.Timestamp
+
+  @@id([gameId, userId])
+}
+
+model Review {
+  game    Game    @relation(fields: [gameId], references: [id])
+  gameId  String
+  user    User    @relation(fields: [userId], references: [id])
+  userId  String
+  content String?
+  rating  Float
+
+  createdAt DateTime @default(now()) @db.Timestamp
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp
 
   @@id([gameId, userId])
 }

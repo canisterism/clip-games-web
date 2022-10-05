@@ -1,9 +1,7 @@
 import { fetchDocumentDataList } from "@/prisma/seeds/utils";
 import { Prisma, PrismaClient } from "@prisma/client";
 
-const prisma = new PrismaClient({ log: ["query", "info", "error", "warn"] });
-
-export const importGames = async () => {
+export const importGames = async (prisma: PrismaClient) => {
   const games = await fetchDocumentDataList("games");
 
   for (const [id, game] of Object.entries(games)) {
