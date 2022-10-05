@@ -1,9 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { fetchSubCollection } from "./utils";
 
-const prisma = new PrismaClient({ log: ["query", "info", "error", "warn"] });
-
-export const importReviews = async () => {
+export const importReviews = async (prisma: PrismaClient) => {
   const reviews = await fetchSubCollection("reviews");
   for (const review of reviews) {
     console.dir(review);

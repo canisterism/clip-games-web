@@ -1,9 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { fetchSubCollection } from "./utils";
 
-const prisma = new PrismaClient({ log: ["query", "info", "error", "warn"] });
-
-export const importClips = async () => {
+export const importClips = async (prisma: PrismaClient) => {
   const clips = await fetchSubCollection("clips");
   for (const clip of clips) {
     await prisma.clip.upsert({
