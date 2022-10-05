@@ -77,7 +77,7 @@ model Clip {
   gameId    String
   user      User     @relation(fields: [userId], references: [id])
   userId    String
-  createdAt DateTime
+  createdAt DateTime @default(now()) @db.Timestamp
 
   @@id([gameId, userId])
 }
