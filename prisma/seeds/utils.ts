@@ -22,6 +22,13 @@ export const fetchDocumentDataList = async (
   return documentMap;
 };
 
+export const fetchSubCollection = async (
+  collectionId: string
+): Promise<FirebaseFirestore.DocumentData[]> =>
+  await (
+    await firestore.collectionGroup(collectionId).get()
+  ).docs.map((doc) => doc.data());
+
 export const fetchDocumentReference = async (
   collectionPath: string,
   id: string
