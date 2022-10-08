@@ -17,10 +17,13 @@
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
     "@prisma/client": "4.2.1",
+    "apollo-server-micro": "^3.10.2",
     "dotenv-cli": "^6.0.0",
     "firebase": "^9.6.10",
     "firebase-admin": "^11.0.1",
     "framer-motion": "^6",
+    "graphql": "^16.6.0",
+    "micro": "^9.4.1",
     "next": "12.1.4",
     "react": "18.0.0",
     "react-dom": "18.0.0"
