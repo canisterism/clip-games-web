@@ -1,6 +1,7 @@
 import "reflect-metadata";
 
 import { GameResolver } from "@/graphql/queries/GameResolver";
+import { ReviewResolver } from "@/graphql/queries/ReviewResolver";
 import { PrismaClient } from "@prisma/client";
 import { ApolloServer } from "apollo-server-micro";
 import { GraphQLSchema } from "graphql";
@@ -16,7 +17,7 @@ export const config = {
 const prisma = new PrismaClient({ log: ["query", "info", "warn", "error"] });
 
 const schema: GraphQLSchema = buildSchemaSync({
-  resolvers: [GameResolver],
+  resolvers: [ReviewResolver, GameResolver],
   validate: false,
   emitSchemaFile: true,
 });

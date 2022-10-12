@@ -13,9 +13,16 @@ type Game {
   imageUrl: String
   price: Int
   publishedAt: DateTime
+  reviews: [Review!]!
   title: String!
 }
 
 type Query {
   game(gameId: String!): Game
+}
+
+type Review {
+  content: String
+  createdAt: DateTime!
+  rating: Int
 }
