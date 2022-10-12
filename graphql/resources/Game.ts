@@ -1,3 +1,4 @@
+import { Review } from "@/graphql/resources/Review";
 import { Field, ID, Int, ObjectType } from "type-graphql";
 
 @ObjectType()
@@ -16,4 +17,6 @@ export class Game {
 
   @Field({ nullable: true })
   imageUrl?: string;
+
+  reviews!: Review[];
 }

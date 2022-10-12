@@ -1,6 +1,7 @@
 import { Game } from "@/graphql/resources/Game";
+import { Review } from "@/graphql/resources/Review";
 import { PrismaClient } from "@prisma/client";
-import { Arg, Ctx, Query, Resolver } from "type-graphql";
+import { Arg, Ctx, FieldResolver, Query, Resolver, Root } from "type-graphql";
 
 @Resolver((of) => Game)
 export class GameResolver {
@@ -24,5 +25,21 @@ export class GameResolver {
       },
     });
     return game;
+  }
+
+  @FieldResolver((of) => [Review])
+  async reviews(@Root() game: Game, @Ctx("prisma") prisma: PrismaClient) {
+    const reviews = await prisma.review.findMany({
+      select: {
+        game: true,
+        content: true,
+        rating: true,
+        createdAt: true,
+      },
+      where: {
+        gameId: game.id,
+      },
+    });
+    return reviews ?? [];
   }
 }
