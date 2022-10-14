@@ -1,13 +1,8 @@
+import { Navigation } from "@/components/Navigation";
 import type { NextPage } from "next";
 import Head from "next/head";
-import Hero from "./components/hero";
-import { Navigation } from "./components/navigation";
-
-import { useGames } from "./hooks/game";
 
 const Home: NextPage = () => {
-  const games = useGames();
-
   return (
     <div>
       <Head>
@@ -18,7 +13,7 @@ const Home: NextPage = () => {
       <Navigation></Navigation>
 
       <main>
-        <Hero></Hero>
+        <h1> clip-games</h1>
       </main>
     </div>
   );
