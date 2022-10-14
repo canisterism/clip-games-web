@@ -1,5 +1,7 @@
+import { Navigation } from "@/components/Navigation";
 import type { NextPage } from "next";
 import Head from "next/head";
+import Image from "next/image";
 
 const Home: NextPage = () => {
   return (
@@ -11,10 +13,53 @@ const Home: NextPage = () => {
       </Head>
 
       <main>
-        <h1> clip-games</h1>
+        <Navigation></Navigation>
+        <div className="mx-8 my-4">
+          <GamesGrid games={GAME_LIST}></GamesGrid>
+        </div>
       </main>
     </div>
   );
 };
 
+const GAME_LIST: Game[] = [...Array(10).keys()].map((i) => {
+  return {
+    id: `${i}`,
+    title: "ポポロクロイス",
+    imageUrl: "https://placeimg.com/320/400/any",
+  };
+});
+
 export default Home;
+
+type Game = {
+  id: string;
+  title: string;
+  imageUrl: string;
+};
+
+const GamesGrid: React.FC<{ games: Game[] }> = ({ games }) => {
+  return (
+    <div className="flex flex-wrap gap-4">
+      {games.map((game) => (
+        <GamePackage key={game.id} {...game} />
+      ))}
+    </div>
+  );
+};
+
+export const GamePackage = ({ title, imageUrl }: Game) => {
+  return (
+    <div>
+      <div className="flex flex-col">
+        <Image
+          src={`${imageUrl}`}
+          alt={`${title}`}
+          width="320"
+          height="400"
+        ></Image>
+        <span>{title}</span>
+      </div>
+    </div>
+  );
+};
