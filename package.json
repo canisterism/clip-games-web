@@ -12,10 +12,6 @@
     "seed": "ts-node --require tsconfig-paths/register --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "dependencies": {
-    "@chakra-ui/icons": "^2.0.4",
-    "@chakra-ui/react": "^1.8.7",
-    "@emotion/react": "^11",
-    "@emotion/styled": "^11",
     "@prisma/client": "4.2.1",
     "apollo-server-micro": "^3.10.2",
     "class-validator": "^0.13.2",
