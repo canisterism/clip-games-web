@@ -1,7 +1,23 @@
 import { Navigation } from "@/components/Navigation";
+import { gql, useQuery } from "@apollo/client";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
+
+const GET_GAME = gql`
+  query GetGame($gameId: String!) {
+    game(gameId: $gameId) {
+      id
+      title
+      imageUrl
+      reviews {
+        content
+        rating
+        createdAt
+      }
+    }
+  }
+`;
 
 const Home: NextPage = () => {
   return (
@@ -15,20 +31,19 @@ const Home: NextPage = () => {
       <main>
         <Navigation></Navigation>
         <div className="mx-8 my-4">
-          <GamesGrid games={GAME_LIST}></GamesGrid>
+          <GamesGrid gameIds={GAME_IDS}></GamesGrid>
         </div>
       </main>
     </div>
   );
 };
 
-const GAME_LIST: Game[] = [...Array(10).keys()].map((i) => {
-  return {
-    id: `${i}`,
-    title: "ポポロクロイス",
-    imageUrl: "https://placeimg.com/320/400/any",
-  };
-});
+const GAME_IDS: string[] = [
+  "5jVrnHPmsMV1qSflBdJS",
+  "ou5Y8uSB6s6CgYWiCRpa",
+  "pkCaQiaDa7NyRFYtwZ8U",
+  "sR6klPwn2WF0YGaeykq1",
+];
 
 export default Home;
 
@@ -38,27 +53,47 @@ type Game = {
   imageUrl: string;
 };
 
-const GamesGrid: React.FC<{ games: Game[] }> = ({ games }) => {
+const GamesGrid: React.FC<{ gameIds: string[] }> = ({ gameIds }) => {
   return (
     <div className="flex flex-wrap gap-4">
-      {games.map((game) => (
-        <GamePackage key={game.id} {...game} />
+      {gameIds.map((gameId) => (
+        <GamePackage key={gameId} gameId={gameId} />
       ))}
     </div>
   );
 };
 
-export const GamePackage = ({ title, imageUrl }: Game) => {
+export const GamePackage: React.FC<{ gameId: string }> = ({ gameId }) => {
+  const { loading, error, data } = useQuery(GET_GAME, {
+    variables: {
+      gameId: gameId,
+    },
+  });
+
+  if (loading) {
+    return (
+      <div className="flex justify-center">
+        <div className="animate-spin h-10 w-10 border-4 border-blue-500 rounded-full border-t-transparent"></div>
+      </div>
+    );
+  }
+  if (error) {
+    return <>Something Went Wrong!</>;
+  }
   return (
     <div>
       <div className="flex flex-col">
         <Image
-          src={`${imageUrl}`}
-          alt={`${title}`}
+          src={
+            data.game.imageUrl
+              ? `${data.game.imageUrl}`
+              : "https://placeimg.com/320/400/any"
+          }
+          alt={`${data.game.title}`}
           width="320"
           height="400"
         ></Image>
-        <span>{title}</span>
+        <span>{data.game.title}</span>
       </div>
     </div>
   );
