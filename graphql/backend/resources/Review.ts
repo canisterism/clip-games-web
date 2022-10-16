@@ -1,4 +1,4 @@
-import { Game } from "@/graphql/resources/Game";
+import { Game } from "@/graphql/backend/resources/Game";
 import { Field, Int, ObjectType } from "type-graphql";
 
 @ObjectType()

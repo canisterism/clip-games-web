@@ -1,5 +1,8 @@
-import { ConnectionType, EdgeType } from "@/graphql/resources/Connection/types";
-import { Game } from "@/graphql/resources/Game";
+import {
+  ConnectionType,
+  EdgeType,
+} from "@/graphql/backend/resources/Connection/types";
+import { Game } from "@/graphql/backend/resources/Game";
 import { ObjectType } from "type-graphql";
 
 @ObjectType()

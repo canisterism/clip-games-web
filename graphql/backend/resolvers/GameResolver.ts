@@ -1,5 +1,5 @@
-import { Game } from "@/graphql/resources/Game";
-import { Review } from "@/graphql/resources/Review";
+import { Game } from "@/graphql/backend/resources/Game";
+import { Review } from "@/graphql/backend/resources/Review";
 import { PrismaClient } from "@prisma/client";
 import { Arg, Ctx, FieldResolver, Query, Resolver, Root } from "type-graphql";
 
