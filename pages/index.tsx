@@ -1,23 +1,8 @@
 import { Navigation } from "@/components/Navigation";
-import { gql, useQuery } from "@apollo/client";
+import { useGameQuery } from "@/graphql/generated/types";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-
-const GET_GAME = gql`
-  query GetGame($gameId: String!) {
-    game(gameId: $gameId) {
-      id
-      title
-      imageUrl
-      reviews {
-        content
-        rating
-        createdAt
-      }
-    }
-  }
-`;
 
 const Home: NextPage = () => {
   return (
@@ -47,12 +32,6 @@ const GAME_IDS: string[] = [
 
 export default Home;
 
-type Game = {
-  id: string;
-  title: string;
-  imageUrl: string;
-};
-
 const GamesGrid: React.FC<{ gameIds: string[] }> = ({ gameIds }) => {
   return (
     <div className="flex flex-wrap gap-4">
@@ -64,12 +43,11 @@ const GamesGrid: React.FC<{ gameIds: string[] }> = ({ gameIds }) => {
 };
 
 export const GamePackage: React.FC<{ gameId: string }> = ({ gameId }) => {
-  const { loading, error, data } = useQuery(GET_GAME, {
+  const { loading, error, data } = useGameQuery({
     variables: {
       gameId: gameId,
     },
   });
-
   if (loading) {
     return (
       <div className="flex justify-center">
@@ -77,7 +55,12 @@ export const GamePackage: React.FC<{ gameId: string }> = ({ gameId }) => {
       </div>
     );
   }
-  if (error) {
+  if (
+    error ||
+    data === undefined ||
+    data.game === undefined ||
+    data.game === null
+  ) {
     return <>Something Went Wrong!</>;
   }
   return (
