@@ -1,4 +1,4 @@
-import { Review } from "@/graphql/resources/Review";
+import { Review } from "@/graphql/backend/resources/Review";
 import { Field, ID, Int, ObjectType } from "type-graphql";
 
 @ObjectType()

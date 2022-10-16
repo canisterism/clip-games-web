@@ -1,4 +1,4 @@
-import { Review } from "@/graphql/resources/Review";
+import { Review } from "@/graphql/backend/resources/Review";
 import { Resolver } from "type-graphql";
 
 @Resolver((of) => Review)

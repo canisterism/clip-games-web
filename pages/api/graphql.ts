@@ -1,7 +1,7 @@
 import "reflect-metadata";
 
-import { GameResolver } from "@/graphql/resolvers/GameResolver";
-import { ReviewResolver } from "@/graphql/resolvers/ReviewResolver";
+import { GameResolver } from "@/graphql/backend/resolvers/GameResolver";
+import { ReviewResolver } from "@/graphql/backend/resolvers/ReviewResolver";
 import { PrismaClient } from "@prisma/client";
 import { ApolloServer } from "apollo-server-micro";
 import { GraphQLSchema } from "graphql";

@@ -1,4 +1,4 @@
-import { client } from "@/graphql/client";
+import { client } from "@/graphql/frontend/client";
 import { ApolloProvider } from "@apollo/client";
 import type { AppProps } from "next/app";
 import "tailwindcss/tailwind.css";
