@@ -3,7 +3,7 @@ import Link from "next/link";
 export const Navigation = () => {
   return (
     <>
-      <div className="bg-white lg:pb-12">
+      <div className="bg-white lg:pb-12 sticky top-0 z-50">
         <div className="max-w-screen-2xl px-4 md:px-8 mx-auto">
           <header className="flex justify-between items-center py-4 md:py-4">
             {/* logo - start  */}
@@ -27,7 +27,7 @@ export const Navigation = () => {
               </a>
               <a
                 href="#"
-                className="inline-flex items-center text-indigo-500 text-lg font-semibold gap-1"
+                className="text-gray-600 hover:text-indigo-500 active:text-indigo-700 text-lg font-semibold transition duration-100"
               >
                 Features
               </a>
