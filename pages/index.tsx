@@ -1,5 +1,5 @@
-import { Navigation } from "@/components/Navigation";
 import { useGameQuery } from "@/graphql/frontend/generated/types";
+import { Navigation } from "@/src/components/Navigation";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
