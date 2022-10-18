@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export const Navigation = () => {
+export const Navigation = (): JSX.Element => {
   return (
     <>
       <div className="bg-white lg:pb-12 sticky top-0 z-50">

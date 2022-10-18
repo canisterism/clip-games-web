@@ -1,4 +1,5 @@
-import { FirebaseOptions } from "@firebase/app";
+import { FirebaseOptions, initializeApp } from "@firebase/app";
+import { getAuth } from "firebase/auth";
 
 const config: FirebaseOptions = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -11,4 +12,6 @@ const config: FirebaseOptions = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-export default config;
+// Initialize Firebase
+const app = initializeApp(config);
+export const clientInitializedAuth = getAuth(app);
