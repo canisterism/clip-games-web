@@ -1,5 +1,5 @@
 import { FirebaseOptions, initializeApp } from "@firebase/app";
-import { getAuth } from "firebase/auth";
+import { connectAuthEmulator, getAuth } from "firebase/auth";
 
 const config: FirebaseOptions = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -14,4 +14,10 @@ const config: FirebaseOptions = {
 
 // Initialize Firebase
 const app = initializeApp(config);
+
 export const clientInitializedAuth = getAuth(app);
+console.dir(process.env.FIREBASE_AUTH_EMULATOR_HOST);
+
+if (process.env.NODE_ENV === "development") {
+  connectAuthEmulator(clientInitializedAuth, "http://localhost:9099");
+}

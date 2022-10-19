@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }: Props): JSX.Element => {
   useEffect(() => {
     const unsubscribe = clientInitializedAuth.onAuthStateChanged((user) => {
       console.debug("Auth State Has Changed. user: ");
-      console.dir(user);
+      console.debug({ user });
       setUser(user);
     });
 
