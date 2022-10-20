@@ -29,31 +29,30 @@ export const Navigation = (): JSX.Element => {
                 href="#"
                 className="text-gray-600 hover:text-indigo-500 active:text-indigo-700 text-lg font-semibold transition duration-100"
               >
-                Features
+                おすすめ
               </a>
               <a
                 href="#"
                 className="text-gray-600 hover:text-indigo-500 active:text-indigo-700 text-lg font-semibold transition duration-100"
               >
-                Pricing
+                機種別
               </a>
               <a
                 href="#"
                 className="text-gray-600 hover:text-indigo-500 active:text-indigo-700 text-lg font-semibold transition duration-100"
               >
-                About
+                clip-gamesについて
               </a>
             </nav>
             {/* nav - end  */}
 
             {/* buttons - start  */}
             <div className="hidden lg:flex flex-col sm:flex-row sm:justify-center lg:justify-start gap-2.5 -ml-8">
-              <a
-                href="#"
-                className="inline-block focus-visible:ring ring-indigo-300 text-gray-500 hover:text-indigo-500 active:text-indigo-600 text-sm md:text-base font-semibold text-center rounded-lg outline-none transition duration-100 px-4 py-3"
-              >
-                Sign in
-              </a>
+              <Link href="/login">
+                <a className="inline-block focus-visible:ring ring-indigo-300 text-gray-500 hover:text-indigo-500 active:text-indigo-600 text-sm md:text-base font-semibold text-center rounded-lg outline-none transition duration-100 px-4 py-3">
+                  Sign in
+                </a>
+              </Link>
 
               <a
                 href="#"

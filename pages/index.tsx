@@ -61,7 +61,11 @@ export const GamePackage: React.FC<{ gameId: string }> = ({ gameId }) => {
     data.game === undefined ||
     data.game === null
   ) {
-    return <>Something Went Wrong!</>;
+    return (
+      <>
+        <p> Something Went Wrong!</p>
+      </>
+    );
   }
   return (
     <div>

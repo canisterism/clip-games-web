@@ -8,7 +8,10 @@ import {
   useState,
 } from "react";
 
-const AuthContext = createContext<{ user: User | null }>({ user: null });
+export const AuthContext = createContext<{
+  user: User | undefined;
+  token: string | undefined;
+}>({ user: undefined, token: undefined });
 
 export const useAuthContext = () => {
   useContext(AuthContext);
@@ -19,18 +22,25 @@ type Props = {
 };
 
 export const AuthProvider = ({ children }: Props): JSX.Element => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | undefined>(undefined);
+  const [token, setToken] = useState<string | undefined>(undefined);
 
   const value = {
     user: user,
+    token: token,
   };
 
   useEffect(() => {
-    const unsubscribe = clientInitializedAuth.onAuthStateChanged((user) => {
-      console.debug("Auth State Has Changed. user: ");
-      console.dir(user);
-      setUser(user);
-    });
+    const unsubscribe = clientInitializedAuth.onAuthStateChanged(
+      async (user) => {
+        if (!user) {
+          return;
+        }
+        setUser(user);
+        const token = (await user?.getIdToken()) ?? null;
+        setToken(token);
+      }
+    );
 
     return () => {
       unsubscribe();
