@@ -1,13 +1,12 @@
-import { client } from "@/graphql/frontend/client";
+import { ApolloProvider } from "@/src/context/apolloContext";
 import { AuthProvider } from "@/src/context/authContext";
-import { ApolloProvider } from "@apollo/client";
 import type { AppProps } from "next/app";
 import "tailwindcss/tailwind.css";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <AuthProvider>
-      <ApolloProvider client={client}>
+      <ApolloProvider>
         <Component {...pageProps} />
       </ApolloProvider>
     </AuthProvider>

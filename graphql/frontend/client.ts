@@ -1,6 +1,25 @@
-import { ApolloClient, InMemoryCache } from "@apollo/client";
+import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
 
-export const client = new ApolloClient({
+const httpLink = createHttpLink({
   uri: process.env["NEXT_PUBLIC_GRAPHQL_ENDPOINT_URL"],
-  cache: new InMemoryCache(),
 });
+
+const generateAuthLink = (token: string | undefined) => {
+  return setContext(async (_, { headers }) => {
+    return {
+      headers: {
+        ...headers,
+        authorization: token ? `Bearer ${token}` : "",
+      },
+    };
+  });
+};
+
+export const createApolloClient = (token: string | undefined) => {
+  const authLink = generateAuthLink(token);
+  return new ApolloClient({
+    cache: new InMemoryCache(),
+    link: authLink.concat(httpLink),
+  });
+};
