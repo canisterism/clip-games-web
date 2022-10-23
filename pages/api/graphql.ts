@@ -2,6 +2,7 @@ import "reflect-metadata";
 
 import { GameResolver } from "@/graphql/backend/resolvers/GameResolver";
 import { ReviewResolver } from "@/graphql/backend/resolvers/ReviewResolver";
+import { ContextType } from "@/graphql/backend/resources/ContextType";
 import { PrismaClient } from "@prisma/client";
 import { ApolloServer } from "apollo-server-micro";
 import { GraphQLSchema } from "graphql";
@@ -18,15 +19,19 @@ const prisma = new PrismaClient({ log: ["query", "info", "warn", "error"] });
 
 const schema: GraphQLSchema = buildSchemaSync({
   resolvers: [ReviewResolver, GameResolver],
+
   validate: false,
   emitSchemaFile: true,
 });
 
 const apolloServer = new ApolloServer({
   schema,
-  context: () => ({
-    prisma: prisma,
-  }),
+  context: ({ req }): ContextType => {
+    const headers = req.headers as NextApiRequest["headers"];
+    const authorization = headers["authorization"];
+    console.log({ authorization });
+    return { prisma: prisma };
+  },
 });
 
 const startServer = apolloServer.start();
