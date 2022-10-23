@@ -29,7 +29,7 @@
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "reflect-metadata": "^0.1.13",
-    "type-graphql": "^1.1.1"
+    "type-graphql": "^1.2.0-rc.1"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "2.13.7",
