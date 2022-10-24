@@ -13,10 +13,15 @@ const params = {
   clientC509CertUrl: process.env.CLIENT_X509_CERT_URL,
 };
 
-admin.initializeApp({
-  credential: admin.credential.cert(params),
-});
+const apps = admin.apps;
+let app: admin.app.App;
 
-export const firestore = admin.firestore();
-export const auth = admin.auth();
-export const storage = admin.storage();
+if (apps.length !== 0 && apps[0]) {
+  app = apps[0];
+} else {
+  app = admin.initializeApp({ credential: admin.credential.cert(params) });
+}
+
+export const firestore = app.firestore();
+export const auth = app.auth();
+export const storage = app.storage();
