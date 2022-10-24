@@ -1,10 +1,19 @@
 import { Game } from "@/graphql/backend/resources/Game";
 import { Review } from "@/graphql/backend/resources/Review";
 import { PrismaClient } from "@prisma/client";
-import { Arg, Ctx, FieldResolver, Query, Resolver, Root } from "type-graphql";
+import {
+  Arg,
+  Authorized,
+  Ctx,
+  FieldResolver,
+  Query,
+  Resolver,
+  Root,
+} from "type-graphql";
 
 @Resolver((of) => Game)
 export class GameResolver {
+  @Authorized("ADMIN")
   @Query((returns) => Game, { nullable: true })
   async game(
     @Arg("gameId") gameId: string,
