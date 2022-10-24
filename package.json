@@ -19,7 +19,7 @@
     "class-validator": "^0.13.2",
     "dotenv-cli": "^6.0.0",
     "firebase": "^9.6.10",
-    "firebase-admin": "^11.0.1",
+    "firebase-admin": "^11.2.0",
     "framer-motion": "^6",
     "graphql": "^15.3.0",
     "graphql-fields": "^2.0.3",
