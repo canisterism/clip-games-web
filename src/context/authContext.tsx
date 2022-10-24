@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }: Props): JSX.Element => {
           return;
         }
         setUser(user);
-        const token = (await user?.getIdToken()) ?? null;
+        const token = (await user?.getIdToken(true)) ?? null;
         setToken(token);
       }
     );
