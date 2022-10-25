@@ -1,16 +1,19 @@
 import { auth } from "@/prisma/firebaseAdmin";
-import { DecodedIdToken } from "firebase-admin/lib/auth/token-verifier";
+import { UserRecord } from "firebase-admin/lib/auth/user-record";
 
 const getUserFromToken = async (
   token: string
-): Promise<DecodedIdToken | undefined> => {
+): Promise<UserRecord | undefined> => {
   // TODO: バックエンドのFirebase clientのディレクトリをいい感じにする
   try {
     const decodedIdToken = await auth.verifyIdToken(token, true);
-    return decodedIdToken;
+    return await auth.getUser(decodedIdToken.uid);
   } catch (error) {
+    // TODO: エラーハンドリング
+    //   - user not found
+    //   - token expired
     console.error(error);
-    throw error;
+    return undefined;
   }
 };
 

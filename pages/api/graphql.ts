@@ -5,7 +5,7 @@ import getUserFromToken from "@/graphql/backend/helpers/firebase/getUserFromToke
 import { GameResolver } from "@/graphql/backend/resolvers/GameResolver";
 import { ReviewResolver } from "@/graphql/backend/resolvers/ReviewResolver";
 import { ContextType } from "@/graphql/backend/resources/ContextType";
-import client from "@/prisma/client";
+import { default as prisma } from "@/prisma/client";
 import { ApolloServer } from "apollo-server-micro";
 import { GraphQLSchema } from "graphql";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -29,9 +29,12 @@ const apolloServer = new ApolloServer({
   context: async ({ req }): Promise<ContextType> => {
     const headers = req.headers as NextApiRequest["headers"];
     const token = headers["authorization"]?.replace("Bearer ", "");
-    if (token) await getUserFromToken(token);
+    const user = token ? await getUserFromToken(token) : undefined;
 
-    return { prisma: client };
+    return {
+      prisma: prisma,
+      user: user,
+    };
   },
 });
 
