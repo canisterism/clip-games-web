@@ -1,8 +1,11 @@
 import "reflect-metadata";
 
+import { customAuthChecker } from "@/graphql/backend/helpers/AuthChecker";
+import getUserFromToken from "@/graphql/backend/helpers/firebase/getUserFromToken";
 import { GameResolver } from "@/graphql/backend/resolvers/GameResolver";
 import { ReviewResolver } from "@/graphql/backend/resolvers/ReviewResolver";
-import { PrismaClient } from "@prisma/client";
+import { ContextType } from "@/graphql/backend/resources/ContextType";
+import { default as prisma } from "@/prisma/client";
 import { ApolloServer } from "apollo-server-micro";
 import { GraphQLSchema } from "graphql";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -14,19 +17,25 @@ export const config = {
   },
 };
 
-const prisma = new PrismaClient({ log: ["query", "info", "warn", "error"] });
-
 const schema: GraphQLSchema = buildSchemaSync({
   resolvers: [ReviewResolver, GameResolver],
+  authChecker: customAuthChecker,
   validate: false,
   emitSchemaFile: true,
 });
 
 const apolloServer = new ApolloServer({
   schema,
-  context: () => ({
-    prisma: prisma,
-  }),
+  context: async ({ req }): Promise<ContextType> => {
+    const headers = req.headers as NextApiRequest["headers"];
+    const token = headers["authorization"]?.replace("Bearer ", "");
+    const user = token ? await getUserFromToken(token) : undefined;
+
+    return {
+      prisma: prisma,
+      user: user,
+    };
+  },
 });
 
 const startServer = apolloServer.start();
