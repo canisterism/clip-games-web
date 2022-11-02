@@ -1,9 +1,7 @@
 import { fetchDocumentDataList } from "@/src/backend/prisma/seeds/utils";
 import { PrismaClient } from "@prisma/client";
 
-const prisma = new PrismaClient();
-
-export const importGenres = async () => {
+export const importGenres = async (prisma: PrismaClient) => {
   // 日本語化するためにゲーム全部取ってマッピングを作る
   const games = await fetchDocumentDataList("games");
 
