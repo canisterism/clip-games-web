@@ -6,14 +6,14 @@ export const importClips = async (prisma: PrismaClient) => {
   for (const clip of clips) {
     await prisma.clip.upsert({
       where: {
-        gameId_userId: {
+        gameId_profileId: {
           gameId: clip.game.ref.id,
-          userId: clip.profile.ref.id,
+          profileId: clip.profile.ref.id,
         },
       },
       create: {
         gameId: clip.game.ref.id,
-        userId: clip.profile.ref.id,
+        profileId: clip.profile.ref.id,
         createdAt: clip.createdAt.toDate(),
       },
       update: {},

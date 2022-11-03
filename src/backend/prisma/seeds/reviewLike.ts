@@ -10,15 +10,15 @@ export const importReviewLikes = async (prisma: PrismaClient) => {
     const review = await prisma.review.findFirstOrThrow({
       where: {
         gameId: like.game.ref.id,
-        userId: like.author.ref.id,
+        profileId: like.author.ref.id,
       },
     });
 
     await prisma.reviewLike.upsert({
       where: {
-        reviewId_userId: {
+        reviewId_profileId: {
           reviewId: review.id,
-          userId: like.viewer.ref.id,
+          profileId: like.viewer.ref.id,
         },
       },
       create: {
@@ -27,7 +27,7 @@ export const importReviewLikes = async (prisma: PrismaClient) => {
             id: review.id,
           },
         },
-        user: {
+        profile: {
           connect: {
             id: like.viewer.ref.id,
           },
