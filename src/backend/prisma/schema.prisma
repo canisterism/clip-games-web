@@ -8,15 +8,16 @@ datasource db {
 }
 
 model User {
-  id                 String   @id
-  displayName        String   @db.VarChar(255)
-  description        String   @default("") @db.Text()
-  photoUrl           String?  @db.Text()
-  notificationReadAt DateTime @default(now()) @db.Timestamp(0)
-  createdAt          DateTime @default(now()) @db.Timestamp(0)
-  updatedAt          DateTime @default(now()) @updatedAt @db.Timestamp(0)
+  id                 String       @id
+  displayName        String       @db.VarChar(255)
+  description        String       @default("") @db.Text()
+  photoUrl           String?      @db.Text()
+  notificationReadAt DateTime     @default(now()) @db.Timestamp(0)
+  createdAt          DateTime     @default(now()) @db.Timestamp(0)
+  updatedAt          DateTime     @default(now()) @updatedAt @db.Timestamp(0)
   clips              Clip[]
   Review             Review[]
+  ReviewLike         ReviewLike[]
 }
 
 model Platform {
@@ -94,8 +95,21 @@ model Review {
   content String?
   rating  Float
 
-  createdAt DateTime @default(now()) @db.Timestamp
-  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp
+  createdAt  DateTime     @default(now()) @db.Timestamp
+  updatedAt  DateTime     @default(now()) @updatedAt @db.Timestamp
+  ReviewLike ReviewLike[]
 
   @@id([gameId, userId])
+}
+
+model ReviewLike {
+  id       String @unique @default(dbgenerated("gen_random_uuid()"))
+  review   Review @relation(fields: [reviewId], references: [id])
+  reviewId String
+  user     User   @relation(fields: [userId], references: [id])
+  userId   String
+
+  createdAt DateTime @default(now()) @db.Timestamp
+
+  @@id([reviewId, userId])
 }
