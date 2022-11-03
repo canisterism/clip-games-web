@@ -4,6 +4,7 @@ import { importGenres } from "@/src/backend/prisma/seeds/genre";
 import { importPlatforms } from "@/src/backend/prisma/seeds/platform";
 import { importPublishers } from "@/src/backend/prisma/seeds/publishers";
 import { importReviews } from "@/src/backend/prisma/seeds/review";
+import { importReviewLikes } from "@/src/backend/prisma/seeds/reviewLike";
 import { importUsers } from "@/src/backend/prisma/seeds/user";
 import { PrismaClient } from "@prisma/client";
 
@@ -17,6 +18,7 @@ async function main() {
   await importGames(prisma);
   await importClips(prisma);
   await importReviews(prisma);
+  await importReviewLikes(prisma);
 }
 
 main()
