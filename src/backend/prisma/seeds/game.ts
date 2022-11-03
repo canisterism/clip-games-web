@@ -1,7 +1,9 @@
+import { GENRES_MAP, splitGenre } from "@/src/backend/prisma/seeds/genre";
 import { fetchDocumentDataList } from "@/src/backend/prisma/seeds/utils";
 import { Prisma, PrismaClient } from "@prisma/client";
 
 export const importGames = async (prisma: PrismaClient) => {
+  const invalidGames = [];
   const games = await fetchDocumentDataList("games");
 
   for (const [id, game] of Object.entries(games)) {
@@ -26,7 +28,7 @@ export const importGames = async (prisma: PrismaClient) => {
             },
           },
           genres: {
-            create: (game.genre as string).split("/").map((genre) => {
+            create: splitGenre(game.genre as string).map((genre) => {
               return {
                 genre: {
                   connectOrCreate: {
@@ -59,39 +61,21 @@ export const importGames = async (prisma: PrismaClient) => {
     } catch (error) {
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&
-        error.code === "P2002"
+        (error.code === "P2002" || error.code === "P2025")
       ) {
         console.warn(error.message);
         console.warn(`id: ${id}, title: ${game.title}`);
+        invalidGames.push({
+          id: id,
+          title: game.title,
+          message: error.message,
+        });
         continue;
       }
       throw error;
     }
   }
+  console.log({ invalidGames });
 };
 
 const toGenreName = (id: string) => GENRES_MAP[id as keyof typeof GENRES_MAP];
-const GENRES_MAP = {
-  ADV: "アドベンチャー",
-  ACT: "アクション",
-  AADV: "アクションアドベンチャー",
-  RPG: "RPG",
-  ARPG: "アクションRPG",
-  音楽: "音楽",
-  SLG: "シミュレーション",
-  RCG: "レース",
-  FTG: "格闘ゲーム",
-  SRPG: "シミュレーションRPG",
-  SPG: "スポーツ",
-  TBL: "テーブルゲーム",
-  SPRG: "シミュレーションRPG(ToBeFixed)",
-  SLC: "恋愛シミュレーション",
-  STG: "シューティング",
-  PZL: "パズル",
-  TPS: "TPS",
-  FPS: "FPS",
-  ASTG: "アクションシューティング",
-  etc: "その他",
-  RACT: "レースアクション",
-  クイズ: "クイズ",
-};

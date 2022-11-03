@@ -25,8 +25,11 @@ export const importGenres = async (prisma: PrismaClient) => {
   }
 };
 
-export const splitGenre = (rawString: string): string[] =>
-  rawString
+export const splitGenre = (rawString: string): string[] => {
+  if (rawString == null) {
+    return [];
+  }
+  return rawString
     .split(/(?:\+)|(?:\&)|(?:\/)/) // ? & / は区切り文字なのでsplitする
     .flat()
     .map((str) => str.replace(/(\.)|(他)|(3D)|\s/, "")) // . 他 3D 空白などは扶養なので削除
@@ -37,6 +40,7 @@ export const splitGenre = (rawString: string): string[] =>
         : str
     )
     .filter((v) => v) as string[];
+};
 
 // マスタ側のデータが間違ってるなどの理由で修正されるべきジャンルのキー名と正しいキー名のマッピング
 export const INVALId_GENRE_MAP = {
