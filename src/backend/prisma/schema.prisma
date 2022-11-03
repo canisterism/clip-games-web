@@ -7,17 +7,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Profile {
+  id          String       @id
+  displayName String       @db.VarChar(255)
+  description String       @default("") @db.Text()
+  photoUrl    String?      @db.Text()
+  createdAt   DateTime     @default(now()) @db.Timestamp(0)
+  updatedAt   DateTime     @default(now()) @updatedAt @db.Timestamp(0)
+  clips       Clip[]
+  Review      Review[]
+  ReviewLike  ReviewLike[]
+}
+
 model User {
-  id                 String       @id
-  displayName        String       @db.VarChar(255)
-  description        String       @default("") @db.Text()
-  photoUrl           String?      @db.Text()
-  notificationReadAt DateTime     @default(now()) @db.Timestamp(0)
-  createdAt          DateTime     @default(now()) @db.Timestamp(0)
-  updatedAt          DateTime     @default(now()) @updatedAt @db.Timestamp(0)
-  clips              Clip[]
-  Review             Review[]
-  ReviewLike         ReviewLike[]
+  id                 String   @id
+  notificationReadAt DateTime @default(now()) @db.Timestamp(0)
+  createdAt          DateTime @default(now()) @db.Timestamp(0)
+  updatedAt          DateTime @default(now()) @updatedAt @db.Timestamp(0)
 }
 
 model Platform {
@@ -79,37 +85,37 @@ model Clip {
   id        String   @unique @default(dbgenerated("gen_random_uuid()"))
   game      Game     @relation(fields: [gameId], references: [id])
   gameId    String
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
+  profile   Profile  @relation(fields: [profileId], references: [id])
+  profileId String
   createdAt DateTime @default(now()) @db.Timestamp
 
-  @@id([gameId, userId])
+  @@id([gameId, profileId])
 }
 
 model Review {
-  id      String  @unique @default(dbgenerated("gen_random_uuid()"))
-  game    Game    @relation(fields: [gameId], references: [id])
-  gameId  String
-  user    User    @relation(fields: [userId], references: [id])
-  userId  String
-  content String?
-  rating  Float
+  id        String  @unique @default(dbgenerated("gen_random_uuid()"))
+  game      Game    @relation(fields: [gameId], references: [id])
+  gameId    String
+  profile   Profile @relation(fields: [profileId], references: [id])
+  profileId String
+  content   String?
+  rating    Float
 
   createdAt  DateTime     @default(now()) @db.Timestamp
   updatedAt  DateTime     @default(now()) @updatedAt @db.Timestamp
   ReviewLike ReviewLike[]
 
-  @@id([gameId, userId])
+  @@id([gameId, profileId])
 }
 
 model ReviewLike {
-  id       String @unique @default(dbgenerated("gen_random_uuid()"))
-  review   Review @relation(fields: [reviewId], references: [id])
-  reviewId String
-  user     User   @relation(fields: [userId], references: [id])
-  userId   String
+  id        String  @unique @default(dbgenerated("gen_random_uuid()"))
+  review    Review  @relation(fields: [reviewId], references: [id])
+  reviewId  String
+  profile   Profile @relation(fields: [profileId], references: [id])
+  profileId String
 
   createdAt DateTime @default(now()) @db.Timestamp
 
-  @@id([reviewId, userId])
+  @@id([reviewId, profileId])
 }

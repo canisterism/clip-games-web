@@ -1,9 +1,18 @@
 -- CreateTable
-CREATE TABLE "User" (
+CREATE TABLE "Profile" (
     "id" TEXT NOT NULL,
     "displayName" VARCHAR(255) NOT NULL,
     "description" TEXT NOT NULL DEFAULT '',
     "photoUrl" TEXT,
+    "createdAt" TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Profile_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "User" (
+    "id" TEXT NOT NULL,
     "notificationReadAt" TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "createdAt" TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -66,6 +75,39 @@ CREATE TABLE "GameGenre" (
     CONSTRAINT "GameGenre_pkey" PRIMARY KEY ("gameId","genreId")
 );
 
+-- CreateTable
+CREATE TABLE "Clip" (
+    "id" TEXT NOT NULL DEFAULT gen_random_uuid(),
+    "gameId" TEXT NOT NULL,
+    "profileId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Clip_pkey" PRIMARY KEY ("gameId","profileId")
+);
+
+-- CreateTable
+CREATE TABLE "Review" (
+    "id" TEXT NOT NULL DEFAULT gen_random_uuid(),
+    "gameId" TEXT NOT NULL,
+    "profileId" TEXT NOT NULL,
+    "content" TEXT,
+    "rating" DOUBLE PRECISION NOT NULL,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Review_pkey" PRIMARY KEY ("gameId","profileId")
+);
+
+-- CreateTable
+CREATE TABLE "ReviewLike" (
+    "id" TEXT NOT NULL DEFAULT gen_random_uuid(),
+    "reviewId" TEXT NOT NULL,
+    "profileId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "ReviewLike_pkey" PRIMARY KEY ("reviewId","profileId")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "Platform_name_key" ON "Platform"("name");
 
@@ -81,6 +123,15 @@ CREATE UNIQUE INDEX "Publisher_name_key" ON "Publisher"("name");
 -- CreateIndex
 CREATE UNIQUE INDEX "Game_title_key" ON "Game"("title");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "Clip_id_key" ON "Clip"("id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Review_id_key" ON "Review"("id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ReviewLike_id_key" ON "ReviewLike"("id");
+
 -- AddForeignKey
 ALTER TABLE "Game" ADD CONSTRAINT "Game_publisherId_fkey" FOREIGN KEY ("publisherId") REFERENCES "Publisher"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -95,3 +146,21 @@ ALTER TABLE "GameGenre" ADD CONSTRAINT "GameGenre_gameId_fkey" FOREIGN KEY ("gam
 
 -- AddForeignKey
 ALTER TABLE "GameGenre" ADD CONSTRAINT "GameGenre_genreId_fkey" FOREIGN KEY ("genreId") REFERENCES "Genre"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Clip" ADD CONSTRAINT "Clip_gameId_fkey" FOREIGN KEY ("gameId") REFERENCES "Game"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Clip" ADD CONSTRAINT "Clip_profileId_fkey" FOREIGN KEY ("profileId") REFERENCES "Profile"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Review" ADD CONSTRAINT "Review_gameId_fkey" FOREIGN KEY ("gameId") REFERENCES "Game"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Review" ADD CONSTRAINT "Review_profileId_fkey" FOREIGN KEY ("profileId") REFERENCES "Profile"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ReviewLike" ADD CONSTRAINT "ReviewLike_reviewId_fkey" FOREIGN KEY ("reviewId") REFERENCES "Review"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ReviewLike" ADD CONSTRAINT "ReviewLike_profileId_fkey" FOREIGN KEY ("profileId") REFERENCES "Profile"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
