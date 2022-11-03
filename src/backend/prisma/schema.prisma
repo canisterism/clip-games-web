@@ -64,18 +64,18 @@ model Game {
 }
 
 model GamePlatform {
-  game       Game     @relation(fields: [gameId], references: [id])
+  game       Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
   gameId     String
-  platform   Platform @relation(fields: [platformId], references: [id])
+  platform   Platform @relation(fields: [platformId], references: [id], onDelete: Cascade)
   platformId String   @db.Uuid
 
   @@id([gameId, platformId])
 }
 
 model GameGenre {
-  game    Game   @relation(fields: [gameId], references: [id])
+  game    Game   @relation(fields: [gameId], references: [id], onDelete: Cascade)
   gameId  String
-  genre   Genre  @relation(fields: [genreId], references: [id])
+  genre   Genre  @relation(fields: [genreId], references: [id], onDelete: Cascade)
   genreId String
 
   @@id([gameId, genreId])
@@ -83,9 +83,9 @@ model GameGenre {
 
 model Clip {
   id        String   @unique @default(dbgenerated("gen_random_uuid()"))
-  game      Game     @relation(fields: [gameId], references: [id])
+  game      Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
   gameId    String
-  profile   Profile  @relation(fields: [profileId], references: [id])
+  profile   Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
   profileId String
   createdAt DateTime @default(now()) @db.Timestamp
 
@@ -94,9 +94,9 @@ model Clip {
 
 model Review {
   id        String  @unique @default(dbgenerated("gen_random_uuid()"))
-  game      Game    @relation(fields: [gameId], references: [id])
+  game      Game    @relation(fields: [gameId], references: [id], onDelete: Cascade)
   gameId    String
-  profile   Profile @relation(fields: [profileId], references: [id])
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
   profileId String
   content   String?
   rating    Float
@@ -110,9 +110,9 @@ model Review {
 
 model ReviewLike {
   id        String  @unique @default(dbgenerated("gen_random_uuid()"))
-  review    Review  @relation(fields: [reviewId], references: [id])
+  review    Review  @relation(fields: [reviewId], references: [id], onDelete: Cascade)
   reviewId  String
-  profile   Profile @relation(fields: [profileId], references: [id])
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
   profileId String
 
   createdAt DateTime @default(now()) @db.Timestamp
