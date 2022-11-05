@@ -4,8 +4,9 @@
 
 **初回やること**
 
+https://app.supabase.com/project/uhzpsiojzdplvpsmtisc から connection string をコピーして .env に `DATABASE_URL=${connection string}` の形で貼り付ける。
+
 ```bash
-$ docker-compose up -d # DBの立ち上げ
 $ yarn
 $ yarn prisma migrate dev # マイグレーション
 $ yarn prisma db seed     # マスタデータ投入

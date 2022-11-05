@@ -10,7 +10,8 @@
     "codegen:frontend": "graphql-codegen --config codegen.ts"
   },
   "prisma": {
-    "seed": "ts-node --require tsconfig-paths/register --compiler-options {\"module\":\"CommonJS\"} src/backend/prisma/seed.ts"
+    "seed": "ts-node --require tsconfig-paths/register --compiler-options {\"module\":\"CommonJS\"} src/backend/prisma/seed.ts",
+    "schema": "./src/backend/prisma/schema.prisma"
   },
   "dependencies": {
     "@apollo/client": "^3.7.0",

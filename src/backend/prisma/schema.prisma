@@ -7,16 +7,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Profile {
+  id          String       @id
+  displayName String       @db.VarChar(255)
+  description String       @default("") @db.Text()
+  photoUrl    String?      @db.Text()
+  createdAt   DateTime     @default(now()) @db.Timestamp(0)
+  updatedAt   DateTime     @default(now()) @updatedAt @db.Timestamp(0)
+  clips       Clip[]
+  Review      Review[]
+  ReviewLike  ReviewLike[]
+}
+
 model User {
   id                 String   @id
-  displayName        String   @db.VarChar(255)
-  description        String   @default("") @db.Text()
-  photoUrl           String?  @db.Text()
   notificationReadAt DateTime @default(now()) @db.Timestamp(0)
   createdAt          DateTime @default(now()) @db.Timestamp(0)
   updatedAt          DateTime @default(now()) @updatedAt @db.Timestamp(0)
-  clips              Clip[]
-  Review             Review[]
 }
 
 model Platform {
@@ -42,7 +49,7 @@ model Publisher {
 model Game {
   // Firestoreから移行したゲームはdocumentID, それ以降のゲームはuuid
   id          String    @id @default(dbgenerated("gen_random_uuid()"))
-  title       String    @unique @db.VarChar(255)
+  title       String    @db.VarChar(255)
   publishedAt DateTime? @db.Timestamp(0)
   price       Int?
   imageUrl    String?   @db.Text()
@@ -57,43 +64,58 @@ model Game {
 }
 
 model GamePlatform {
-  game       Game     @relation(fields: [gameId], references: [id])
+  game       Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
   gameId     String
-  platform   Platform @relation(fields: [platformId], references: [id])
+  platform   Platform @relation(fields: [platformId], references: [id], onDelete: Cascade)
   platformId String   @db.Uuid
 
   @@id([gameId, platformId])
 }
 
 model GameGenre {
-  game    Game   @relation(fields: [gameId], references: [id])
+  game    Game   @relation(fields: [gameId], references: [id], onDelete: Cascade)
   gameId  String
-  genre   Genre  @relation(fields: [genreId], references: [id])
+  genre   Genre  @relation(fields: [genreId], references: [id], onDelete: Cascade)
   genreId String
 
   @@id([gameId, genreId])
 }
 
 model Clip {
-  game      Game     @relation(fields: [gameId], references: [id])
+  id        String   @unique @default(dbgenerated("gen_random_uuid()"))
+  game      Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
   gameId    String
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
+  profile   Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId String
   createdAt DateTime @default(now()) @db.Timestamp
 
-  @@id([gameId, userId])
+  @@id([gameId, profileId])
 }
 
 model Review {
-  game    Game    @relation(fields: [gameId], references: [id])
-  gameId  String
-  user    User    @relation(fields: [userId], references: [id])
-  userId  String
-  content String?
-  rating  Float
+  id        String  @unique @default(dbgenerated("gen_random_uuid()"))
+  game      Game    @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  gameId    String
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId String
+  content   String?
+  rating    Float
+
+  createdAt  DateTime     @default(now()) @db.Timestamp
+  updatedAt  DateTime     @default(now()) @updatedAt @db.Timestamp
+  ReviewLike ReviewLike[]
+
+  @@id([gameId, profileId])
+}
+
+model ReviewLike {
+  id        String  @unique @default(dbgenerated("gen_random_uuid()"))
+  review    Review  @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  reviewId  String
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId String
 
   createdAt DateTime @default(now()) @db.Timestamp
-  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp
 
-  @@id([gameId, userId])
+  @@id([reviewId, profileId])
 }

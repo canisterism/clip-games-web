@@ -7,14 +7,14 @@ export const importReviews = async (prisma: PrismaClient) => {
     console.dir(review);
     await prisma.review.upsert({
       where: {
-        gameId_userId: {
+        gameId_profileId: {
           gameId: review.game.ref.id,
-          userId: review.profile.ref.id,
+          profileId: review.profile.ref.id,
         },
       },
       create: {
         gameId: review.game.ref.id,
-        userId: review.profile.ref.id,
+        profileId: review.profile.ref.id,
         content: review.body,
         rating: review.rating,
         createdAt: review.createdAt.toDate(),
