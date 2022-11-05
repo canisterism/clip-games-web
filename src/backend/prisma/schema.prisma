@@ -49,7 +49,7 @@ model Publisher {
 model Game {
   // Firestoreから移行したゲームはdocumentID, それ以降のゲームはuuid
   id          String    @id @default(dbgenerated("gen_random_uuid()"))
-  title       String    @unique @db.VarChar(255)
+  title       String    @db.VarChar(255)
   publishedAt DateTime? @db.Timestamp(0)
   price       Int?
   imageUrl    String?   @db.Text()
