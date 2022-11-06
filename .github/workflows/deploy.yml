@@ -23,7 +23,7 @@ jobs:
       - name: Configure docker to use the gcloud cli
         run: gcloud auth configure-docker --quiet ${{ secrets.GCP_REGION_PRD }}-docker.pkg.dev
       - name: Build a docker image
-        run: docker build -t ${{ env.IMAGE }} -f /Dockerfile .
+        run: docker build -t ${{ env.IMAGE }} -f ./Dockerfile .
       - name: Push the docker image
         run: docker push ${{ env.IMAGE }}
       - name: Deploy to Cloud Run
