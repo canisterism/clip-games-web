@@ -1,0 +1,5 @@
+import { Review } from "@/archive/backend/graphql/resources/Review";
+import { Resolver } from "type-graphql";
+
+@Resolver((of) => Review)
+export class ReviewResolver {}

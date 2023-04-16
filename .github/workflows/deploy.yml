@@ -25,7 +25,7 @@ jobs:
       - name: Load environment variables and secrets
         run: |
           echo "DATABASE_URL=${{ secrets.PRD_DATABASE_URL }}" >> .env.production.local
-          run: echo ${{ secrets.PRD_FIREBASE_ADMIN_CREDENTIALS_ENV }} | base64 -d >> .env.production.local
+          echo ${{ secrets.PRD_FIREBASE_ADMIN_CREDENTIALS_ENV }} | base64 -d >> .env.production.local
       - name: Build a docker image
         run: docker build -t ${{ env.IMAGE }} -f ./Dockerfile .
       - name: Push the docker image
@@ -37,3 +37,5 @@ jobs:
           service: application
           image: ${{ env.IMAGE }}
           region: ${{ env.GCP_REGION }}
+          flags:
+            - --allow-unauthenticated
