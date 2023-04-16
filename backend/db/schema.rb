@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_14_140316) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_16_122503) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_graphql"
   enable_extension "pg_stat_statements"
@@ -65,8 +65,23 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_14_140316) do
     t.datetime "published_at"
   end
 
+  create_table "profiles", id: :string, force: :cascade do |t|
+    t.string "description", default: "", null: false
+    t.string "display_name", null: false
+    t.string "photo_url", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "publishers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
+  end
+
+  create_table "users", id: :string, force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "notification_read_at", default: -> { "now()" }, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_foreign_key "games", "publishers"
