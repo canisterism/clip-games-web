@@ -1,0 +1,41 @@
+name: deploy
+
+on:
+  push:
+    branches:
+      - "main"
+      - "run-on-cloudrun"
+
+env:
+  GCP_REGION: ${{ secrets.GCP_REGION_PRD }}
+  IMAGE: ${{ secrets.GCP_REGION_PRD }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID_PRD }}/cloud-run-source/application:${{ github.sha }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+      - id: "auth"
+        uses: "google-github-actions/auth@v0"
+        with:
+          credentials_json: "${{ secrets.GCP_SERVICE_ACCOUNT_KEY_PRD }}"
+      - name: Configure docker to use the gcloud cli
+        run: gcloud auth configure-docker --quiet ${{ secrets.GCP_REGION_PRD }}-docker.pkg.dev
+      - name: Load environment variables and secrets
+        run: |
+          echo "DATABASE_URL=${{ secrets.PRD_DATABASE_URL }}" >> .env.production.local
+          echo ${{ secrets.PRD_FIREBASE_ADMIN_CREDENTIALS_ENV }} | base64 -d >> .env.production.local
+      - name: Build a docker image
+        run: docker build -t ${{ env.IMAGE }} -f ./Dockerfile .
+      - name: Push the docker image
+        run: docker push ${{ env.IMAGE }}
+      - name: Deploy to Cloud Run
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@v0
+        with:
+          service: application
+          image: ${{ env.IMAGE }}
+          region: ${{ env.GCP_REGION }}
+          flags:
+            - --allow-unauthenticated

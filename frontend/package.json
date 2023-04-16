@@ -1,0 +1,53 @@
+{
+  "name": "clip-games-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "postinstall": "prisma generate",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "codegen:frontend": "graphql-codegen --config codegen.ts"
+  },
+  "prisma": {
+    "seed": "ts-node --require tsconfig-paths/register --compiler-options {\"module\":\"CommonJS\"} src/backend/prisma/seed.ts",
+    "schema": "./src/backend/prisma/schema.prisma"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.7.0",
+    "@prisma/client": "4.2.1",
+    "apollo-server-micro": "^3.10.2",
+    "class-validator": "^0.13.2",
+    "dotenv-cli": "^6.0.0",
+    "firebase": "^9.6.10",
+    "firebase-admin": "^11.2.0",
+    "framer-motion": "^6",
+    "graphql": "^15.3.0",
+    "graphql-fields": "^2.0.3",
+    "graphql-relay": "^0.10.0",
+    "micro": "^9.4.1",
+    "next": "12.3.1",
+    "react": "18.0.0",
+    "react-dom": "18.0.0",
+    "reflect-metadata": "^0.1.13",
+    "type-graphql": "^1.2.0-rc.1"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "2.13.7",
+    "@graphql-codegen/typescript-operations": "^2.5.4",
+    "@graphql-codegen/typescript-react-apollo": "^3.3.4",
+    "@types/node": "17.0.23",
+    "@types/react": "17.0.43",
+    "@types/react-dom": "17.0.14",
+    "autoprefixer": "^10.4.4",
+    "eslint": "8.12.0",
+    "eslint-config-next": "12.1.4",
+    "postcss": "^8.4.12",
+    "prisma": "4.2.1",
+    "tailwindcss": "^3.1.8",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.1.0",
+    "typescript": "4.6.3"
+  }
+}

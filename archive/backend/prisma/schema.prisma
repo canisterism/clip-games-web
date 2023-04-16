@@ -1,0 +1,122 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-arm64-openssl-1.1.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Profile {
+  id          String       @id
+  displayName String       @db.VarChar(255)
+  description String       @default("") @db.Text()
+  photoUrl    String?      @db.Text()
+  createdAt   DateTime     @default(now()) @db.Timestamp(0)
+  updatedAt   DateTime     @default(now()) @updatedAt @db.Timestamp(0)
+  clips       Clip[]
+  Review      Review[]
+  ReviewLike  ReviewLike[]
+}
+
+model User {
+  id                 String   @id
+  notificationReadAt DateTime @default(now()) @db.Timestamp(0)
+  createdAt          DateTime @default(now()) @db.Timestamp(0)
+  updatedAt          DateTime @default(now()) @updatedAt @db.Timestamp(0)
+}
+
+model Platform {
+  id            String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name          String         @unique @db.VarChar(255)
+  shortenedName String         @unique @db.VarChar(255)
+  publishedAt   DateTime       @db.Timestamp(0)
+  games         GamePlatform[]
+}
+
+model Genre {
+  id    String      @id
+  name  String      @unique @db.VarChar(255)
+  games GameGenre[]
+}
+
+model Publisher {
+  id    String @id @default(dbgenerated("gen_random_uuid()"))
+  name  String @unique @db.VarChar(255)
+  games Game[]
+}
+
+model Game {
+  // Firestoreから移行したゲームはdocumentID, それ以降のゲームはuuid
+  id          String    @id @default(dbgenerated("gen_random_uuid()"))
+  title       String    @db.VarChar(255)
+  publishedAt DateTime? @db.Timestamp(0)
+  price       Int?
+  imageUrl    String?   @db.Text()
+  wikiId      Int?
+
+  publisher   Publisher      @relation(fields: [publisherId], references: [id])
+  publisherId String
+  platforms   GamePlatform[]
+  genres      GameGenre[]
+  clips       Clip[]
+  reviews     Review[]
+}
+
+model GamePlatform {
+  game       Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  gameId     String
+  platform   Platform @relation(fields: [platformId], references: [id], onDelete: Cascade)
+  platformId String   @db.Uuid
+
+  @@id([gameId, platformId])
+}
+
+model GameGenre {
+  game    Game   @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  gameId  String
+  genre   Genre  @relation(fields: [genreId], references: [id], onDelete: Cascade)
+  genreId String
+
+  @@id([gameId, genreId])
+}
+
+model Clip {
+  id        String   @unique @default(dbgenerated("gen_random_uuid()"))
+  game      Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  gameId    String
+  profile   Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId String
+  createdAt DateTime @default(now()) @db.Timestamp
+
+  @@id([gameId, profileId])
+}
+
+model Review {
+  id        String  @unique @default(dbgenerated("gen_random_uuid()"))
+  game      Game    @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  gameId    String
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId String
+  content   String?
+  rating    Float
+
+  createdAt  DateTime     @default(now()) @db.Timestamp
+  updatedAt  DateTime     @default(now()) @updatedAt @db.Timestamp
+  ReviewLike ReviewLike[]
+
+  @@id([gameId, profileId])
+}
+
+model ReviewLike {
+  id        String  @unique @default(dbgenerated("gen_random_uuid()"))
+  review    Review  @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  reviewId  String
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId String
+
+  createdAt DateTime @default(now()) @db.Timestamp
+
+  @@id([reviewId, profileId])
+}
