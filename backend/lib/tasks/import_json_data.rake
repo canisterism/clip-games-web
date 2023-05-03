@@ -1,9 +1,12 @@
 require 'google/cloud/firestore'
 require 'json'
 
+ActiveRecord::Base.logger = Logger.new($stdout)
+
 namespace :import_json_data do
   desc 'Import data from a JSON file'
   task run: :environment do
+
     # file_names = %w[hardwares users public_profiles games reviews clips]
     file_names = %w[games]
     file_names.each do |file_name|
@@ -63,6 +66,29 @@ def import_games
       game.genres       = genres
       game.publisher    = publisher
       game.platforms    = platforms
+    end
+  end
+end
+
+# TODO めちゃくちゃ適当なので後で直す
+def import_reviews
+  read_file(name: 'reviews').each do |doc|
+    Review.find_or_create_by!(id: doc['id']) do |review|
+      review.body = doc['data']['body']
+      review.created_at = doc['data']['createdAt']
+      review.updated_at = doc['data']['updatedAt']
+    end
+  end
+end
+
+# TODO めちゃくちゃ適当なので後で直す
+def import_clips
+  read_file(name: 'clips').each do |doc|
+    Clip.find_or_create_by!(id: doc['id']) do |clip|
+      clip.title = doc['data']['title']
+      clip.url = doc['data']['url']
+      clip.created_at = doc['data']['createdAt']
+      clip.updated_at = doc['data']['updatedAt']
     end
   end
 end
