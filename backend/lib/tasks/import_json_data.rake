@@ -5,7 +5,7 @@ namespace :import_json_data do
   desc 'Import data from a JSON file'
   task run: :environment do
     # file_names = %w[hardwares users public_profiles games reviews clips]
-    file_names = %w[hardwares users public_profiles]
+    file_names = %w[games]
     file_names.each do |file_name|
       send("import_#{file_name}")
     end
@@ -44,32 +44,28 @@ def import_public_profiles
   end
 end
 
-# def import_games
-#   read_file(name: 'games').each do |doc|
-#     Game.find_or_initializecreate!(
-#       id: doc['id'],
-#       title: doc['data']['title'],
-#       image_url: doc['data']['imageUrl'],
-#       genre: doc['data']['genre'],
-#       publisher: doc['data']['publisher'],
-#       price: doc['data']['price'],
-#       platforms: doc['data']['hardwareIds'],
-#       published_at: doc['data']['publishedAt'],
-#       wiki_id: doc['data']['wikiId'],
-#       created_at: doc['data']['createdAt'],
-#       updated_at: doc['data']['updatedAt']
-#     )
-#   end
-# end
-# def import_games
+def import_games
+  read_file(name: 'games').each do |doc|
+    Game.find_or_create_by!(id: doc['id']) do |game|
+      genres = split_genre(doc['data']['genre']).map do |id|
+        Genre.find_or_initialize_by(id:, name: GENRES_MAP[:id])
+      end
+      publisher = Publisher.find_or_initialize_by(name: doc['data']['publisher'])
+      platforms = Platform.where(id: doc['data']['hardwareIds'])
 
-# end
-# def import_reviews
-
-# end
-# def import_clips
-
-# end
+      game.title        = doc['data']['title']
+      game.image_url    = doc['data']['imageUrl']
+      game.price        = doc['data']['price']
+      game.published_at = doc['data']['publishedAt']
+      game.wiki_id      = doc['data']['wikiId']
+      game.created_at   = doc['data']['createdAt']
+      game.updated_at   = doc['data']['updatedAt']
+      game.genres       = genres
+      game.publisher    = publisher
+      game.platforms    = platforms
+    end
+  end
+end
 
 # JSONファイルからデータを読み込む
 # @param [String] name コレクション名
@@ -78,3 +74,68 @@ def read_file(name:)
   json_data = File.read("tmp/#{name}.json")
   JSON.parse(json_data)
 end
+
+# ジャンルの元データには以下のような文字列が含まれるので分割する
+# ACT/PZL, RPG&ACT
+def split_genre(raw_string)
+  return [] if raw_string.nil? || raw_string.empty?
+
+  raw_string
+    .split(/(?:\+)|(?:\&)|(?:\/)/) # ? & / は区切り文字なので split する
+    .flat_map { |str| str.gsub(/(\.)|(他)|(3D)|\s/, "") } # . 他 3D 空白などは扶養なので削除
+    .filter { |v| !v.nil? && !v.empty? }
+    .map { |str| INVALId_GENRE_MAP.key?(str) ? INVALId_GENRE_MAP[str] : str }
+    .filter { |v| !v.nil? }
+end
+
+GENRES_MAP = {
+  ACT: "アクション",
+  PZL: "パズル",
+  TBL: "テーブルゲーム",
+  RPG: "RPG",
+  クイズ: "クイズ",
+  ARPG: "アクションRPG",
+  ADV: "アドベンチャー",
+  AADV: "アクションアドベンチャー",
+  STG: "シューティング",
+  RCG: "レース",
+  SLG: "シミュレーション",
+  etc: "その他",
+  SRPG: "シミュレーションRPG",
+  SPG: "スポーツ",
+  FTG: "格闘ゲーム",
+  APZL: "アクションパズル",
+  音楽: "音楽",
+  RTS: "リアルタイムストラテジー",
+  FPS: "FPS",
+  TPS: "TPS",
+  BG: "ボードゲーム",
+  ダンスシミュレーション: "ダンスシミュレーション",
+  FACT: "格闘アクション",
+  キャラ: "キャラゲー",
+  ASTG: "アクションシューティング",
+  脱衣麻雀: "脱衣麻雀",
+  RPG制作: "RPG制作",
+  RACT: "レースアクション",
+  FPA: "ファーストパーソンアドベンチャー",
+  TCG: "トレーディングカードゲーム",
+  サバイバル: "サバイバル",
+};
+
+# マスタ側のデータが間違ってるなどの理由で修正されるべきジャンルのキー名と正しいキー名のマッピング
+ INVALId_GENRE_MAP = {
+  SPRG: "SRPG",
+  PZLl: "PZL",
+  SPT: "SPG",
+  ボードゲーム: "BG",
+  AVG: "ADV",
+  ATC: "ACT",
+  ETC: "etc",
+  RST: nil,
+  ACR: nil,
+  act: "ACT",
+  RCE: "RCG",
+  SRG: "SLG",
+  SLC: "SLG",
+  BDG: "BG",
+};
