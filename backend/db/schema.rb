@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_16_122503) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_03_180001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_graphql"
   enable_extension "pg_stat_statements"
@@ -29,6 +29,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_16_122503) do
   create_enum "factor_type", ["totp", "webauthn"]
   create_enum "key_status", ["default", "valid", "invalid", "expired"]
   create_enum "key_type", ["aead-ietf", "aead-det", "hmacsha512", "hmacsha256", "auth", "shorthash", "generichash", "kdf", "secretbox", "secretstream", "stream_xchacha20"]
+
+  create_table "clips", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "game_id", null: false
+    t.string "profile_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["game_id", "profile_id"], name: "index_clips_on_game_id_and_profile_id", unique: true
+    t.index ["game_id"], name: "index_clips_on_game_id"
+    t.index ["profile_id"], name: "index_clips_on_profile_id"
+  end
 
   create_table "games", id: :string, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string "title", null: false
@@ -77,6 +87,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_16_122503) do
     t.string "name"
   end
 
+  create_table "reviews", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "rating", null: false
+    t.text "body", default: "", null: false
+    t.string "game_id", null: false
+    t.string "profile_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["game_id", "profile_id"], name: "index_reviews_on_game_id_and_profile_id", unique: true
+    t.index ["game_id"], name: "index_reviews_on_game_id"
+    t.index ["profile_id"], name: "index_reviews_on_profile_id"
+  end
+
   create_table "users", id: :string, force: :cascade do |t|
     t.string "name", null: false
     t.datetime "notification_read_at", default: -> { "now()" }, null: false
@@ -84,9 +106,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_16_122503) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "clips", "games"
+  add_foreign_key "clips", "profiles"
   add_foreign_key "games", "publishers"
   add_foreign_key "games_genres", "games"
   add_foreign_key "games_genres", "genres"
   add_foreign_key "games_platforms", "games"
   add_foreign_key "games_platforms", "platforms"
+  add_foreign_key "reviews", "games"
+  add_foreign_key "reviews", "profiles"
 end
