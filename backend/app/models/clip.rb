@@ -1,4 +1,4 @@
-class GamesPlatform < ApplicationRecord
+class Clip < ApplicationRecord
   belongs_to :game
-  belongs_to :platform
+  belongs_to :profile
 end

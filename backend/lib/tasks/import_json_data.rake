@@ -8,7 +8,7 @@ namespace :import_json_data do
   task run: :environment do
 
     # file_names = %w[hardwares users public_profiles games reviews clips]
-    file_names = %w[games]
+    file_names = %w[public_profiles reviews clips]
     file_names.each do |file_name|
       send("import_#{file_name}")
     end
@@ -70,25 +70,40 @@ def import_games
   end
 end
 
-# TODO めちゃくちゃ適当なので後で直す
 def import_reviews
   read_file(name: 'reviews').each do |doc|
-    Review.find_or_create_by!(id: doc['id']) do |review|
+    binding.b
+    Review.find_or_create_by!(
+      game_id: doc['data']['game']['ref'],
+      profile_id: doc['data']['profile']['ref']
+    ) do |review|
+      game = Game.find_by(id: doc['data']['game']['ref'])
+      profile = Profile.find_by(id: doc['data']['profile']['ref'])
+      review.game = game
+      review.profile = profile
+
       review.body = doc['data']['body']
+      review.rating = doc['data']['rating']
       review.created_at = doc['data']['createdAt']
       review.updated_at = doc['data']['updatedAt']
+
     end
   end
 end
 
-# TODO めちゃくちゃ適当なので後で直す
 def import_clips
   read_file(name: 'clips').each do |doc|
-    Clip.find_or_create_by!(id: doc['id']) do |clip|
-      clip.title = doc['data']['title']
-      clip.url = doc['data']['url']
+    Clip.find_or_create_by!(
+      game_id: doc['data']['game']['ref'],
+      profile_id: doc['data']['profile']['ref']
+    ) do |clip|
+      game = Game.find_by(id: doc['data']['game']['ref'])
+      profile = Profile.find_by(id: doc['data']['profile']['ref'])
+      clip.game = game
+      clip.profile = profile
+
       clip.created_at = doc['data']['createdAt']
-      clip.updated_at = doc['data']['updatedAt']
+      clip.updated_at = doc['data']['createdAt']
     end
   end
 end
