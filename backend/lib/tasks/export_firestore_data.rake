@@ -19,7 +19,7 @@ end
 
 namespace :export_firestore_data do
   desc 'Export data from Firestore and save as a JSON file'
-  task :run do
+  task run: :environment do
 
     Rails.logger.info('export_firestore_data を開始します')
     firestore_credentials = Rails.application.credentials.firebase.credentials
@@ -32,6 +32,10 @@ namespace :export_firestore_data do
 
     # Firestoreクライアントを作成
     firestore = Google::Cloud::Firestore.new
+
+    # 出力先のディレクトリを新規作成
+    FileUtils.rm_rf("tmp/#{Rails.env}")
+    FileUtils.mkdir_p("tmp/#{Rails.env}")
 
     # 対象となるコレクション名のリスト
     collections = %w[users public-profiles games hardwares]
@@ -50,8 +54,8 @@ namespace :export_firestore_data do
       json_data = JSON.pretty_generate(data)
 
       # JSONファイルにデータを書き込み
-      File.write("tmp/#{collection_name.underscore}.json", json_data)
-      Rails.logger.log("tmp/#{collection_name.underscore}.json にデータを書き込みました")
+      File.write("tmp/#{Rails.env}/#{collection_name.underscore}.json", json_data)
+      Rails.logger.info("tmp/#{Rails.env}/#{collection_name.underscore}.json にデータを書き込みました")
     end
 
     collection_groups = %w[reviews clips likes]
@@ -70,8 +74,8 @@ namespace :export_firestore_data do
       json_data = JSON.pretty_generate(data)
 
       # JSONファイルにデータを書き込み
-      File.write("tmp/#{collection_group_name}.json", json_data)
-      Rails.logger.info("tmp/#{collection_group_name}.json にデータを書き込みました")
+      File.write("tmp/#{Rails.env}/#{collection_group_name}.json", json_data)
+      Rails.logger.info("tmp/#{Rails.env}/#{collection_group_name}.json にデータを書き込みました")
     end
     Rails.logger.info('export_firestore_data を終了します')
   end
