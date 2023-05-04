@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_03_180001) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_04_130000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_graphql"
   enable_extension "pg_stat_statements"
@@ -87,6 +87,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_03_180001) do
     t.string "name"
   end
 
+  create_table "review_likes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "review_id", null: false
+    t.string "liker_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["liker_id"], name: "index_review_likes_on_liker_id"
+    t.index ["review_id"], name: "index_review_likes_on_review_id"
+  end
+
   create_table "reviews", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.integer "rating", null: false
     t.text "body", default: "", null: false
@@ -113,6 +122,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_03_180001) do
   add_foreign_key "games_genres", "genres"
   add_foreign_key "games_platforms", "games"
   add_foreign_key "games_platforms", "platforms"
+  add_foreign_key "review_likes", "profiles", column: "liker_id", on_delete: :cascade
+  add_foreign_key "review_likes", "reviews"
   add_foreign_key "reviews", "games"
   add_foreign_key "reviews", "profiles"
 end
