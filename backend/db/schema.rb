@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_04_130000) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_04_130001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_graphql"
   enable_extension "pg_stat_statements"
@@ -97,7 +97,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_04_130000) do
   end
 
   create_table "reviews", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.integer "rating", null: false
+    t.decimal "rating", precision: 5, scale: 1, null: false
     t.text "body", default: "", null: false
     t.string "game_id", null: false
     t.string "profile_id", null: false
