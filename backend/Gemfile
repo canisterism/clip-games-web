@@ -11,6 +11,11 @@ gem 'tzinfo-data', platforms: %i[ mingw mswin x64_mingw jruby ]
 gem 'google-cloud-firestore'
 gem 'graphql'
 
+group :development do
+  gem 'graphiql-rails'
+  gem 'sass-rails'
+end
+
 group :development, :test do
   gem 'debug', platforms: %i[ mri mingw x64_mingw ]
 end
