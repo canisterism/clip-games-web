@@ -1,14 +1,15 @@
 require 'google/cloud/firestore'
 require 'json'
 
-ActiveRecord::Base.logger = Logger.new($stdout)
+Rails.logger = Logger.new($stdout)
+Rails.logger.level = Logger::INFO
 
 namespace :import_json_data do
   desc 'Import data from a JSON file'
   task run: :environment do
 
-    # file_names = %w[hardwares users public_profiles games reviews clips]
-    file_names = %w[public_profiles reviews clips]
+    # file_names = %w[hardwares users public_profiles games reviews clips likes]
+    file_names = %w[likes]
     file_names.each do |file_name|
       send("import_#{file_name}")
     end
@@ -72,7 +73,6 @@ end
 
 def import_reviews
   read_file(name: 'reviews').each do |doc|
-    binding.b
     Review.find_or_create_by!(
       game_id: doc['data']['game']['ref'],
       profile_id: doc['data']['profile']['ref']
@@ -107,6 +107,36 @@ def import_clips
     end
   end
 end
+
+# {
+#   "id": "FgCu93AVqPXWjY7XKlbHXfsCqiE3",
+#   "data": {
+#     "viewer": {
+#       "ref": "FgCu93AVqPXWjY7XKlbHXfsCqiE3"
+#     },
+#     "createdAt": "2021-05-12 15:52:27 +0900",
+#     "author": {
+#       "ref": "FgCu93AVqPXWjY7XKlbHXfsCqiE3"
+#     },
+#     "game": {
+#       "ref": "pkCaQiaDa7NyRFYtwZ8U"
+#     }
+#   }
+# },
+def import_likes
+  read_file(name: 'likes').each do |doc|
+    review = Review.find_by(profile_id: doc['data']['author']['ref'], game_id: doc['data']['game']['ref'])
+    ReviewLike.find_or_create_by!(review:, liker_id: doc['data']['viewer']['ref']) do |like|
+      liker = Profile.find_by(id: doc['data']['viewer']['ref'])
+      like.review = review
+      like.liker = liker
+
+      like.created_at = doc['data']['createdAt']
+      like.updated_at = doc['data']['createdAt']
+    end
+  end
+end
+
 
 # JSONファイルからデータを読み込む
 # @param [String] name コレクション名
