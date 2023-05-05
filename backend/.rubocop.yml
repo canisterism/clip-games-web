@@ -7,6 +7,8 @@ AllCops:
   Exclude:
     - "gems/**/*"
   NewCops: enable
+  AllCops:
+    SuggestExtensions: false
 
 Bundler:
   Enabled: true
