@@ -43,5 +43,25 @@ module Types
     def publisher
       dataloader.with(Sources::BatchedActiveRecords, Publisher).load(object.publisher_id)
     end
+
+    def reviews_count
+      dataloader.with(Sources::BatchedAssociationsByForeignKey, Review, :game_id).load(object.id).then(&:count)
+    end
+
+    def clips_count
+      dataloader.with(Sources::BatchedAssociationsByForeignKey, Clip, :game_id).load(object.id).then(&:count)
+    end
+
+    def rating_distribution
+      dataloader.with(Sources::BatchedAssociationsByForeignKey, Review, :game_id).load(object.id).then do |reviews|
+        reviews.group_by(&:rating).transform_values(&:count)
+      end
+    end
+
+    def rating_average
+      dataloader.with(Sources::BatchedAssociationsByForeignKey, Review, :game_id).load(object.id).then do |reviews|
+        reviews.average(&:rating)
+      end
+    end
   end
 end
