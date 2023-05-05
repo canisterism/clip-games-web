@@ -1,6 +1,7 @@
 {
   "editor.codeActionsOnSave": {
-    "source.organizeImports": true // importsを自動で並べ替える
+    "source.organizeImports": true, // importsを自動で並べ替える
+    "source.fixAll.rubocop": true
   },
   "typescript.preferences.importModuleSpecifier": "non-relative"
 }

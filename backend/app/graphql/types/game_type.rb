@@ -34,11 +34,13 @@ module Types
     end
 
     def platforms
-      dataloader.with(Sources::BatchedAssociationsByManyToMany, Platform, :games_platforms, :game_id, :platform_id).load(object.id)
+      dataloader.with(Sources::BatchedAssociationsByManyToMany, Platform, :games_platforms, :game_id,
+                      :platform_id).load(object.id)
     end
 
     def genres
-      dataloader.with(Sources::BatchedAssociationsByManyToMany, Genre, :games_genres, :game_id, :genre_id).load(object.id)
+      dataloader.with(Sources::BatchedAssociationsByManyToMany, Genre, :games_genres, :game_id,
+                      :genre_id).load(object.id)
     end
 
     def publisher

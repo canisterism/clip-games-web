@@ -1,0 +1,30 @@
+require:
+  - rubocop-performance
+  - rubocop-rubycw
+
+AllCops:
+  DisabledByDefault: true
+  Exclude:
+    - "gems/**/*"
+    - "vendor/**/*"
+
+  NewCops: enable
+  SuggestExtensions: false
+
+Bundler:
+  Enabled: true
+
+Gemspec:
+  Enabled: true
+
+Lint:
+  Enabled: true
+
+Performance:
+  Enabled: true
+
+Rubycw:
+  Enabled: true
+
+Security:
+  Enabled: true

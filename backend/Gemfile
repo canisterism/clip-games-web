@@ -6,16 +6,19 @@ gem 'bootsnap', require: false
 gem 'pg'
 gem 'puma', '~> 5.0'
 gem 'rails', '~> 7.0.4', '>= 7.0.4.3'
-gem 'tzinfo-data', platforms: %i[ mingw mswin x64_mingw jruby ]
+gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 # gem 'rack-cors'
 gem 'google-cloud-firestore'
 gem 'graphql'
 
 group :development do
   gem 'graphiql-rails'
+  gem 'rubocop', '~> 1.50'
+  gem "rubocop-performance", "~> 1.17"
+  gem "rubocop-rubycw", "~> 0.1.6"
   gem 'sass-rails'
 end
 
 group :development, :test do
-  gem 'debug', platforms: %i[ mri mingw x64_mingw ]
+  gem 'debug', platforms: %i[mri mingw x64_mingw]
 end
