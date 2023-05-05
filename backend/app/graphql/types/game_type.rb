@@ -24,20 +24,24 @@ module Types
     field :genres, [Types::GenreType], null: false
     field :publisher, Types::PublisherType, null: false
 
-    def reviews_count
-      object.reviews.count
+    def reviews
+      dataloader.with(Sources::BatchedAssociationsByForeignKey, Review, :game_id).load(object.id)
     end
 
-    def clips_count
-      object.clips.count
+    def clips
+      dataloader.with(Sources::BatchedAssociationsByForeignKey, Clip, :game_id).load(object.id)
     end
 
-    def rating_distribution
-      object.reviews.group(:rating).count
+    def platforms
+      dataloader.with(Sources::BatchedAssociationsByManyToMany, Platform, :games_platforms, :game_id, :platform_id).load(object.id)
     end
 
-    def rating_average
-      object.reviews.average(:rating)
+    def genres
+      dataloader.with(Sources::BatchedAssociationsByManyToMany, Genre, :games_genres, :game_id, :genre_id).load(object.id)
+    end
+
+    def publisher
+      dataloader.with(Sources::BatchedActiveRecords, Publisher).load(object.publisher_id)
     end
   end
 end

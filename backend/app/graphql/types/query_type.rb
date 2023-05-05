@@ -12,6 +12,15 @@ module Types
       Game.find(id)
     end
 
+    field :games, [Types::GameType], null: false do
+      description 'Fetch all games'
+      argument :ids, [ID], required: true
+    end
+
+    def games(ids:)
+      Game.where(id: ids)
+    end
+
     field :genres, [Types::GenreType], null: false do
       description 'Find all genres'
     end
@@ -45,9 +54,5 @@ module Types
     def review(id:)
       Review.find(id)
     end
-
-
-
-
   end
 end

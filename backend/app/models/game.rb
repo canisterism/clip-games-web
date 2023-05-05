@@ -25,4 +25,20 @@ class Game < ApplicationRecord
   has_many :reviews, dependent: :destroy
   has_many :clips, dependent: :destroy
   has_many :review_likes, through: :reviews
+
+  def rating_distribution
+    reviews.group(:rating).count
+  end
+
+  def rating_average
+    reviews.average(:rating)
+  end
+
+  def reviews_count
+    reviews.count
+  end
+
+  def clips_count
+    clips.count
+  end
 end
