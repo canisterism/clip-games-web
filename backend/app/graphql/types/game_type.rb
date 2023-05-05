@@ -14,6 +14,9 @@ module Types
 
     field :reviews_count, Integer, null: false
     field :clips_count, Integer, null: false
+    # review.ratingの分布を返す
+    field :rating_distribution, GraphQL::Types::JSON, null: false
+    field :rating_average, Float, null: false
 
     field :reviews, [Types::ReviewType], null: false
     field :clips, [Types::ClipType], null: false
@@ -27,6 +30,14 @@ module Types
 
     def clips_count
       object.clips.count
+    end
+
+    def rating_distribution
+      object.reviews.group(:rating).count
+    end
+
+    def rating_average
+      object.reviews.average(:rating)
     end
   end
 end
