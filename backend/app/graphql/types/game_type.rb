@@ -3,7 +3,8 @@
 module Types
   class GameType < Types::BaseObject
     implements GraphQL::Types::Relay::Node
-    field :id, ID, null: false
+
+    # field :id, ID, null: false GraphQL::Types::Relay::Node によって自動的に追加される
     field :title, String, null: false
     field :published_at, GraphQL::Types::ISO8601DateTime
     field :price, Float
@@ -12,11 +13,11 @@ module Types
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 
-    field :reviews_count, Integer, null: false
-    field :clips_count, Integer, null: false
-    # review.ratingの分布を返す
-    field :rating_distribution, GraphQL::Types::JSON, null: false
-    field :rating_average, Float, null: false
+    field :reviews_count, Integer, null: false, description: 'レビュー数'
+    field :clips_count, Integer, null: false, description: 'クリップ数'
+
+    field :rating_distribution, GraphQL::Types::JSON, null: false, description: 'レビューの評価分布'
+    field :rating_average, Float, null: false, description: 'レビューの平均評価'
 
     field :reviews, [Types::ReviewType], null: false
     field :clips, [Types::ClipType], null: false
