@@ -60,7 +60,8 @@ module Types
 
     def rating_average
       dataloader.with(Sources::BatchedAssociationsByForeignKey, Review, :game_id).load(object.id).then do |reviews|
-        reviews.average(&:rating)
+        total_ratings = reviews.sum(&:rating)
+        total_ratings.to_f / reviews.size
       end
     end
   end
