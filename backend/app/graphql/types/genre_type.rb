@@ -5,5 +5,6 @@ module Types
     implements GraphQL::Types::Relay::Node
     field :id, ID, null: false
     field :name, String
+    field :games, [Types::GameType], null: false
   end
 end

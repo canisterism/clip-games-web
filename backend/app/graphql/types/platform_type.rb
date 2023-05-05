@@ -6,5 +6,6 @@ module Types
     field :id, ID, null: false
     field :name, String
     field :published_at, GraphQL::Types::ISO8601DateTime
+    field :games, [Types::GameType], null: false
   end
 end
