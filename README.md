@@ -15,3 +15,11 @@ $ EDITOR='code --wait' rails credentials:edit --environment development
 **機密情報をコミットしないようにする**
 
 https://docs.gitguardian.com/ggshield-docs/integrations/git-hooks/pre-commit
+
+## Graphq周辺
+
+### graphql-rubyのスキーマを更新する
+
+```bash
+$ rails graphql:schema:dump 
+```

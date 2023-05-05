@@ -1,0 +1,153 @@
+type Clip implements Node {
+  createdAt: ISO8601DateTime!
+  game: Game!
+  id: ID!
+  profile: Profile!
+  updatedAt: ISO8601DateTime!
+}
+
+type Game implements Node {
+  clips: [Clip!]!
+  clipsCount: Int!
+  createdAt: ISO8601DateTime!
+  genres: [Genre!]!
+  id: ID!
+  imageUrl: String
+  platforms: [Platform!]!
+  price: Float
+  publishedAt: ISO8601DateTime
+  publisher: Publisher!
+  ratingAverage: Float!
+  ratingDistribution: JSON!
+  reviews: [Review!]!
+  reviewsCount: Int!
+  title: String!
+  updatedAt: ISO8601DateTime!
+}
+
+type Genre implements Node {
+  games: [Game!]!
+  id: ID!
+  name: String
+}
+
+"""
+An ISO 8601-encoded datetime
+"""
+scalar ISO8601DateTime
+
+"""
+Represents untyped JSON
+"""
+scalar JSON
+
+type Mutation {
+  """
+  An example field added by the generator
+  """
+  testField: String!
+}
+
+"""
+An object with an ID.
+"""
+interface Node {
+  """
+  ID of the object.
+  """
+  id: ID!
+}
+
+type Platform implements Node {
+  games: [Game!]!
+  id: ID!
+  name: String
+  publishedAt: ISO8601DateTime
+}
+
+type Profile implements Node {
+  clips: [Clip!]!
+  createdAt: ISO8601DateTime!
+  description: String!
+  displayName: String!
+  id: ID!
+  photoUrl: String!
+  reviewLikes: [ReviewLike!]!
+  reviews: [Review!]!
+  updatedAt: ISO8601DateTime!
+}
+
+type Publisher implements Node {
+  id: ID!
+  name: String
+}
+
+type Query {
+  """
+  Find a game by ID
+  """
+  game(id: ID!): Game!
+
+  """
+  Fetch all games
+  """
+  games(ids: [ID!]!): [Game!]!
+
+  """
+  Find all genres
+  """
+  genres: [Genre!]!
+
+  """
+  Fetches an object given its ID.
+  """
+  node(
+    """
+    ID of the object.
+    """
+    id: ID!
+  ): Node
+
+  """
+  Fetches a list of objects given a list of IDs.
+  """
+  nodes(
+    """
+    IDs of the objects.
+    """
+    ids: [ID!]!
+  ): [Node]!
+
+  """
+  Find all platforms
+  """
+  platforms: [Platform!]!
+
+  """
+  Find a profile by ID
+  """
+  profile(id: ID!): Profile!
+
+  """
+  Find a review by ID
+  """
+  review(id: ID!): Review!
+}
+
+type Review implements Node {
+  body: String!
+  createdAt: ISO8601DateTime!
+  game: Game!
+  id: ID!
+  profile: Profile!
+  rating: Float!
+  updatedAt: ISO8601DateTime!
+}
+
+type ReviewLike implements Node {
+  createdAt: ISO8601DateTime!
+  id: ID!
+  liker: Profile!
+  review: Review!
+  updatedAt: ISO8601DateTime!
+}
