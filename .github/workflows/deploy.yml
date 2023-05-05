@@ -27,7 +27,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
-          context: .
+          context: ./backend
           platforms: linux/amd64
           tags: asia-northeast1-docker.pkg.dev/clip-games/cloud-run-source/application:latest
           push: true
