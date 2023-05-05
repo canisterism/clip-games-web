@@ -14,6 +14,8 @@ gem 'graphql'
 group :development do
   gem 'graphiql-rails'
   gem 'rubocop', '~> 1.50'
+  gem "rubocop-performance", "~> 1.17"
+  gem "rubocop-rubycw", "~> 0.1.6"
   gem 'sass-rails'
 end
 

@@ -226,6 +226,11 @@ GEM
       unicode-display_width (>= 2.4.0, < 3.0)
     rubocop-ast (1.28.1)
       parser (>= 3.2.1.0)
+    rubocop-performance (1.17.1)
+      rubocop (>= 1.7.0, < 2.0)
+      rubocop-ast (>= 0.4.0)
+    rubocop-rubycw (0.1.6)
+      rubocop (~> 1.0)
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
     sass-rails (6.0.0)
@@ -274,6 +279,8 @@ DEPENDENCIES
   puma (~> 5.0)
   rails (~> 7.0.4, >= 7.0.4.3)
   rubocop (~> 1.50)
+  rubocop-performance (~> 1.17)
+  rubocop-rubycw (~> 0.1.6)
   sass-rails
   tzinfo-data
 
