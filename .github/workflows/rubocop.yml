@@ -15,7 +15,8 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          working-directory: backend
+          working-directory: ./backend
+          bundler-cache: true
 
       - name: Cache gems
         uses: actions/cache@v2
@@ -30,5 +31,5 @@ jobs:
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
 
-      - name: Run RuboCop
+      - name: Run Rubocop
         run: bundle exec rubocop
