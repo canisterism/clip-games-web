@@ -81,7 +81,6 @@ def import_reviews
       review.rating = doc['data']['rating']
       review.created_at = doc['data']['createdAt']
       review.updated_at = doc['data']['updatedAt']
-
     end
   end
 end
@@ -141,7 +140,7 @@ def split_genre(raw_string)
   return [] if raw_string.nil? || raw_string.empty?
 
   raw_string
-    .split(/(?:\+)|(?:\&)|(?:\/)/) # ? & / は区切り文字なので split する
+    .split(%r{(?:\+)|(?:&)|(?:/)}) # ? & / は区切り文字なので split する
     .flat_map { |str| str.gsub(/(\.)|(他)|(3D)|\s/, '') } # . 他 3D 空白などは扶養なので削除
     .filter { |v| !v.nil? && !v.empty? }
     .map { |str| INVALId_GENRE_MAP.key?(str.to_sym) ? INVALId_GENRE_MAP[str.to_sym] : str }

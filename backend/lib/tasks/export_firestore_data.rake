@@ -20,7 +20,6 @@ end
 namespace :export_firestore_data do
   desc 'Export data from Firestore and save as a JSON file'
   task run: :environment do
-
     Rails.logger.info('export_firestore_data を開始します')
     firestore_credentials = Rails.application.credentials.firebase.credentials
 

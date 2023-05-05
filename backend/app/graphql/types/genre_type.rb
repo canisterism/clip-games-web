@@ -7,7 +7,8 @@ module Types
     field :games, [Types::GameType], null: false
 
     def games
-      dataloader.with(Sources::BatchedAssociationsByManyToMany, Game, :games_genres, :genre_id, :game_id).load(object.id)
+      dataloader.with(Sources::BatchedAssociationsByManyToMany, Game, :games_genres, :genre_id,
+                      :game_id).load(object.id)
     end
   end
 end
