@@ -143,7 +143,7 @@ def split_genre(raw_string)
     .split(%r{(?:\+)|(?:&)|(?:/)}) # ? & / は区切り文字なので split する
     .flat_map { |str| str.gsub(/(\.)|(他)|(3D)|\s/, '') } # . 他 3D 空白などは扶養なので削除
     .filter { |v| !v.nil? && !v.empty? }
-    .map { |str| INVALId_GENRE_MAP.key?(str.to_sym) ? INVALId_GENRE_MAP[str.to_sym] : str }
+    .map { |str| INVALID_GENRE_MAP.key?(str.to_sym) ? INVALID_GENRE_MAP[str.to_sym] : str }
     .filter { |v| !v.nil? }
 end
 
@@ -183,7 +183,7 @@ GENRES_MAP = {
 }.freeze
 
 # マスタ側のデータが間違ってるなどの理由で修正されるべきジャンルのキー名と正しいキー名のマッピング
-INVALId_GENRE_MAP = {
+INVALID_GENRE_MAP = {
   SPRG: 'SRPG',
   PZLl: 'PZL',
   SPT: 'SPG',

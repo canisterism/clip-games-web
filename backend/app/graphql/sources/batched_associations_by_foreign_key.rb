@@ -8,6 +8,7 @@
 module Sources
   class BatchedAssociationsByForeignKey < GraphQL::Dataloader::Source
     def initialize(model_class, foreign_key)
+      super()
       @model_class = model_class
       @foreign_key = foreign_key
     end

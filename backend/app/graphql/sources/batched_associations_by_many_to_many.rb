@@ -9,6 +9,7 @@
 module Sources
   class BatchedAssociationsByManyToMany < GraphQL::Dataloader::Source
     def initialize(model_class, join_table, source_key, target_key)
+      super()
       @model_class = model_class
       @join_table = join_table
       @source_key = source_key

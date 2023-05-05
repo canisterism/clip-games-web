@@ -8,6 +8,7 @@
 module Sources
   class BatchedActiveRecords < GraphQL::Dataloader::Source
     def initialize(model_class)
+      super()
       @model_class = model_class
     end
 
