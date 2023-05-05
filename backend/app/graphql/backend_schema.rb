@@ -5,6 +5,7 @@ class BackendSchema < GraphQL::Schema
   # For batch-loading (see https://graphql-ruby.org/dataloader/overview.html)
   use GraphQL::Dataloader
 
+  # rubocop:disable Lint/UselessMethodDefinition
   # GraphQL-Ruby calls this when something goes wrong while running a query:
   def self.type_error(err, context)
     # if err.is_a?(GraphQL::InvalidNullError)
@@ -13,6 +14,7 @@ class BackendSchema < GraphQL::Schema
     # end
     super
   end
+  # rubocop:enable Lint/UselessMethodDefinition
 
   # Union and Interface Resolution
   def self.resolve_type(_abstract_type, _obj, _ctx)
