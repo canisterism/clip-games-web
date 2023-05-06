@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - cloudrun # TODO:後で消す
 
 jobs:
   deploy:
