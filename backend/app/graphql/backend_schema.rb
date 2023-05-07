@@ -17,10 +17,27 @@ class BackendSchema < GraphQL::Schema
   # rubocop:enable Lint/UselessMethodDefinition
 
   # Union and Interface Resolution
-  def self.resolve_type(_abstract_type, _obj, _ctx)
-    # TODO: Implement this method
-    # to return the correct GraphQL object type for `obj`
-    raise(GraphQL::RequiredImplementationMissingError)
+  def self.resolve_type(_abstract_type, obj, _ctx)
+    case obj
+    when Game
+      Types::GameType
+    when Profile
+      Types::ProfileType
+    when Review
+      Types::ReviewType
+    when Genre
+      Types::GenreType
+    when Platform
+      Types::PlatformType
+    when ReviewLike
+      Types::ReviewLikeType
+    when User
+      Types::UserType
+    when Publisher
+      Types::PublisherType
+    else
+      raise(GraphQL::RequiredImplementationMissingError)
+    end
   end
 
   # Stop validating when it encounters this many errors:
