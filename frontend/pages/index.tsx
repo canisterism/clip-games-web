@@ -1,8 +1,24 @@
 import { Navigation } from "@/components/Navigation";
-import { useGameQuery } from "@/graphql/generated/types";
+import { useQuery } from "@apollo/client";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
+import { graphql } from "../graphql/generated";
+
+const gameDocument = graphql(`
+  query game($gameId: ID!) {
+    game(id: $gameId) {
+      id
+      title
+      imageUrl
+      reviews {
+        body
+        rating
+        createdAt
+      }
+    }
+  }
+`);
 
 const Home: NextPage = () => {
   return (
@@ -40,10 +56,8 @@ const GamesGrid: React.FC<{ gameIds: string[] }> = ({ gameIds }) => {
 };
 
 export const GamePackage: React.FC<{ gameId: string }> = ({ gameId }) => {
-  const { loading, error, data } = useGameQuery({
-    variables: {
-      gameId: gameId,
-    },
+  const { loading, error, data } = useQuery(gameDocument, {
+    variables: { gameId },
   });
   if (loading) {
     return (
