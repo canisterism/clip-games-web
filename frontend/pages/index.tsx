@@ -1,5 +1,5 @@
-import { Navigation } from "@/frontend/components/Navigation";
-import { useGameQuery } from "@/frontend/graphql/generated/types";
+import { Navigation } from "@/components/Navigation";
+import { useGameQuery } from "@/graphql/generated/types";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
@@ -24,10 +24,7 @@ const Home: NextPage = () => {
 };
 
 const GAME_IDS: string[] = [
-  "5jVrnHPmsMV1qSflBdJS",
-  "ou5Y8uSB6s6CgYWiCRpa",
-  "pkCaQiaDa7NyRFYtwZ8U",
-  "sR6klPwn2WF0YGaeykq1",
+  "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS9wa0NhUWlhRGE3TnlSRll0d1o4VQ",
 ];
 
 export default Home;
