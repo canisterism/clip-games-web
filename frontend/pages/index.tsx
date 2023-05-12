@@ -3,7 +3,9 @@ import Head from "next/head";
 import Image from "next/image";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 import { Navigation } from "@/components/Navigation";
-import { Game, GameDocument } from "../graphql/generated/graphql";
+import { GameDocument, GameQuery } from "../graphql/generated/graphql";
+
+type Game = GameQuery["game"];
 
 const Home: NextPage<{ games: Game[] }> = ({ games }) => {
   return (
@@ -34,7 +36,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
     cache: new InMemoryCache(),
   });
 
-  const games = await Promise.all(
+  const games: Game[] = await Promise.all(
     GAME_IDS.map(async (gameId) => {
       const { data } = await client.query({
         query: GameDocument,
