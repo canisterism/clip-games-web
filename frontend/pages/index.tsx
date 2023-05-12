@@ -1,26 +1,11 @@
-import { Navigation } from "@/components/Navigation";
-import { useQuery } from "@apollo/client";
-import type { NextPage } from "next";
+import { NextPage, GetServerSideProps } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import { graphql } from "../graphql/generated";
+import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
+import { Navigation } from "@/components/Navigation";
+import { Game, GameDocument } from "../graphql/generated/graphql";
 
-const gameDocument = graphql(`
-  query game($gameId: ID!) {
-    game(id: $gameId) {
-      id
-      title
-      imageUrl
-      reviews {
-        body
-        rating
-        createdAt
-      }
-    }
-  }
-`);
-
-const Home: NextPage = () => {
+const Home: NextPage<{ games: Game[] }> = ({ games }) => {
   return (
     <div>
       <Head>
@@ -32,66 +17,70 @@ const Home: NextPage = () => {
       <main>
         <Navigation></Navigation>
         <div className="mx-8 my-4">
-          <GamesGrid gameIds={GAME_IDS}></GamesGrid>
+          <GamesGrid games={games}></GamesGrid>
         </div>
       </main>
     </div>
   );
 };
 
-const GAME_IDS: string[] = [
-  "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS9wa0NhUWlhRGE3TnlSRll0d1o4VQ",
-];
+export const getServerSideProps: GetServerSideProps = async () => {
+  const GAME_IDS: string[] = [
+    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS9wa0NhUWlhRGE3TnlSRll0d1o4VQ",
+  ];
+
+  const client = new ApolloClient({
+    uri: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT_URL,
+    cache: new InMemoryCache(),
+  });
+
+  const games = await Promise.all(
+    GAME_IDS.map(async (gameId) => {
+      const { data } = await client.query({
+        query: GameDocument,
+        variables: { gameId },
+      });
+      return data.game;
+    })
+  );
+
+  return {
+    props: {
+      games,
+    },
+  };
+};
 
 export default Home;
 
-const GamesGrid: React.FC<{ gameIds: string[] }> = ({ gameIds }) => {
+const GamesGrid: React.FC<{ games: Game[] }> = ({ games }) => {
   return (
     <div className="flex flex-wrap gap-4">
-      {gameIds.map((gameId) => (
-        <GamePackage key={gameId} gameId={gameId} />
+      {games.map((game) => (
+        <GamePackage key={game.id} game={game} />
       ))}
     </div>
   );
 };
 
-export const GamePackage: React.FC<{ gameId: string }> = ({ gameId }) => {
-  const { loading, error, data } = useQuery(gameDocument, {
-    variables: { gameId },
-  });
-  if (loading) {
-    return (
-      <div className="flex justify-center">
-        <div className="animate-spin h-10 w-10 border-4 border-blue-500 rounded-full border-t-transparent"></div>
-      </div>
-    );
-  }
-  if (
-    error ||
-    data === undefined ||
-    data.game === undefined ||
-    data.game === null
-  ) {
-    return (
-      <>
-        <p> Something Went Wrong!</p>
-      </>
-    );
-  }
+export const GamePackage: React.FC<{ game: Game }> = ({ game }) => {
+  console.dir(game);
   return (
     <div>
       <div className="flex flex-col">
         <Image
           src={
-            data.game.imageUrl
-              ? `${data.game.imageUrl}`
+            game.imageUrl
+              ? `${game.imageUrl}`
               : "https://placeimg.com/320/400/any"
           }
-          alt={`${data.game.title}`}
+          alt={`${game.title}`}
           width="320"
           height="400"
         ></Image>
-        <span>{data.game.title}</span>
+        <span>{game.title}</span>
+        <span>発売日：{game.publishedAt}</span>
+        <span>☆ {game.ratingAverage}</span>
       </div>
     </div>
   );

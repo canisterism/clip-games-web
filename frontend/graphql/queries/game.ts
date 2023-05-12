@@ -10,6 +10,8 @@ export default gql`
         rating
         createdAt
       }
+      publishedAt
+      ratingAverage
     }
   }
 `;
