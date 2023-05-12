@@ -12,6 +12,11 @@ $ cd backend
 $ EDITOR='code --wait' rails credentials:edit --environment development
 ```
 
+```bash
+# api.localhost にアクセスできるようにする
+echo "127.0.0.1 api.localhost" >> /etc/hosts
+```
+
 **機密情報をコミットしないようにする**
 
 https://docs.gitguardian.com/ggshield-docs/integrations/git-hooks/pre-commit

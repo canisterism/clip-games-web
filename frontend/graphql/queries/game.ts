@@ -1,15 +1,17 @@
 import { gql } from "@apollo/client";
 export default gql`
-  query game($gameId: String!) {
-    game(gameId: $gameId) {
+  query game($gameId: ID!) {
+    game(id: $gameId) {
       id
       title
       imageUrl
       reviews {
-        content
+        body
         rating
         createdAt
       }
+      publishedAt
+      ratingAverage
     }
   }
 `;

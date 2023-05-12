@@ -31,3 +31,5 @@
 /config/credentials/production.key
 
 schema.json
+
+.irb_history

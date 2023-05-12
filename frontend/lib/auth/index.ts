@@ -1,4 +1,4 @@
-import { clientInitializedAuth } from "@/frontend/config/firebase";
+import { clientInitializedAuth } from "@/config/firebase";
 import { signOut as firebaseSignOut } from "firebase/auth";
 export { signInWithGoogle } from "./google";
 

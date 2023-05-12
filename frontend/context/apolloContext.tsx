@@ -1,5 +1,5 @@
-import { AuthContext } from "@/frontend/context/authContext";
-import { createApolloClient } from "@/frontend/graphql/client";
+import { AuthContext } from "@/context/authContext";
+import { createApolloClient } from "@/graphql/client";
 import { ApolloProvider as OriginalApolloProvider } from "@apollo/client";
 import { ReactNode, useContext } from "react";
 

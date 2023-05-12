@@ -1,4 +1,4 @@
-import { clientInitializedAuth } from "@/frontend/config/firebase";
+import { clientInitializedAuth } from "@/config/firebase";
 import { User } from "firebase/auth";
 import {
   createContext,
