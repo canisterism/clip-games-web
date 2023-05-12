@@ -1,7 +1,6 @@
 import type { CodegenConfig } from "@graphql-codegen/cli";
 
 const config: CodegenConfig = {
-  overwrite: true,
   schema: "../schema.graphql",
   documents: "graphql/**/*.ts",
   generates: {
@@ -9,6 +8,9 @@ const config: CodegenConfig = {
       preset: "client",
       plugins: [],
     },
+  },
+  hooks: {
+    afterAllFileWrite: ["prettier --write"],
   },
   config: {
     scalars: {
