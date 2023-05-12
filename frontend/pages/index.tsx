@@ -66,7 +66,6 @@ const GamesGrid: React.FC<{ games: Game[] }> = ({ games }) => {
 };
 
 export const GamePackage: React.FC<{ game: Game }> = ({ game }) => {
-  console.dir(game);
   return (
     <div>
       <div className="flex flex-col">
