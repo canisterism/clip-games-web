@@ -163,6 +163,10 @@ export type ReviewLike = Node & {
   updatedAt: Scalars["ISO8601DateTime"];
 };
 
+export type GameQueryVariables = Exact<{
+  gameId: Scalars["ID"];
+}>;
+
 export type GameQuery = {
   __typename?: "Query";
   game: {
@@ -170,6 +174,8 @@ export type GameQuery = {
     id: string;
     title: string;
     imageUrl?: string | null;
+    reviewsCount: number;
+    clipsCount: number;
     publishedAt?: string | null;
     ratingAverage: number;
     reviews: Array<{
@@ -225,6 +231,16 @@ export const GameDocument = {
                 { kind: "Field", name: { kind: "Name", value: "imageUrl" } },
                 {
                   kind: "Field",
+                  name: { kind: "Name", value: "reviewsCount" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "clipsCount" } },
+                { kind: "Field", name: { kind: "Name", value: "publishedAt" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "ratingAverage" },
+                },
+                {
+                  kind: "Field",
                   name: { kind: "Name", value: "reviews" },
                   selectionSet: {
                     kind: "SelectionSet",
@@ -241,11 +257,6 @@ export const GameDocument = {
                     ],
                   },
                 },
-                { kind: "Field", name: { kind: "Name", value: "publishedAt" } },
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "ratingAverage" },
-                },
               ],
             },
           },
@@ -254,6 +265,3 @@ export const GameDocument = {
     },
   ],
 } as unknown as DocumentNode<GameQuery, GameQueryVariables>;
-export type GameQueryVariables = Exact<{
-  gameId: Scalars["ID"];
-}>;
