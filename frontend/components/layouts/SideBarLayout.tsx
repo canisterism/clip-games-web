@@ -19,12 +19,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { Fragment, useState } from "react";
 
-type NavigationItem = {
-  name: string;
-  href: string;
-  icon: (props: React.ComponentProps<"svg">) => JSX.Element;
-  current: boolean;
-};
 const navigation = [
   { name: "Dashboard", href: "#", icon: HomeIcon, current: true },
   { name: "Team", href: "#", icon: UsersIcon, current: false },
@@ -142,7 +136,7 @@ function SearchBar(props: { onSearch: (query: string) => void }) {
       </div>
       <input
         id="search-field"
-        className="block h-full w-full border-0 rounded-md py-1.5 pl-10 pr-3 bg-gray-700 text-gray-900 placeholder:text-gray-400 focus:bg-white focus:text-gray-900 focus:ring-0 sm:text-sm"
+        className="block h-full w-full border-0 rounded-md py-1.5 pl-10 pr-3 bg-gray-700 text-gray-200 placeholder:text-gray-400 focus:bg-white focus:text-gray-900 focus:ring-0 sm:text-sm"
         placeholder="Search..."
         type="search"
         name="search"
