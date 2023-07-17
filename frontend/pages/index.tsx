@@ -1,8 +1,8 @@
+import GameList from "@/components/GameList";
 import { SideBarLayout } from "@/components/layouts";
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
-import Image from "next/image";
 import { GameDocument, GameQuery } from "../graphql/generated/graphql";
 
 type Game = GameQuery["game"];
@@ -17,7 +17,7 @@ const Home: NextPage<{ games: Game[] }> = ({ games }) => {
       </Head>
       <SideBarLayout>
         <div className="mx-8 my-4">
-          <GamesGrid games={games}></GamesGrid>
+          <GameList games={games} />
         </div>
       </SideBarLayout>
     </div>
@@ -26,7 +26,36 @@ const Home: NextPage<{ games: Game[] }> = ({ games }) => {
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const GAME_IDS: string[] = [
-    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS9wa0NhUWlhRGE3TnlSRll0d1o4VQ",
+    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8wQkR2OUZ3eFNCRkJ1akFUcHZkdw",
+    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8wTllsbmV0ejEzRkJPeWI1MDdyTw",
+    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8waGh2dGkycm40dE92OG14UVFxcQ",
+    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8wbWNza21JaHJNTTFLbG5ac1g1Rg",
+    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8xN2lWYmV3YjdWVFZTeGVRQWQ5WA",
+    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8xVmFkNXl3Zk9HVHVDRkpYYk1WeQ",
+    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8xYWQzZUg2U0VhcUI5eHRoVU11eA",
+    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8xaElnZWttS2xmU05Fa0hIWXJ0TA",
+    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8xdjJUUGRGU043cHdxTktRRjc3Yg",
+    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8yM3dGd05xVXg3U2FDaHpBWWRudg",
+    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8yNG5Kb0NoaEVHRUZBSGNRZ051Qw",
+    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8yWFowQlRUcHNwa3BQbWVNMDVhSA",
+    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8yZGwzcDZYbmVMUWNTRWVLNFpkbg",
+    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8yaXR6ajB5Z053cms2RXpjcm9QMQ",
+    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8yclYwbnVVZnBleENRWGprc1RsTw",
+    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8zTmh0eHNnRnlnZGd4cjdyMUdYNQ",
+    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8zYkpaRFJPVmRMOG5tQXB4U0JkNw",
+    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8zY0Q2M1RYTHVOcDNMNnI0YnNLaQ",
+    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8zY0xvalVMWTJkU2ZXQnJjaU16TA",
+    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS80ZWlVNDdreW41VWJXY01DRWlLZQ",
+    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS80bEFTTGFZT1ZjY0N6dWZoVlcyag",
+    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS80bERSb2kzSmxJQm5ldzVMbnBRZw",
+    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS80blBqcFh1emxacm9xdVBuUEtyQg",
+    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS81V0NjYkg0YW9YSFA3eHR6ZFNSbQ",
+    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS81YzZYQWVNMFRla2hadlo2dG51cA",
+    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS81alZybkhQbXNNVjFxU2ZsQmRKUw",
+    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS82MXl6b1dhclBTNlRNUkNIRTRpWg",
+    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS82M2JXcERwb3BOekVmalNhS1dvcQ",
+    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS82WGxvZFhJVERodjFVVmV4S0tCUw",
+    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS82bDI1QUZ0WDBvZHZta0c0SGxIVQ",
   ];
 
   const client = new ApolloClient({
@@ -52,35 +81,3 @@ export const getServerSideProps: GetServerSideProps = async () => {
 };
 
 export default Home;
-
-const GamesGrid: React.FC<{ games: Game[] }> = ({ games }) => {
-  return (
-    <div className="flex flex-wrap gap-4">
-      {games.map((game) => (
-        <GamePackage key={game.id} game={game} />
-      ))}
-    </div>
-  );
-};
-
-export const GamePackage: React.FC<{ game: Game }> = ({ game }) => {
-  return (
-    <div>
-      <div className="flex flex-col">
-        <Image
-          src={
-            game.imageUrl
-              ? `${game.imageUrl}`
-              : "https://placeimg.com/320/400/any"
-          }
-          alt={`${game.title}`}
-          width="320"
-          height="400"
-        ></Image>
-        <span>{game.title}</span>
-        <span>発売日：{game.publishedAt}</span>
-        <span>☆ {game.ratingAverage}</span>
-      </div>
-    </div>
-  );
-};
