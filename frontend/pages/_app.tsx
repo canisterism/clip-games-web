@@ -2,6 +2,7 @@ import { ApolloProvider } from "@/context/apolloContext";
 import { AuthProvider } from "@/context/authContext";
 import type { AppProps } from "next/app";
 import "tailwindcss/tailwind.css";
+import "../styles/global.css";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
