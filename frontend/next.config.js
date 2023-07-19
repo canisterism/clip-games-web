@@ -6,6 +6,7 @@ const nextConfig = {
       "storage.googleapis.com",
       "placeimg.com",
       "images.unsplash.com",
+      "lh4.googleusercontent.com",
     ],
   },
   reactStrictMode: true,
