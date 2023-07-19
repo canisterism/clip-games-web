@@ -19,6 +19,7 @@ const generateAuthLink = (token: string | undefined) => {
 export const createApolloClient = (token: string | undefined) => {
   const authLink = generateAuthLink(token);
   return new ApolloClient({
+    ssrMode: typeof window === "undefined",
     cache: new InMemoryCache(),
     link: authLink.concat(httpLink),
   });
