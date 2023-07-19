@@ -1,3 +1,4 @@
+import { SideBarLayout } from "@/components/layouts";
 import { ApolloProvider } from "@/context/apolloContext";
 import { AuthProvider } from "@/context/authContext";
 import type { AppProps } from "next/app";
@@ -8,7 +9,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <AuthProvider>
       <ApolloProvider>
-        <Component {...pageProps} />
+        <SideBarLayout>
+          <Component {...pageProps} />
+        </SideBarLayout>
       </ApolloProvider>
     </AuthProvider>
   );

@@ -1,36 +1,36 @@
+import { AuthContext } from "@/context/authContext";
 import { Dialog, Menu, Transition } from "@headlessui/react";
 import {
   ChevronDownIcon,
+  FireIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/20/solid";
 import {
   Bars3Icon,
   BellIcon,
-  CalendarIcon,
-  ChartPieIcon,
   Cog6ToothIcon,
-  DocumentDuplicateIcon,
-  FolderIcon,
   HomeIcon,
-  UsersIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
+import { User } from "firebase/auth";
 import Image from "next/image";
 import Link from "next/link";
-import { Fragment, useState } from "react";
+import React, { Fragment, useContext, useState } from "react";
 
 const navigation = [
-  { name: "Dashboard", href: "#", icon: HomeIcon, current: true },
-  { name: "Team", href: "#", icon: UsersIcon, current: false },
-  { name: "Projects", href: "#", icon: FolderIcon, current: false },
-  { name: "Calendar", href: "#", icon: CalendarIcon, current: false },
-  { name: "Documents", href: "#", icon: DocumentDuplicateIcon, current: false },
-  { name: "Reports", href: "#", icon: ChartPieIcon, current: false },
+  { name: "ホーム", href: "#", icon: HomeIcon, current: true },
+  {
+    name: "ゲームを探す",
+    href: "#",
+    icon: MagnifyingGlassIcon,
+    current: false,
+  },
+  { name: "話題作", href: "#", icon: FireIcon, current: false },
 ];
-const teams = [
-  { id: 1, name: "Heroicons", href: "#", initial: "H", current: false },
-  { id: 2, name: "Tailwind Labs", href: "#", initial: "T", current: false },
-  { id: 3, name: "Workcation", href: "#", initial: "W", current: false },
+const teams: any[] = [
+  // { id: 1, name: "Heroicons", href: "#", initial: "H", current: false },
+  // { id: 2, name: "Tailwind Labs", href: "#", initial: "T", current: false },
+  // { id: 3, name: "Workcation", href: "#", initial: "W", current: false },
 ];
 
 function classNames(...classes: string[]) {
@@ -41,9 +41,11 @@ type Props = {
   children: React.ReactNode;
 };
 
-export default function SideBarLayout({ children }: Props) {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+export default React.memo(SideBarLayout);
 
+function SideBarLayout({ children }: Props) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { user } = useContext(AuthContext);
   return (
     <div>
       <div>
@@ -84,12 +86,7 @@ export default function SideBarLayout({ children }: Props) {
                 />
 
                 {/* Profile dropdown */}
-                <ProfileMenu
-                  userIconUrl={
-                    "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                  }
-                  userName={"Tom Cook"}
-                />
+                <ProfileMenu user={user} />
               </div>
             </div>
           </div>
@@ -158,10 +155,12 @@ function NotificationButton() {
   );
 }
 
-function ProfileMenu(props: { userIconUrl: string; userName: string }) {
+function ProfileMenu(props: { user: User | undefined }) {
   const userNavigation = [
-    { name: "Your profile", href: "#" },
-    { name: "Sign out", href: "#" },
+    { name: "プロフィール", href: "#" },
+    props.user
+      ? { name: "Sign out", href: "/signin" }
+      : { name: "Sign in", href: "/signin" },
   ];
 
   return (
@@ -170,7 +169,7 @@ function ProfileMenu(props: { userIconUrl: string; userName: string }) {
         <span className="sr-only">Open user menu</span>
         <Image
           className="h-8 w-8 rounded-full bg-gray-50"
-          src={props.userIconUrl}
+          src={props.user?.photoURL ?? ""}
           alt="profile icon"
           width="40"
           height="40"
@@ -180,7 +179,7 @@ function ProfileMenu(props: { userIconUrl: string; userName: string }) {
             className="ml-4 text-sm font-semibold leading-6 text-gray-300"
             aria-hidden="true"
           >
-            {props.userName}
+            {props.user?.displayName ?? "ゲスト"}
           </span>
           <ChevronDownIcon
             className="ml-2 h-5 w-5 text-gray-400"
@@ -252,7 +251,7 @@ function SideBarDesktop() {
             </li>
             <li>
               <div className="text-xs font-semibold leading-6 text-gray-400">
-                Your teams
+                {/* Your teams */}
               </div>
               <ul role="list" className="-mx-2 mt-2 space-y-1">
                 {teams.map((team) => (
