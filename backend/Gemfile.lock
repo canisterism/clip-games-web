@@ -288,6 +288,7 @@ DEPENDENCIES
   google-cloud-firestore
   graphiql-rails
   graphql
+  jwt
   katakata_irb
   pg
   puma (~> 5.0)
