@@ -4,7 +4,8 @@
 
 ### 初回やること
 
-development.keyを1passwordから取得して、`./backend/config/credentials/development.key`に配置する。
+- バックエンド用のクレデンシャルのキーであるdevelopment.keyを1passwordから取得して、`./backend/config/credentials/development.key`に配置する。
+- フロントエンドのクレデンシャルの.env.localを1passwordから取得して、`./frontend/.env.local`に配置する。
 
 ```bash
 $ cd backend
