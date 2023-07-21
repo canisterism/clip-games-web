@@ -1,0 +1,346 @@
+type Clip implements Node {
+  createdAt: ISO8601DateTime!
+  game: Game!
+
+  """
+  ID of the object.
+  """
+  id: ID!
+  profile: Profile!
+  updatedAt: ISO8601DateTime!
+}
+
+type Game implements Node {
+  clips: [Clip!]!
+
+  """
+  クリップ数
+  """
+  clipsCount: Int!
+  createdAt: ISO8601DateTime!
+  genres: [Genre!]!
+
+  """
+  ID of the object.
+  """
+  id: ID!
+  imageUrl: String
+  platforms: [Platform!]!
+  price: Float
+  publishedAt: ISO8601DateTime
+  publisher: Publisher!
+
+  """
+  レビューの平均評価
+  """
+  ratingAverage: Float!
+
+  """
+  レビューの評価分布
+  """
+  ratingDistribution: JSON!
+  reviews: [Review!]!
+
+  """
+  レビュー数
+  """
+  reviewsCount: Int!
+  title: String!
+  updatedAt: ISO8601DateTime!
+}
+
+"""
+The connection type for Game.
+"""
+type GameConnection {
+  """
+  A list of edges.
+  """
+  edges: [GameEdge]
+
+  """
+  A list of nodes.
+  """
+  nodes: [Game]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+}
+
+"""
+An edge in a connection.
+"""
+type GameEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: Game
+}
+
+type Genre implements Node {
+  games: [Game!]!
+
+  """
+  ID of the object.
+  """
+  id: ID!
+  name: String
+}
+
+"""
+An ISO 8601-encoded datetime
+"""
+scalar ISO8601DateTime
+
+"""
+Represents untyped JSON
+"""
+scalar JSON
+
+type Mutation {
+  """
+  An example field added by the generator
+  """
+  testField: String!
+}
+
+"""
+An object with an ID.
+"""
+interface Node {
+  """
+  ID of the object.
+  """
+  id: ID!
+}
+
+"""
+Information about pagination in a connection.
+"""
+type PageInfo {
+  """
+  When paginating forwards, the cursor to continue.
+  """
+  endCursor: String
+
+  """
+  When paginating forwards, are there more items?
+  """
+  hasNextPage: Boolean!
+
+  """
+  When paginating backwards, are there more items?
+  """
+  hasPreviousPage: Boolean!
+
+  """
+  When paginating backwards, the cursor to continue.
+  """
+  startCursor: String
+}
+
+type Platform implements Node {
+  games: [Game!]!
+
+  """
+  ID of the object.
+  """
+  id: ID!
+  name: String
+  publishedAt: ISO8601DateTime
+}
+
+type Profile implements Node {
+  clips: [Clip!]!
+  createdAt: ISO8601DateTime!
+  description: String!
+  displayName: String!
+
+  """
+  ID of the object.
+  """
+  id: ID!
+  photoUrl: String!
+  reviewLikes: [ReviewLike!]!
+  reviews: [Review!]!
+  updatedAt: ISO8601DateTime!
+}
+
+type Publisher implements Node {
+  games: [Game!]!
+
+  """
+  ID of the object.
+  """
+  id: ID!
+  name: String
+}
+
+type Query {
+  """
+  Find a game by ID
+  """
+  game(id: ID!): Game!
+
+  """
+  Fetch all games
+  """
+  games(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+  ): GameConnection!
+
+  """
+  Find all genres
+  """
+  genres: [Genre!]!
+
+  """
+  Find the current user
+  """
+  me: Profile
+
+  """
+  Fetches an object given its ID.
+  """
+  node(
+    """
+    ID of the object.
+    """
+    id: ID!
+  ): Node
+
+  """
+  Fetches a list of objects given a list of IDs.
+  """
+  nodes(
+    """
+    IDs of the objects.
+    """
+    ids: [ID!]!
+  ): [Node]!
+
+  """
+  Find all platforms
+  """
+  platforms: [Platform!]!
+
+  """
+  Find a profile by ID
+  """
+  profile(id: ID!): Profile!
+
+  """
+  Find a review by ID
+  """
+  review(id: ID!): Review!
+
+  """
+  Fetch all reviews. filtered by game or profile
+  """
+  reviews(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+    gameId: ID
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+    profileId: ID
+  ): ReviewConnection!
+}
+
+type Review implements Node {
+  body: String!
+  createdAt: ISO8601DateTime!
+  game: Game!
+  id: ID!
+  likeCount: Int!
+  profile: Profile!
+  rating: Float!
+  updatedAt: ISO8601DateTime!
+}
+
+"""
+The connection type for Review.
+"""
+type ReviewConnection {
+  """
+  A list of edges.
+  """
+  edges: [ReviewEdge]
+
+  """
+  A list of nodes.
+  """
+  nodes: [Review]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+}
+
+"""
+An edge in a connection.
+"""
+type ReviewEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: Review
+}
+
+type ReviewLike implements Node {
+  createdAt: ISO8601DateTime!
+
+  """
+  ID of the object.
+  """
+  id: ID!
+  liker: Profile!
+  review: Review!
+  updatedAt: ISO8601DateTime!
+}
