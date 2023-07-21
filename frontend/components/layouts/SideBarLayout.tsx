@@ -1,4 +1,3 @@
-import { AuthContext } from "@/context/authContext";
 import { Dialog, Menu, Transition } from "@headlessui/react";
 import {
   ChevronDownIcon,
@@ -12,10 +11,10 @@ import {
   HomeIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import { User } from "firebase/auth";
+import { User, useUser, withUser } from "next-firebase-auth";
 import Image from "next/image";
 import Link from "next/link";
-import React, { Fragment, useContext, useState } from "react";
+import React, { Fragment, useState } from "react";
 
 const navigation = [
   { name: "ホーム", href: "#", icon: HomeIcon, current: true },
@@ -27,11 +26,7 @@ const navigation = [
   },
   { name: "話題作", href: "#", icon: FireIcon, current: false },
 ];
-const teams: any[] = [
-  // { id: 1, name: "Heroicons", href: "#", initial: "H", current: false },
-  // { id: 2, name: "Tailwind Labs", href: "#", initial: "T", current: false },
-  // { id: 3, name: "Workcation", href: "#", initial: "W", current: false },
-];
+const teams: any[] = [];
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -41,11 +36,10 @@ type Props = {
   children: React.ReactNode;
 };
 
-export default React.memo(SideBarLayout);
-
-function SideBarLayout({ children }: Props) {
+const SideBarLayout: React.FC<Props> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { user } = useContext(AuthContext);
+  const user = useUser();
+
   return (
     <div>
       <div>
@@ -98,7 +92,7 @@ function SideBarLayout({ children }: Props) {
       </div>
     </div>
   );
-}
+};
 
 function Separator() {
   return (
@@ -425,3 +419,5 @@ function SideBarMobile(props: {
     </Transition.Root>
   );
 }
+
+export default React.memo(withUser<Props>()(SideBarLayout));

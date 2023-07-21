@@ -1,14 +1,19 @@
 import { createApolloClient } from "@/graphql/client";
 import { GameDocument, GameQuery } from "@/graphql/generated/graphql";
 import { GetServerSideProps } from "next";
+import { withUserTokenSSR } from "next-firebase-auth";
 import Head from "next/head";
 import Image from "next/image";
 
 type PageProps = {
   game: GameQuery["game"];
+  errorCode: string;
 };
 
 export function Game(props: PageProps) {
+  if (props.errorCode) {
+    return <div>{props.errorCode}</div>;
+  }
   return (
     <div>
       <Head>
@@ -39,26 +44,25 @@ export function Game(props: PageProps) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const token = context.req.cookies["auth"];
-  const client = createApolloClient(token);
+export const getServerSideProps: GetServerSideProps = withUserTokenSSR()(
+  async ({ user, query }) => {
+    const { id } = query;
+    if (typeof id !== "string") {
+      return {
+        notFound: true,
+      };
+    }
+    const token = (await user?.getIdToken()) ?? undefined;
+    const client = createApolloClient(token);
 
-  const { id } = context.query;
-  if (typeof id !== "string") {
-    return {
-      notFound: true,
-    };
+    const { data } = await client.query({
+      query: GameDocument,
+      variables: {
+        gameId: id,
+      },
+    });
+    const game = data.game;
+    return { props: { game } };
   }
-
-  const { data } = await client.query({
-    query: GameDocument,
-    variables: {
-      gameId: id,
-    },
-  });
-  console.log({ data });
-  const game = data.game;
-  return { props: { game } };
-};
-
+);
 export default Game;
