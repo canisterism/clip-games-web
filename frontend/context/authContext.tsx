@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }: Props): JSX.Element => {
 
         // サーバーサイドにトークンを送信して保存する
         if (token) {
-          const response = await fetch("/api/saveToken", {
+          const response = await fetch("/api/login", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
