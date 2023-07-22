@@ -1,4 +1,4 @@
-import GameList from "@/components/GameList";
+import { GameList } from "@/components/GameList";
 import { createApolloClient } from "@/graphql/client";
 import { NextPage } from "next";
 import { withUserTokenSSR } from "next-firebase-auth";
@@ -17,7 +17,7 @@ const Home: NextPage<{ games: Games }> = ({ games }) => {
       </Head>
 
       <div className="mx-8 my-4">
-        <GameList games={games} />
+        <GameList />
       </div>
     </div>
   );

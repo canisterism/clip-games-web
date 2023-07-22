@@ -17,7 +17,7 @@ module Types
     end
 
     def game(id:)
-      GlobalID::Locator.locate(id)
+      GlobalID::Locator.locate(id) || Game.find(id)
     end
 
 

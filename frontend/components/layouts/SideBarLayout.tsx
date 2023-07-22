@@ -1,4 +1,5 @@
 import ProfileMenuIcon from "@/components/ProfileMenuIcon";
+import SearchBox from "@/components/SearchBox";
 import { Dialog, Transition } from "@headlessui/react";
 import { FireIcon, MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import {
@@ -58,11 +59,8 @@ const SideBarLayout: React.FC<Props> = ({ children }) => {
 
             {/* Search bar */}
             <div className="bg-gray-800 flex flex-1 gap-x-4 self-stretch lg:gap-x-6 py-2">
-              <SearchBar
-                onSearch={(query) => {
-                  console.log(query);
-                }}
-              />
+              <SearchBox />
+
               <div className="flex items-center gap-x-4 lg:gap-x-6">
                 {/* Notification button */}
                 <NotificationButton />
@@ -104,30 +102,6 @@ function LogoLink() {
         clip-games
       </a>
     </Link>
-  );
-}
-
-function SearchBar(props: { onSearch: (query: string) => void }) {
-  return (
-    <form className="relative flex flex-1" action="#" method="GET">
-      <label htmlFor="search-field" className="sr-only">
-        Search
-      </label>
-      <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-        <MagnifyingGlassIcon
-          className="h-5 w-5 text-gray-400"
-          aria-hidden="true"
-        />
-      </div>
-      <input
-        id="search-field"
-        className="block h-full w-full border-0 rounded-md py-1.5 pl-10 pr-3 bg-gray-700 text-gray-200 placeholder:text-gray-400 focus:bg-white focus:text-gray-900 focus:ring-0 sm:text-sm"
-        placeholder="Search..."
-        type="search"
-        name="search"
-        onChange={(e) => props.onSearch(e.target.value)}
-      />
-    </form>
   );
 }
 
