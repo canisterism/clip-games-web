@@ -50,10 +50,10 @@ export const initAuth = () => {
     firebaseAdminInitConfig: adminConfig,
     cookies: {
       name: "auth",
-      // keys: [
-      //   process.env.COOKIE_SECRET_CURRENT,
-      //   process.env.COOKIE_SECRET_PREVIOUS,
-      // ],
+      keys: [
+        process.env.COOKIE_SECRET_CURRENT,
+        process.env.COOKIE_SECRET_PREVIOUS,
+      ],
       httpOnly: true,
       maxAge: 12 * 60 * 60 * 24 * 1000, // 12days
       overwrite: true,
