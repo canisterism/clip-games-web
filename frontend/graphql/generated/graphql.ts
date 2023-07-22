@@ -269,6 +269,30 @@ export type GameQuery = {
   };
 };
 
+export type GamesQueryVariables = Exact<{
+  first?: InputMaybe<Scalars["Int"]>;
+  last?: InputMaybe<Scalars["Int"]>;
+  before?: InputMaybe<Scalars["String"]>;
+  after?: InputMaybe<Scalars["String"]>;
+}>;
+
+export type GamesQuery = {
+  __typename?: "Query";
+  games: {
+    __typename?: "GameConnection";
+    nodes?: Array<{
+      __typename?: "Game";
+      id: string;
+      title: string;
+      imageUrl?: string | null;
+      reviewsCount: number;
+      clipsCount: number;
+      publishedAt?: string | null;
+      ratingAverage: number;
+    } | null> | null;
+  };
+};
+
 export type MeQueryVariables = Exact<{ [key: string]: never }>;
 
 export type MeQuery = {
@@ -359,6 +383,126 @@ export const GameDocument = {
     },
   ],
 } as unknown as DocumentNode<GameQuery, GameQueryVariables>;
+export const GamesDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "games" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "first" },
+          },
+          type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "last" } },
+          type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "before" },
+          },
+          type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "after" },
+          },
+          type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "games" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "first" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "first" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "last" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "last" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "before" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "before" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "after" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "after" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "nodes" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "title" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "imageUrl" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "reviewsCount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "clipsCount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "publishedAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "ratingAverage" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GamesQuery, GamesQueryVariables>;
 export const MeDocument = {
   kind: "Document",
   definitions: [

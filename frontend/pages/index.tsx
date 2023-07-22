@@ -1,13 +1,13 @@
 import GameList from "@/components/GameList";
-import { ApolloClient, InMemoryCache } from "@apollo/client";
+import { createApolloClient } from "@/graphql/client";
 import { NextPage } from "next";
 import { withUserTokenSSR } from "next-firebase-auth";
 import Head from "next/head";
-import { GameDocument, GameQuery } from "../graphql/generated/graphql";
+import { GamesDocument, GamesQuery } from "../graphql/generated/graphql";
 
-type Game = GameQuery["game"];
+type Games = GamesQuery["games"]["nodes"];
 
-const Home: NextPage<{ games: Game[] }> = ({ games }) => {
+const Home: NextPage<{ games: Games }> = ({ games }) => {
   return (
     <div>
       <Head>
@@ -24,33 +24,21 @@ const Home: NextPage<{ games: Game[] }> = ({ games }) => {
 };
 
 export const getServerSideProps = withUserTokenSSR()(async ({ user }) => {
-  const GAME_IDS: string[] = [
-    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8wQkR2OUZ3eFNCRkJ1akFUcHZkdw",
-    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8wTllsbmV0ejEzRkJPeWI1MDdyTw",
-    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8waGh2dGkycm40dE92OG14UVFxcQ",
-  ];
+  const token = (await user?.getIdToken(true)) ?? null;
 
-  let token: string | null;
-  if (user) token = await user.getIdToken(true);
-
-  const client = new ApolloClient({
-    uri: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT_URL,
-    cache: new InMemoryCache(),
+  const client = createApolloClient(token);
+  const {
+    data: { games },
+  } = await client.query({
+    query: GamesDocument,
+    variables: {
+      first: 5,
+    },
   });
-
-  const games: Game[] = await Promise.all(
-    GAME_IDS.map(async (gameId) => {
-      const { data } = await client.query({
-        query: GameDocument,
-        variables: { gameId },
-      });
-      return data.game;
-    })
-  );
 
   return {
     props: {
-      games,
+      games: games.nodes,
     },
   };
 });
