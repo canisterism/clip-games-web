@@ -15,6 +15,7 @@
     "@heroicons/react": "^2.0.18",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.4",
+    "algoliasearch": "^4.19.1",
     "cookie": "^0.5.0",
     "dotenv-cli": "^6.0.0",
     "firebase": "^10.1.0",
@@ -27,6 +28,7 @@
     "next-firebase-auth": "^1.0.0-beta.0",
     "react": "18.0.0",
     "react-dom": "18.0.0",
+    "react-instantsearch-hooks-web": "^6.47.1",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
