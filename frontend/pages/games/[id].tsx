@@ -52,7 +52,7 @@ export const getServerSideProps: GetServerSideProps = withUserTokenSSR()(
         notFound: true,
       };
     }
-    const token = (await user?.getIdToken()) ?? undefined;
+    const token = (await user?.getIdToken()) || null;
     const client = createApolloClient(token);
 
     const { data } = await client.query({

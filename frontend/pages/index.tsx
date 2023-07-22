@@ -1,6 +1,7 @@
 import GameList from "@/components/GameList";
 import { ApolloClient, InMemoryCache } from "@apollo/client";
-import { GetServerSideProps, NextPage } from "next";
+import { NextPage } from "next";
+import { withUserTokenSSR } from "next-firebase-auth";
 import Head from "next/head";
 import { GameDocument, GameQuery } from "../graphql/generated/graphql";
 
@@ -22,39 +23,15 @@ const Home: NextPage<{ games: Game[] }> = ({ games }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps = withUserTokenSSR()(async ({ user }) => {
   const GAME_IDS: string[] = [
     "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8wQkR2OUZ3eFNCRkJ1akFUcHZkdw",
     "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8wTllsbmV0ejEzRkJPeWI1MDdyTw",
     "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8waGh2dGkycm40dE92OG14UVFxcQ",
-    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8wbWNza21JaHJNTTFLbG5ac1g1Rg",
-    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8xN2lWYmV3YjdWVFZTeGVRQWQ5WA",
-    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8xVmFkNXl3Zk9HVHVDRkpYYk1WeQ",
-    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8xYWQzZUg2U0VhcUI5eHRoVU11eA",
-    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8xaElnZWttS2xmU05Fa0hIWXJ0TA",
-    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8xdjJUUGRGU043cHdxTktRRjc3Yg",
-    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8yM3dGd05xVXg3U2FDaHpBWWRudg",
-    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8yNG5Kb0NoaEVHRUZBSGNRZ051Qw",
-    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8yWFowQlRUcHNwa3BQbWVNMDVhSA",
-    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8yZGwzcDZYbmVMUWNTRWVLNFpkbg",
-    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8yaXR6ajB5Z053cms2RXpjcm9QMQ",
-    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8yclYwbnVVZnBleENRWGprc1RsTw",
-    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8zTmh0eHNnRnlnZGd4cjdyMUdYNQ",
-    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8zYkpaRFJPVmRMOG5tQXB4U0JkNw",
-    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8zY0Q2M1RYTHVOcDNMNnI0YnNLaQ",
-    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS8zY0xvalVMWTJkU2ZXQnJjaU16TA",
-    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS80ZWlVNDdreW41VWJXY01DRWlLZQ",
-    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS80bEFTTGFZT1ZjY0N6dWZoVlcyag",
-    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS80bERSb2kzSmxJQm5ldzVMbnBRZw",
-    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS80blBqcFh1emxacm9xdVBuUEtyQg",
-    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS81V0NjYkg0YW9YSFA3eHR6ZFNSbQ",
-    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS81YzZYQWVNMFRla2hadlo2dG51cA",
-    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS81alZybkhQbXNNVjFxU2ZsQmRKUw",
-    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS82MXl6b1dhclBTNlRNUkNIRTRpWg",
-    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS82M2JXcERwb3BOekVmalNhS1dvcQ",
-    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS82WGxvZFhJVERodjFVVmV4S0tCUw",
-    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS82bDI1QUZ0WDBvZHZta0c0SGxIVQ",
   ];
+
+  let token: string | null;
+  if (user) token = await user.getIdToken(true);
 
   const client = new ApolloClient({
     uri: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT_URL,
@@ -76,6 +53,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
       games,
     },
   };
-};
+});
 
 export default Home;

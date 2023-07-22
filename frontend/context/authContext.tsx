@@ -62,7 +62,6 @@ export const AuthProvider = ({ children }: Props): JSX.Element => {
 
     return () => {
       unsubscribe();
-      clientInitializedAuth.signOut();
     };
   }, []);
 
