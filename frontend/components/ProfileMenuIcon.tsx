@@ -17,7 +17,6 @@ function ProfileMenuIcon() {
       : { name: "Sign in", href: "/signin" },
   ];
 
-  console.log({ me, loading });
   return loading ? null : (
     <Menu as="div" className="relative">
       <Menu.Button className="-m-1.5 flex items-center p-1.5">

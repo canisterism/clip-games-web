@@ -10,6 +10,7 @@ import {
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import React, { Fragment, useState } from "react";
+import { SearchBox } from "react-instantsearch-hooks-web";
 
 const navigation = [
   { name: "ホーム", href: "#", icon: HomeIcon, current: true },
@@ -58,11 +59,8 @@ const SideBarLayout: React.FC<Props> = ({ children }) => {
 
             {/* Search bar */}
             <div className="bg-gray-800 flex flex-1 gap-x-4 self-stretch lg:gap-x-6 py-2">
-              <SearchBar
-                onSearch={(query) => {
-                  console.log(query);
-                }}
-              />
+              <SearchBox />
+
               <div className="flex items-center gap-x-4 lg:gap-x-6">
                 {/* Notification button */}
                 <NotificationButton />
