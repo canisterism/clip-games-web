@@ -82,6 +82,8 @@ GEM
     faraday (2.7.4)
       faraday-net_http (>= 2.0, < 3.1)
       ruby2_keywords (>= 0.0.4)
+    faraday-http-cache (2.5.0)
+      faraday (>= 0.8)
     faraday-net_http (3.0.2)
     faraday-retry (2.1.0)
       faraday (~> 2.0)
@@ -285,9 +287,11 @@ PLATFORMS
 DEPENDENCIES
   bootsnap
   debug
+  faraday-http-cache
   google-cloud-firestore
   graphiql-rails
   graphql
+  jwt
   katakata_irb
   pg
   puma (~> 5.0)

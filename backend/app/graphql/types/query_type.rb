@@ -3,6 +3,14 @@ module Types
     include GraphQL::Types::Relay::HasNodeField
     include GraphQL::Types::Relay::HasNodesField
 
+    field :me, Types::ProfileType, null: true do
+      description 'Find the current user'
+    end
+
+    def me
+      Profile.find_by(user: context[:current_user])
+    end
+
     field :game, Types::GameType, null: false do
       description 'Find a game by ID'
       argument :id, ID, required: true

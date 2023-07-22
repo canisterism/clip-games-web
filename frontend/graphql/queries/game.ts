@@ -5,13 +5,15 @@ export default gql`
       id
       title
       imageUrl
+      reviewsCount
+      clipsCount
+      publishedAt
+      ratingAverage
       reviews {
         body
         rating
         createdAt
       }
-      publishedAt
-      ratingAverage
     }
   }
 `;

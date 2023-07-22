@@ -60,4 +60,7 @@ Rails.application.configure do
   # config.action_cable.disable_request_forgery_protection = true
 
   config.require_master_key = true
+
+  config.log_level = :debug # ログレベルを設定
+  config.logger = Logger.new(STDOUT) # ログ出力先を標準出力に設定
 end

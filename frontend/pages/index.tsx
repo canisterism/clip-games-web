@@ -1,13 +1,13 @@
-import { NextPage, GetServerSideProps } from "next";
+import GameList from "@/components/GameList";
+import { createApolloClient } from "@/graphql/client";
+import { NextPage } from "next";
+import { withUserTokenSSR } from "next-firebase-auth";
 import Head from "next/head";
-import Image from "next/image";
-import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
-import { Navigation } from "@/components/Navigation";
-import { GameDocument, GameQuery } from "../graphql/generated/graphql";
+import { GamesDocument, GamesQuery } from "../graphql/generated/graphql";
 
-type Game = GameQuery["game"];
+type Games = GamesQuery["games"]["nodes"];
 
-const Home: NextPage<{ games: Game[] }> = ({ games }) => {
+const Home: NextPage<{ games: Games }> = ({ games }) => {
   return (
     <div>
       <Head>
@@ -16,73 +16,31 @@ const Home: NextPage<{ games: Game[] }> = ({ games }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
-        <Navigation></Navigation>
-        <div className="mx-8 my-4">
-          <GamesGrid games={games}></GamesGrid>
-        </div>
-      </main>
-    </div>
-  );
-};
-
-export const getServerSideProps: GetServerSideProps = async () => {
-  const GAME_IDS: string[] = [
-    "Z2lkOi8vYXBwbGljYXRpb24vR2FtZS9wa0NhUWlhRGE3TnlSRll0d1o4VQ",
-  ];
-
-  const client = new ApolloClient({
-    uri: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT_URL,
-    cache: new InMemoryCache(),
-  });
-
-  const games: Game[] = await Promise.all(
-    GAME_IDS.map(async (gameId) => {
-      const { data } = await client.query({
-        query: GameDocument,
-        variables: { gameId },
-      });
-      return data.game;
-    })
-  );
-
-  return {
-    props: {
-      games,
-    },
-  };
-};
-
-export default Home;
-
-const GamesGrid: React.FC<{ games: Game[] }> = ({ games }) => {
-  return (
-    <div className="flex flex-wrap gap-4">
-      {games.map((game) => (
-        <GamePackage key={game.id} game={game} />
-      ))}
-    </div>
-  );
-};
-
-export const GamePackage: React.FC<{ game: Game }> = ({ game }) => {
-  return (
-    <div>
-      <div className="flex flex-col">
-        <Image
-          src={
-            game.imageUrl
-              ? `${game.imageUrl}`
-              : "https://placeimg.com/320/400/any"
-          }
-          alt={`${game.title}`}
-          width="320"
-          height="400"
-        ></Image>
-        <span>{game.title}</span>
-        <span>発売日：{game.publishedAt}</span>
-        <span>☆ {game.ratingAverage}</span>
+      <div className="mx-8 my-4">
+        <GameList games={games} />
       </div>
     </div>
   );
 };
+
+export const getServerSideProps = withUserTokenSSR()(async ({ user }) => {
+  const token = (await user?.getIdToken(true)) ?? null;
+
+  const client = createApolloClient(token);
+  const {
+    data: { games },
+  } = await client.query({
+    query: GamesDocument,
+    variables: {
+      first: 5,
+    },
+  });
+
+  return {
+    props: {
+      games: games.nodes,
+    },
+  };
+});
+
+export default Home;

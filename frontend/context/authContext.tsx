@@ -21,6 +21,7 @@ type Props = {
   children: ReactNode;
 };
 
+// TODO: Firebase Authの認証情報をそのまま使わずに、サーバーサイドからプロフィールを取得するようにする
 export const AuthProvider = ({ children }: Props): JSX.Element => {
   const [user, setUser] = useState<User | undefined>(undefined);
   const [token, setToken] = useState<string | undefined>(undefined);
@@ -39,6 +40,23 @@ export const AuthProvider = ({ children }: Props): JSX.Element => {
         setUser(user);
         const token = (await user?.getIdToken(true)) ?? null;
         setToken(token);
+
+        // サーバーサイドにトークンを送信して保存する
+        if (token) {
+          const response = await fetch("/api/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ token }),
+          });
+
+          if (!response.ok) {
+            console.error("Failed to save token");
+            console.error(response);
+            // TODO: エラーハンドリング
+          }
+        }
       }
     );
 
