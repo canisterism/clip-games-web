@@ -8,7 +8,7 @@ module Types
     end
 
     def me
-      context[:current_user]
+      Profile.find_by(user: context[:current_user])
     end
 
     field :game, Types::GameType, null: false do
