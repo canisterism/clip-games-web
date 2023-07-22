@@ -4,8 +4,8 @@ class GraphqlController < ApplicationController
   # but you'll have to authenticate your user separately
   # protect_from_forgery with: :null_session
 
-  rescue_from GraphQL::ExecutionError do |exception|
-    render json: { errors: [ { message: exception.message, extensions: exception.extensions } ] }, status: 200
+  rescue_from StandardError do |exception|
+    render json: { errors: [ { message: exception.message } ] }, status: 200
   end
 
   def execute
@@ -15,11 +15,11 @@ class GraphqlController < ApplicationController
     context = { current_user: }
     result = BackendSchema.execute(query, variables:, context:, operation_name:)
     render json: result
-  rescue StandardError => e
-    Rails.logger.error e.message
-    raise e unless Rails.env.development?
+  # rescue StandardError => e
+  #   Rails.logger.error e.message
+  #   raise e unless Rails.env.development?
 
-    handle_error_in_development(e)
+  #   handle_error_in_development(e)
   end
 
   private
