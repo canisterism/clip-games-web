@@ -16,6 +16,7 @@ class GraphqlController < ApplicationController
     result = BackendSchema.execute(query, variables:, context:, operation_name:)
     render json: result
   rescue StandardError => e
+    Rails.logger.error e.message
     raise e unless Rails.env.development?
 
     handle_error_in_development(e)
