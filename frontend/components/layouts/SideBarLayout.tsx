@@ -1,9 +1,6 @@
-import { Dialog, Menu, Transition } from "@headlessui/react";
-import {
-  ChevronDownIcon,
-  FireIcon,
-  MagnifyingGlassIcon,
-} from "@heroicons/react/20/solid";
+import ProfileMenuIcon from "@/components/ProfileMenuIcon";
+import { Dialog, Transition } from "@headlessui/react";
+import { FireIcon, MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import {
   Bars3Icon,
   BellIcon,
@@ -11,8 +8,6 @@ import {
   HomeIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import { User, useUser, withUser } from "next-firebase-auth";
-import Image from "next/image";
 import Link from "next/link";
 import React, { Fragment, useState } from "react";
 
@@ -38,7 +33,6 @@ type Props = {
 
 const SideBarLayout: React.FC<Props> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const user = useUser();
 
   return (
     <div>
@@ -80,7 +74,7 @@ const SideBarLayout: React.FC<Props> = ({ children }) => {
                 />
 
                 {/* Profile dropdown */}
-                <ProfileMenu user={user} />
+                <ProfileMenuIcon />
               </div>
             </div>
           </div>
@@ -146,69 +140,6 @@ function NotificationButton() {
       <span className="sr-only">View notifications</span>
       <BellIcon className="h-6 w-6" aria-hidden="true" />
     </button>
-  );
-}
-
-function ProfileMenu(props: { user: User | undefined }) {
-  const userNavigation = [
-    { name: "プロフィール", href: "#" },
-    props.user
-      ? { name: "Sign out", href: "/signin" }
-      : { name: "Sign in", href: "/signin" },
-  ];
-
-  return (
-    <Menu as="div" className="relative">
-      <Menu.Button className="-m-1.5 flex items-center p-1.5">
-        <span className="sr-only">Open user menu</span>
-        <Image
-          className="h-8 w-8 rounded-full bg-gray-50"
-          src={props.user?.photoURL ?? ""}
-          alt="profile icon"
-          width="40"
-          height="40"
-        />
-        <span className="hidden lg:flex lg:items-center">
-          <span
-            className="ml-4 text-sm font-semibold leading-6 text-gray-300"
-            aria-hidden="true"
-          >
-            {props.user?.displayName ?? "ゲスト"}
-          </span>
-          <ChevronDownIcon
-            className="ml-2 h-5 w-5 text-gray-400"
-            aria-hidden="true"
-          />
-        </span>
-      </Menu.Button>
-      <Transition
-        as={Fragment}
-        enter="transition ease-out duration-100"
-        enterFrom="transform opacity-0 scale-95"
-        enterTo="transform opacity-100 scale-100"
-        leave="transition ease-in duration-75"
-        leaveFrom="transform opacity-100 scale-100"
-        leaveTo="transform opacity-0 scale-95"
-      >
-        <Menu.Items className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-gray-700 py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
-          {userNavigation.map((item) => (
-            <Menu.Item key={item.name}>
-              {({ active }) => (
-                <a
-                  href={item.href}
-                  className={classNames(
-                    active ? "bg-gray-600" : "",
-                    "block px-3 py-1 text-sm leading-6 text-gray-300"
-                  )}
-                >
-                  {item.name}
-                </a>
-              )}
-            </Menu.Item>
-          ))}
-        </Menu.Items>
-      </Transition>
-    </Menu>
   );
 }
 
@@ -420,4 +351,4 @@ function SideBarMobile(props: {
   );
 }
 
-export default React.memo(withUser<Props>()(SideBarLayout));
+export default React.memo(SideBarLayout);
