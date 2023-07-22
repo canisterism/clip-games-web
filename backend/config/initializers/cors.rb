@@ -7,7 +7,7 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins "http://localhost:3001", "https://clip-games.com", "https://clip-games-web.vercel.app"
+    origins "http://localhost:3001", "https://clip-games.com", "https://clip-games*.vercel.app"
 
     resource "*",
       headers: :any,
