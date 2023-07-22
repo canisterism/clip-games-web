@@ -50,12 +50,12 @@ function Hit({ hit: game }: { hit: any }) {
         </h3>
         <div className="mt-3 flex flex-col items-start">
           <p className="sr-only">{game.ratingAverage} out of 5 stars</p>
-          <RatingStars ratingAverage={game.ratingAverage} />
+          <RatingStars ratingAverage={game.ratingTotal / game.ratingCount} />
           <p className="mt-1 text-sm text-gray-500">
-            {game.reviewsCount || 0} reviews
+            {game.reviewCount || 0} reviews
           </p>
           <p className="mt-1 text-sm text-gray-500">
-            {game.clipsCount || 0} reviews
+            {game.clipCount || 0} clips
           </p>
         </div>
       </div>
@@ -69,7 +69,9 @@ function RatingStars({ ratingAverage }: { ratingAverage: number }) {
         <StarIcon
           key={rating}
           className={classNames(
-            ratingAverage > rating ? "text-yellow-400" : "text-gray-100",
+            Math.floor(ratingAverage) > rating
+              ? "text-yellow-400"
+              : "text-gray-100",
             "h-5 w-5 flex-shrink-0"
           )}
           aria-hidden="true"
