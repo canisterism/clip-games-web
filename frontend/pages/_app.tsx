@@ -1,7 +1,7 @@
 import { SideBarLayout } from "@/components/layouts";
 import { initAuth } from "@/config/firebase";
 import { ApolloProvider } from "@/context/apolloContext";
-import { AuthProvider } from "@/context/authContext";
+import { MeProvider } from "@/context/meContext";
 import { withUser } from "next-firebase-auth";
 import type { AppProps } from "next/app";
 import "tailwindcss/tailwind.css";
@@ -11,13 +11,13 @@ initAuth();
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <AuthProvider>
-      <ApolloProvider>
+    <ApolloProvider>
+      <MeProvider>
         <SideBarLayout>
           <Component {...pageProps} />
         </SideBarLayout>
-      </ApolloProvider>
-    </AuthProvider>
+      </MeProvider>
+    </ApolloProvider>
   );
 }
 

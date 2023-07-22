@@ -2,6 +2,7 @@ import { GamesQuery } from "@/graphql/generated/graphql";
 import { classNames } from "@/lib/classNames";
 import { StarIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
+import Link from "next/link";
 
 type Props = {
   games: GamesQuery["games"]["nodes"];
@@ -35,10 +36,12 @@ export default function GameList({ games }: Props) {
                 </div>
                 <div className="pb-4 pt-2 ">
                   <h3 className="text-sm text-gray-300">
-                    <a href={`games/${game.id}`}>
-                      <span aria-hidden="true" className="absolute inset-0" />
-                      {game.title}
-                    </a>
+                    <Link href={`games/${game.id}`} passHref>
+                      <a>
+                        <span aria-hidden="true" className="absolute inset-0" />
+                        {game.title}
+                      </a>
+                    </Link>
                   </h3>
                   <div className="mt-3 flex flex-col items-start">
                     <p className="sr-only">

@@ -1,41 +1,42 @@
 "use client";
-import { MeDocument } from "@/graphql/generated/graphql";
+import MeContext from "@/context/meContext";
 import { classNames } from "@/lib/classNames";
-import { useQuery } from "@apollo/client";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
-import { withUser } from "next-firebase-auth";
 import Image from "next/image";
-import { Fragment } from "react";
+import Link from "next/link";
+import React, { Fragment, useContext } from "react";
 
 function ProfileMenuIcon() {
-  const { data } = useQuery(MeDocument);
-  const user = data?.me;
+  const { me, loading } = useContext(MeContext);
 
   const userNavigation = [
     { name: "プロフィール", href: "#" },
-    user
+    me
       ? { name: "Sign out", href: "/signin" }
       : { name: "Sign in", href: "/signin" },
   ];
 
-  return (
+  console.log({ me, loading });
+  return loading ? null : (
     <Menu as="div" className="relative">
       <Menu.Button className="-m-1.5 flex items-center p-1.5">
         <span className="sr-only">Open user menu</span>
-        <Image
-          className="h-8 w-8 rounded-full bg-gray-50"
-          src={user?.photoUrl ?? ""}
-          alt="profile icon"
-          width="40"
-          height="40"
-        />
+        {me && (
+          <Image
+            className="h-8 w-8 rounded-full bg-gray-50"
+            src={me?.photoUrl ?? ""}
+            alt="profile icon"
+            width="40"
+            height="40"
+          />
+        )}
         <span className="hidden lg:flex lg:items-center">
           <span
             className="ml-4 text-sm font-semibold leading-6 text-gray-300"
             aria-hidden="true"
           >
-            {user?.displayName ?? "ゲスト"}
+            {me?.displayName ?? "ゲスト"}
           </span>
           <ChevronDownIcon
             className="ml-2 h-5 w-5 text-gray-400"
@@ -56,15 +57,16 @@ function ProfileMenuIcon() {
           {userNavigation.map((item) => (
             <Menu.Item key={item.name}>
               {({ active }) => (
-                <a
-                  href={item.href}
-                  className={classNames(
-                    active ? "bg-gray-600" : "",
-                    "block px-3 py-1 text-sm leading-6 text-gray-300"
-                  )}
-                >
-                  {item.name}
-                </a>
+                <Link href={item.href} passHref>
+                  <a
+                    className={classNames(
+                      active ? "bg-gray-600" : "",
+                      "block px-3 py-1 text-sm leading-6 text-gray-300"
+                    )}
+                  >
+                    {item.name}
+                  </a>
+                </Link>
               )}
             </Menu.Item>
           ))}
@@ -74,4 +76,4 @@ function ProfileMenuIcon() {
   );
 }
 
-export default withUser()(ProfileMenuIcon);
+export default React.memo(ProfileMenuIcon);
