@@ -1,5 +1,6 @@
 import { SideBarLayout } from "@/components/layouts";
 import { initAuth } from "@/config/firebase";
+import { AlgoliaContext } from "@/context/algoliaContext";
 import { ApolloProvider } from "@/context/apolloContext";
 import { MeProvider } from "@/context/meContext";
 import { withUser } from "next-firebase-auth";
@@ -13,9 +14,11 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ApolloProvider>
       <MeProvider>
-        <SideBarLayout>
-          <Component {...pageProps} />
-        </SideBarLayout>
+        <AlgoliaContext>
+          <SideBarLayout>
+            <Component {...pageProps} />
+          </SideBarLayout>
+        </AlgoliaContext>
       </MeProvider>
     </ApolloProvider>
   );
