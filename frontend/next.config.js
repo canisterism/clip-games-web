@@ -7,6 +7,7 @@ const nextConfig = {
       "placeimg.com",
       "images.unsplash.com",
       "lh4.googleusercontent.com",
+      "m.media-amazon.com",
     ],
   },
   reactStrictMode: true,
