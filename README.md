@@ -22,10 +22,18 @@ echo "127.0.0.1 api.localhost" >> /etc/hosts
 
 https://docs.gitguardian.com/ggshield-docs/integrations/git-hooks/pre-commit
 
-## Graphq周辺
+## Graphql周辺
 
-### graphql-rubyのスキーマを更新する
+### graphqlのスキーマ更新
 
 ```bash
+$ cd backend
 $ rails graphql:schema:dump 
+```
+※ /backendに生成されるが、ルートに移動させないとfrontend側で認識されないので注意
+### graphqlのコード自動生成
+
+```bash
+$ cd ../frontend
+$ yarn codegen
 ```
