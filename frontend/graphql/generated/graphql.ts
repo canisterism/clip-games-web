@@ -28,6 +28,7 @@ export type Clip = Node & {
   __typename?: "Clip";
   createdAt: Scalars["ISO8601DateTime"];
   game: Game;
+  /** ID of the object. */
   id: Scalars["ID"];
   profile: Profile;
   updatedAt: Scalars["ISO8601DateTime"];
@@ -36,26 +37,52 @@ export type Clip = Node & {
 export type Game = Node & {
   __typename?: "Game";
   clips: Array<Clip>;
+  /** クリップ数 */
   clipsCount: Scalars["Int"];
   createdAt: Scalars["ISO8601DateTime"];
   genres: Array<Genre>;
+  /** ID of the object. */
   id: Scalars["ID"];
   imageUrl?: Maybe<Scalars["String"]>;
   platforms: Array<Platform>;
   price?: Maybe<Scalars["Float"]>;
   publishedAt?: Maybe<Scalars["ISO8601DateTime"]>;
   publisher: Publisher;
+  /** レビューの平均評価 */
   ratingAverage: Scalars["Float"];
+  /** レビューの評価分布 */
   ratingDistribution: Scalars["JSON"];
   reviews: Array<Review>;
+  /** レビュー数 */
   reviewsCount: Scalars["Int"];
   title: Scalars["String"];
   updatedAt: Scalars["ISO8601DateTime"];
 };
 
+/** The connection type for Game. */
+export type GameConnection = {
+  __typename?: "GameConnection";
+  /** A list of edges. */
+  edges?: Maybe<Array<Maybe<GameEdge>>>;
+  /** A list of nodes. */
+  nodes?: Maybe<Array<Maybe<Game>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+/** An edge in a connection. */
+export type GameEdge = {
+  __typename?: "GameEdge";
+  /** A cursor for use in pagination. */
+  cursor: Scalars["String"];
+  /** The item at the end of the edge. */
+  node?: Maybe<Game>;
+};
+
 export type Genre = Node & {
   __typename?: "Genre";
   games: Array<Game>;
+  /** ID of the object. */
   id: Scalars["ID"];
   name?: Maybe<Scalars["String"]>;
 };
@@ -72,9 +99,23 @@ export type Node = {
   id: Scalars["ID"];
 };
 
+/** Information about pagination in a connection. */
+export type PageInfo = {
+  __typename?: "PageInfo";
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars["String"]>;
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars["Boolean"];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars["Boolean"];
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars["String"]>;
+};
+
 export type Platform = Node & {
   __typename?: "Platform";
   games: Array<Game>;
+  /** ID of the object. */
   id: Scalars["ID"];
   name?: Maybe<Scalars["String"]>;
   publishedAt?: Maybe<Scalars["ISO8601DateTime"]>;
@@ -86,6 +127,7 @@ export type Profile = Node & {
   createdAt: Scalars["ISO8601DateTime"];
   description: Scalars["String"];
   displayName: Scalars["String"];
+  /** ID of the object. */
   id: Scalars["ID"];
   photoUrl: Scalars["String"];
   reviewLikes: Array<ReviewLike>;
@@ -95,6 +137,8 @@ export type Profile = Node & {
 
 export type Publisher = Node & {
   __typename?: "Publisher";
+  games: Array<Game>;
+  /** ID of the object. */
   id: Scalars["ID"];
   name?: Maybe<Scalars["String"]>;
 };
@@ -104,9 +148,11 @@ export type Query = {
   /** Find a game by ID */
   game: Game;
   /** Fetch all games */
-  games: Array<Game>;
+  games: GameConnection;
   /** Find all genres */
   genres: Array<Genre>;
+  /** Find the current user */
+  me?: Maybe<Profile>;
   /** Fetches an object given its ID. */
   node?: Maybe<Node>;
   /** Fetches a list of objects given a list of IDs. */
@@ -117,6 +163,8 @@ export type Query = {
   profile: Profile;
   /** Find a review by ID */
   review: Review;
+  /** Fetch all reviews. filtered by game or profile */
+  reviews: ReviewConnection;
 };
 
 export type QueryGameArgs = {
@@ -124,7 +172,10 @@ export type QueryGameArgs = {
 };
 
 export type QueryGamesArgs = {
-  ids: Array<Scalars["ID"]>;
+  after?: InputMaybe<Scalars["String"]>;
+  before?: InputMaybe<Scalars["String"]>;
+  first?: InputMaybe<Scalars["Int"]>;
+  last?: InputMaybe<Scalars["Int"]>;
 };
 
 export type QueryNodeArgs = {
@@ -143,20 +194,51 @@ export type QueryReviewArgs = {
   id: Scalars["ID"];
 };
 
+export type QueryReviewsArgs = {
+  after?: InputMaybe<Scalars["String"]>;
+  before?: InputMaybe<Scalars["String"]>;
+  first?: InputMaybe<Scalars["Int"]>;
+  gameId?: InputMaybe<Scalars["ID"]>;
+  last?: InputMaybe<Scalars["Int"]>;
+  profileId?: InputMaybe<Scalars["ID"]>;
+};
+
 export type Review = Node & {
   __typename?: "Review";
   body: Scalars["String"];
   createdAt: Scalars["ISO8601DateTime"];
   game: Game;
   id: Scalars["ID"];
+  likeCount: Scalars["Int"];
   profile: Profile;
   rating: Scalars["Float"];
   updatedAt: Scalars["ISO8601DateTime"];
 };
 
+/** The connection type for Review. */
+export type ReviewConnection = {
+  __typename?: "ReviewConnection";
+  /** A list of edges. */
+  edges?: Maybe<Array<Maybe<ReviewEdge>>>;
+  /** A list of nodes. */
+  nodes?: Maybe<Array<Maybe<Review>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+/** An edge in a connection. */
+export type ReviewEdge = {
+  __typename?: "ReviewEdge";
+  /** A cursor for use in pagination. */
+  cursor: Scalars["String"];
+  /** The item at the end of the edge. */
+  node?: Maybe<Review>;
+};
+
 export type ReviewLike = Node & {
   __typename?: "ReviewLike";
   createdAt: Scalars["ISO8601DateTime"];
+  /** ID of the object. */
   id: Scalars["ID"];
   liker: Profile;
   review: Review;
@@ -185,6 +267,18 @@ export type GameQuery = {
       createdAt: string;
     }>;
   };
+};
+
+export type MeQueryVariables = Exact<{ [key: string]: never }>;
+
+export type MeQuery = {
+  __typename?: "Query";
+  me?: {
+    __typename?: "Profile";
+    id: string;
+    displayName: string;
+    photoUrl: string;
+  } | null;
 };
 
 export const GameDocument = {
@@ -265,3 +359,30 @@ export const GameDocument = {
     },
   ],
 } as unknown as DocumentNode<GameQuery, GameQueryVariables>;
+export const MeDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "me" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "me" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "displayName" } },
+                { kind: "Field", name: { kind: "Name", value: "photoUrl" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<MeQuery, MeQueryVariables>;

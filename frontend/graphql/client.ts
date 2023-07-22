@@ -10,7 +10,7 @@ const httpLink = createHttpLink({
   uri: process.env["NEXT_PUBLIC_GRAPHQL_ENDPOINT_URL"],
 });
 
-const generateAuthLink = (token: string | undefined) => {
+const generateAuthLink = (token: string | null) => {
   return setContext((_, { headers }) => {
     return {
       headers: {
@@ -21,7 +21,7 @@ const generateAuthLink = (token: string | undefined) => {
   });
 };
 
-export const createApolloClient = (token: string | undefined) => {
+export const createApolloClient = (token: string | null) => {
   const authLink = generateAuthLink(token);
   return new ApolloClient({
     ssrMode: typeof window === "undefined",
