@@ -1,9 +1,20 @@
+import { graphql } from "@/graphql/generated";
 import { MeDocument, MeQuery } from "@/graphql/generated/graphql";
 import { useQuery } from "@apollo/client";
 import { ReactNode, createContext } from "react";
 
+export const meQuery = graphql(`
+  query me {
+    me {
+      id
+      displayName
+      photoUrl
+    }
+  }
+`);
+
 type MeContextType = {
-  me: MeQuery["me"] | null; // Userも多分必要なので後で考える
+  me: MeQuery["me"];
   loading: boolean;
   error: any;
 };

@@ -13,12 +13,12 @@ import { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-  "\n  query game($gameId: ID!) {\n    game(id: $gameId) {\n      id\n      title\n      imageUrl\n      reviewsCount\n      clipsCount\n      publishedAt\n      ratingAverage\n      reviews {\n        body\n        rating\n        createdAt\n      }\n    }\n  }\n":
-    types.GameDocument,
-  "\n  query games($first: Int, $last: Int, $before: String, $after: String) {\n    games(first: $first, last: $last, before: $before, after: $after) {\n      nodes {\n        id\n        title\n        imageUrl\n        reviewsCount\n        clipsCount\n        publishedAt\n        ratingAverage\n      }\n    }\n  }\n":
-    types.GamesDocument,
+  "\n  fragment ReviewListItemFragment on Review {\n    id\n    body\n    rating\n    createdAt\n  }\n":
+    types.ReviewListItemFragmentFragmentDoc,
   "\n  query me {\n    me {\n      id\n      displayName\n      photoUrl\n    }\n  }\n":
     types.MeDocument,
+  "\n  query game($gameId: ID!) {\n    game(id: $gameId) {\n      id\n      title\n      imageUrl\n      reviewsCount\n      clipsCount\n      publishedAt\n      ratingAverage\n      reviews {\n        ...ReviewListItemFragment\n      }\n    }\n  }\n":
+    types.GameDocument,
 };
 
 /**
@@ -39,20 +39,20 @@ export function graphql(source: string): unknown;
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  query game($gameId: ID!) {\n    game(id: $gameId) {\n      id\n      title\n      imageUrl\n      reviewsCount\n      clipsCount\n      publishedAt\n      ratingAverage\n      reviews {\n        body\n        rating\n        createdAt\n      }\n    }\n  }\n"
-): (typeof documents)["\n  query game($gameId: ID!) {\n    game(id: $gameId) {\n      id\n      title\n      imageUrl\n      reviewsCount\n      clipsCount\n      publishedAt\n      ratingAverage\n      reviews {\n        body\n        rating\n        createdAt\n      }\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
-  source: "\n  query games($first: Int, $last: Int, $before: String, $after: String) {\n    games(first: $first, last: $last, before: $before, after: $after) {\n      nodes {\n        id\n        title\n        imageUrl\n        reviewsCount\n        clipsCount\n        publishedAt\n        ratingAverage\n      }\n    }\n  }\n"
-): (typeof documents)["\n  query games($first: Int, $last: Int, $before: String, $after: String) {\n    games(first: $first, last: $last, before: $before, after: $after) {\n      nodes {\n        id\n        title\n        imageUrl\n        reviewsCount\n        clipsCount\n        publishedAt\n        ratingAverage\n      }\n    }\n  }\n"];
+  source: "\n  fragment ReviewListItemFragment on Review {\n    id\n    body\n    rating\n    createdAt\n  }\n"
+): (typeof documents)["\n  fragment ReviewListItemFragment on Review {\n    id\n    body\n    rating\n    createdAt\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
   source: "\n  query me {\n    me {\n      id\n      displayName\n      photoUrl\n    }\n  }\n"
 ): (typeof documents)["\n  query me {\n    me {\n      id\n      displayName\n      photoUrl\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  query game($gameId: ID!) {\n    game(id: $gameId) {\n      id\n      title\n      imageUrl\n      reviewsCount\n      clipsCount\n      publishedAt\n      ratingAverage\n      reviews {\n        ...ReviewListItemFragment\n      }\n    }\n  }\n"
+): (typeof documents)["\n  query game($gameId: ID!) {\n    game(id: $gameId) {\n      id\n      title\n      imageUrl\n      reviewsCount\n      clipsCount\n      publishedAt\n      ratingAverage\n      reviews {\n        ...ReviewListItemFragment\n      }\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
