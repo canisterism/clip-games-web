@@ -25,6 +25,19 @@ export const gameWithReviewsQuery = gql`
       clipsCount
       publishedAt
       ratingAverage
+      price
+      genres {
+        id
+        name
+      }
+      publisher {
+        id
+        name
+      }
+      platforms {
+        id
+        name
+      }
       reviews {
         ...ReviewListItemFragment
       }
@@ -71,14 +84,46 @@ export function Game({ game }: PageProps) {
         </div>
         <div className="flex flex-col gap-3 text-gray-100">
           <div className="flex flex-col gap-2">
+            {/* Title */}
             <h1 className="text-3xl font-bold">{game.title}</h1>
+            {/* PublishedAt */}
             {game.publishedAt && (
               <h3 className="text-lg">
                 発売日：{format(new Date(game.publishedAt), "yyyy-MM-dd")}
               </h3>
             )}
           </div>
-          <RatingStars ratingAverage={game.ratingAverage} size="lg" />
+          {/* Rating */}
+          <div className="flex gap-2 items-end">
+            <RatingStars ratingAverage={game.ratingAverage} size="lg" />
+            <div className="text-3xl font-bold">
+              {game.ratingAverage.toFixed(1)}
+            </div>
+          </div>
+          <div className="flex flex-col gap-1">
+            {/* Price */}
+            <div className="">{game.price}円</div>
+            {/* Genres */}
+            <div className="flex gap-2">
+              {game.genres.map((genre) => (
+                <div key={genre.id} className="text-lg">
+                  {genre.name}
+                </div>
+              ))}
+            </div>
+            <div className="flex gap-1">
+              {/* Publisher */}
+              <div className="text-lg">{game.publisher.name}</div> |
+              {/* Platforms */}
+              <div className="flex gap-2">
+                {game.platforms.map((platform) => (
+                  <div key={platform.id} className="text-lg">
+                    {platform.name}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

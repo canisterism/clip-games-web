@@ -280,6 +280,14 @@ export type GameQuery = {
     clipsCount: number;
     publishedAt?: string | null;
     ratingAverage: number;
+    price?: number | null;
+    genres: Array<{ __typename?: "Genre"; id: string; name?: string | null }>;
+    publisher: { __typename?: "Publisher"; id: string; name?: string | null };
+    platforms: Array<{
+      __typename?: "Platform";
+      id: string;
+      name?: string | null;
+    }>;
     reviews: Array<
       { __typename?: "Review" } & {
         " $fragmentRefs"?: {
@@ -390,6 +398,40 @@ export const GameDocument = {
                 {
                   kind: "Field",
                   name: { kind: "Name", value: "ratingAverage" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "price" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "genres" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "publisher" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "platforms" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                    ],
+                  },
                 },
                 {
                   kind: "Field",

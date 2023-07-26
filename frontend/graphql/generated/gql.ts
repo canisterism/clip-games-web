@@ -17,7 +17,7 @@ const documents = {
     types.ReviewListItemFragmentFragmentDoc,
   "\n  query me {\n    me {\n      id\n      displayName\n      photoUrl\n    }\n  }\n":
     types.MeDocument,
-  "\n  query game($gameId: ID!) {\n    game(id: $gameId) {\n      id\n      title\n      imageUrl\n      reviewsCount\n      clipsCount\n      publishedAt\n      ratingAverage\n      reviews {\n        ...ReviewListItemFragment\n      }\n    }\n  }\n":
+  "\n  query game($gameId: ID!) {\n    game(id: $gameId) {\n      id\n      title\n      imageUrl\n      reviewsCount\n      clipsCount\n      publishedAt\n      ratingAverage\n      price\n      genres {\n        id\n        name\n      }\n      publisher {\n        id\n        name\n      }\n      platforms {\n        id\n        name\n      }\n      reviews {\n        ...ReviewListItemFragment\n      }\n    }\n  }\n":
     types.GameDocument,
 };
 
@@ -51,8 +51,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  query game($gameId: ID!) {\n    game(id: $gameId) {\n      id\n      title\n      imageUrl\n      reviewsCount\n      clipsCount\n      publishedAt\n      ratingAverage\n      reviews {\n        ...ReviewListItemFragment\n      }\n    }\n  }\n"
-): (typeof documents)["\n  query game($gameId: ID!) {\n    game(id: $gameId) {\n      id\n      title\n      imageUrl\n      reviewsCount\n      clipsCount\n      publishedAt\n      ratingAverage\n      reviews {\n        ...ReviewListItemFragment\n      }\n    }\n  }\n"];
+  source: "\n  query game($gameId: ID!) {\n    game(id: $gameId) {\n      id\n      title\n      imageUrl\n      reviewsCount\n      clipsCount\n      publishedAt\n      ratingAverage\n      price\n      genres {\n        id\n        name\n      }\n      publisher {\n        id\n        name\n      }\n      platforms {\n        id\n        name\n      }\n      reviews {\n        ...ReviewListItemFragment\n      }\n    }\n  }\n"
+): (typeof documents)["\n  query game($gameId: ID!) {\n    game(id: $gameId) {\n      id\n      title\n      imageUrl\n      reviewsCount\n      clipsCount\n      publishedAt\n      ratingAverage\n      price\n      genres {\n        id\n        name\n      }\n      publisher {\n        id\n        name\n      }\n      platforms {\n        id\n        name\n      }\n      reviews {\n        ...ReviewListItemFragment\n      }\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
