@@ -1,8 +1,6 @@
 "use client";
 
-import { classNames } from "@/lib/classNames";
-import { StarIcon } from "@heroicons/react/20/solid";
-
+import RatingStars from "@/components/Game/RatingStars";
 import Image from "next/image";
 import Link from "next/link";
 import { useHits } from "react-instantsearch-hooks-web";
@@ -59,24 +57,6 @@ function Hit({ hit: game }: { hit: any }) {
           </p>
         </div>
       </div>
-    </div>
-  );
-}
-function RatingStars({ ratingAverage }: { ratingAverage: number }) {
-  return (
-    <div className="flex items-start">
-      {[0, 1, 2, 3, 4].map((rating) => (
-        <StarIcon
-          key={rating}
-          className={classNames(
-            Math.floor(ratingAverage) > rating
-              ? "text-yellow-400"
-              : "text-gray-100",
-            "h-5 w-5 flex-shrink-0"
-          )}
-          aria-hidden="true"
-        />
-      ))}
     </div>
   );
 }

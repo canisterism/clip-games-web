@@ -1,12 +1,14 @@
-import { ListItem as ReviewListItem } from "@/components/Review/ListItem";
+import GameImage from "@/components/Game/GameImage";
+import RatingStars from "@/components/Game/RatingStars";
+import StatButton from "@/components/StatButton";
 import { createApolloClient } from "@/graphql/client";
 import { GameDocument, GameQuery } from "@/graphql/generated/graphql";
 import { gql } from "@apollo/client";
+import { BookmarkIcon, PaintBrushIcon } from "@heroicons/react/20/solid";
 import { format } from "date-fns";
 import { GetServerSideProps } from "next";
 import { withUserTokenSSR } from "next-firebase-auth";
 import Head from "next/head";
-import Image from "next/image";
 
 type PageProps = {
   game: GameQuery["game"];
@@ -39,41 +41,44 @@ export function Game({ game }: PageProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="mx-8 my-4">
-        <div className="flex gap-5">
-          <div className="flex-col">
-            <div className="relative h-96 w-64">
-              <Image
-                src={game.imageUrl || ""}
-                alt={game.title}
-                objectFit="cover"
-                layout="fill"
+      <div className="flex gap-5 mx-8 my-4">
+        <div className="flex-col">
+          <GameImage imageUrl={game.imageUrl || undefined} title={game.title} />
+          <StatButton
+            icon={
+              <PaintBrushIcon
+                className="-ml-0.5 h-5 w-5 text-gray-400"
+                aria-hidden="true"
               />
-            </div>
-            <div className="flex-row gap-2">
-              <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                {game.reviewsCount}
-              </button>
-              <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                {game.clipsCount}
-              </button>
-            </div>
-          </div>
-          <div className="text-white flex-col ">
-            <h1 className="text-2xl font-bold text-gray-100">{game.title}</h1>
+            }
+            label="レビュー"
+            stat={`${game.reviewsCount}`}
+            onClick={() => {
+              console.log("レビュー");
+            }}
+          />
+
+          <StatButton
+            icon={
+              <BookmarkIcon
+                className="-ml-0.5 h-5 w-5 text-gray-400"
+                aria-hidden="true"
+              />
+            }
+            label="クリップ"
+            stat={`${game.clipsCount}`}
+          />
+        </div>
+        <div className="flex flex-col gap-3 text-gray-100">
+          <div className="flex flex-col gap-2">
+            <h1 className="text-3xl font-bold">{game.title}</h1>
             {game.publishedAt && (
-              <h3>
+              <h3 className="text-lg">
                 発売日：{format(new Date(game.publishedAt), "yyyy-MM-dd")}
               </h3>
             )}
-            {game.ratingAverage}
           </div>
-          {/* Reviews */}
-          <div className="flex-col">
-            {game.reviews.map((review, i) => (
-              <ReviewListItem key={i} review={review} />
-            ))}
-          </div>
+          <RatingStars ratingAverage={game.ratingAverage} size="lg" />
         </div>
       </div>
     </div>
