@@ -54,9 +54,17 @@ export function Game({ game }: PageProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="flex gap-5 mx-8 my-4">
-        <div className="flex-col">
-          <GameImage imageUrl={game.imageUrl || undefined} title={game.title} />
+      <GameInfoHero game={game} />
+    </div>
+  );
+}
+
+function GameInfoHero({ game }: { game: GameQuery["game"] }) {
+  return (
+    <div className="flex justify-between ">
+      <div className="w-2/5flex flex-col gap-4">
+        <GameImage imageUrl={game.imageUrl || undefined} title={game.title} />
+        <div className="flex gap-4">
           <StatButton
             icon={
               <PaintBrushIcon
@@ -70,7 +78,6 @@ export function Game({ game }: PageProps) {
               console.log("レビュー");
             }}
           />
-
           <StatButton
             icon={
               <BookmarkIcon
@@ -82,46 +89,46 @@ export function Game({ game }: PageProps) {
             stat={`${game.clipsCount}`}
           />
         </div>
-        <div className="flex flex-col gap-3 text-gray-100">
-          <div className="flex flex-col gap-2">
-            {/* Title */}
-            <h1 className="text-3xl font-bold">{game.title}</h1>
-            {/* PublishedAt */}
-            {game.publishedAt && (
-              <h3 className="text-lg">
-                発売日：{format(new Date(game.publishedAt), "yyyy-MM-dd")}
-              </h3>
-            )}
+      </div>
+      <div className="flex flex-col w-3/5 gap-3 text-gray-100 ">
+        <div className="flex flex-col gap-2">
+          {/* Title */}
+          <h1 className="text-3xl font-bold">{game.title}</h1>
+          {/* PublishedAt */}
+          {game.publishedAt && (
+            <h3 className="text-lg">
+              発売日：{format(new Date(game.publishedAt), "yyyy-MM-dd")}
+            </h3>
+          )}
+        </div>
+        {/* Rating */}
+        <div className="flex gap-2 items-end">
+          <RatingStars ratingAverage={game.ratingAverage} size="lg" />
+          <div className="text-3xl font-bold">
+            {game.ratingAverage.toFixed(1)}
           </div>
-          {/* Rating */}
-          <div className="flex gap-2 items-end">
-            <RatingStars ratingAverage={game.ratingAverage} size="lg" />
-            <div className="text-3xl font-bold">
-              {game.ratingAverage.toFixed(1)}
-            </div>
+        </div>
+        <div className="flex flex-col gap-1">
+          {/* Price */}
+          <div className="">{game.price}円</div>
+          {/* Genres */}
+          <div className="flex gap-2">
+            {game.genres.map((genre) => (
+              <div key={genre.id} className="text-lg">
+                {genre.name}
+              </div>
+            ))}
           </div>
-          <div className="flex flex-col gap-1">
-            {/* Price */}
-            <div className="">{game.price}円</div>
-            {/* Genres */}
+          <div className="flex gap-1">
+            {/* Publisher */}
+            <div className="text-lg">{game.publisher.name}</div> |
+            {/* Platforms */}
             <div className="flex gap-2">
-              {game.genres.map((genre) => (
-                <div key={genre.id} className="text-lg">
-                  {genre.name}
+              {game.platforms.map((platform) => (
+                <div key={platform.id} className="text-lg">
+                  {platform.name}
                 </div>
               ))}
-            </div>
-            <div className="flex gap-1">
-              {/* Publisher */}
-              <div className="text-lg">{game.publisher.name}</div> |
-              {/* Platforms */}
-              <div className="flex gap-2">
-                {game.platforms.map((platform) => (
-                  <div key={platform.id} className="text-lg">
-                    {platform.name}
-                  </div>
-                ))}
-              </div>
             </div>
           </div>
         </div>
