@@ -2,10 +2,10 @@ import { classNames } from "@/lib/classNames";
 import { StarIcon } from "@heroicons/react/20/solid";
 
 export default function RatingStars({
-  ratingAverage,
+  rating,
   size = "md",
 }: {
-  ratingAverage: number;
+  rating: number;
   size: "sm" | "md" | "lg";
 }) {
   const sizeClass = {
@@ -16,13 +16,11 @@ export default function RatingStars({
 
   return (
     <div className="flex items-start">
-      {[0, 1, 2, 3, 4].map((rating) => (
+      {[0, 1, 2, 3, 4].map((n) => (
         <StarIcon
-          key={rating}
+          key={n}
           className={classNames(
-            Math.floor(ratingAverage) > rating
-              ? "text-yellow-400"
-              : "text-gray-100",
+            Math.floor(rating) > n ? "text-yellow-400" : "text-gray-100",
             `${sizeClass} flex-shrink-0`
           )}
           aria-hidden="true"

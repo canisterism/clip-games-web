@@ -1,5 +1,6 @@
 import GameImage from "@/components/Game/GameImage";
 import RatingStars from "@/components/Game/RatingStars";
+import { ReviewListItem } from "@/components/Review/ReviewListItem";
 import StatButton from "@/components/StatButton";
 import { createApolloClient } from "@/graphql/client";
 import { GameDocument, GameQuery } from "@/graphql/generated/graphql";
@@ -54,15 +55,18 @@ export function Game({ game }: PageProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <GameInfoHero game={game} />
+      <div className="flex flex-col gap-10">
+        <GameInfoHero game={game} />
+        <ReviewsArea reviews={game.reviews} />
+      </div>
     </div>
   );
 }
 
 function GameInfoHero({ game }: { game: GameQuery["game"] }) {
   return (
-    <div className="flex justify-between ">
-      <div className="w-2/5flex flex-col gap-4">
+    <div className="flex gap-10">
+      <div className="w-2/5 flex flex-col gap-4">
         <GameImage imageUrl={game.imageUrl || undefined} title={game.title} />
         <div className="flex gap-4">
           <StatButton
@@ -90,7 +94,7 @@ function GameInfoHero({ game }: { game: GameQuery["game"] }) {
           />
         </div>
       </div>
-      <div className="flex flex-col w-3/5 gap-3 text-gray-100 ">
+      <div className="flex flex-col w-3/5 gap-3 text-gray-100">
         <div className="flex flex-col gap-2">
           {/* Title */}
           <h1 className="text-3xl font-bold">{game.title}</h1>
@@ -103,7 +107,7 @@ function GameInfoHero({ game }: { game: GameQuery["game"] }) {
         </div>
         {/* Rating */}
         <div className="flex gap-2 items-end">
-          <RatingStars ratingAverage={game.ratingAverage} size="lg" />
+          <RatingStars rating={game.ratingAverage} size="lg" />
           <div className="text-3xl font-bold">
             {game.ratingAverage.toFixed(1)}
           </div>
@@ -132,6 +136,19 @@ function GameInfoHero({ game }: { game: GameQuery["game"] }) {
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function ReviewsArea({ reviews }: { reviews: GameQuery["game"]["reviews"] }) {
+  return (
+    <div className="flex flex-col gap-4">
+      <h2 className="text-3xl font-bold text-gray-100">レビュー</h2>
+      <div className="flex flex-col gap-4">
+        {reviews.map((review, i) => (
+          <ReviewListItem key={`review-${i}`} review={review} />
+        ))}
       </div>
     </div>
   );

@@ -251,6 +251,12 @@ export type ReviewListItemFragmentFragment = {
   body: string;
   rating: number;
   createdAt: string;
+  profile: {
+    __typename?: "Profile";
+    id: string;
+    displayName: string;
+    photoUrl: string;
+  };
 } & { " $fragmentName"?: "ReviewListItemFragmentFragment" };
 
 export type MeQueryVariables = Exact<{ [key: string]: never }>;
@@ -315,6 +321,18 @@ export const ReviewListItemFragmentFragmentDoc = {
           { kind: "Field", name: { kind: "Name", value: "body" } },
           { kind: "Field", name: { kind: "Name", value: "rating" } },
           { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "profile" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "displayName" } },
+                { kind: "Field", name: { kind: "Name", value: "photoUrl" } },
+              ],
+            },
+          },
         ],
       },
     },
@@ -466,6 +484,18 @@ export const GameDocument = {
           { kind: "Field", name: { kind: "Name", value: "body" } },
           { kind: "Field", name: { kind: "Name", value: "rating" } },
           { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "profile" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "displayName" } },
+                { kind: "Field", name: { kind: "Name", value: "photoUrl" } },
+              ],
+            },
+          },
         ],
       },
     },
