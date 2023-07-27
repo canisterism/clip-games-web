@@ -245,6 +245,32 @@ export type ReviewLike = Node & {
   updatedAt: Scalars["ISO8601DateTime"];
 };
 
+export type ReviewListItemFragmentFragment = {
+  __typename?: "Review";
+  id: string;
+  body: string;
+  rating: number;
+  createdAt: string;
+  profile: {
+    __typename?: "Profile";
+    id: string;
+    displayName: string;
+    photoUrl: string;
+  };
+} & { " $fragmentName"?: "ReviewListItemFragmentFragment" };
+
+export type MeQueryVariables = Exact<{ [key: string]: never }>;
+
+export type MeQuery = {
+  __typename?: "Query";
+  me?: {
+    __typename?: "Profile";
+    id: string;
+    displayName: string;
+    photoUrl: string;
+  } | null;
+};
+
 export type GameQueryVariables = Exact<{
   gameId: Scalars["ID"];
 }>;
@@ -260,51 +286,85 @@ export type GameQuery = {
     clipsCount: number;
     publishedAt?: string | null;
     ratingAverage: number;
-    reviews: Array<{
-      __typename?: "Review";
-      body: string;
-      rating: number;
-      createdAt: string;
-    }>;
-  };
-};
-
-export type GamesQueryVariables = Exact<{
-  first?: InputMaybe<Scalars["Int"]>;
-  last?: InputMaybe<Scalars["Int"]>;
-  before?: InputMaybe<Scalars["String"]>;
-  after?: InputMaybe<Scalars["String"]>;
-}>;
-
-export type GamesQuery = {
-  __typename?: "Query";
-  games: {
-    __typename?: "GameConnection";
-    nodes?: Array<{
-      __typename?: "Game";
+    price?: number | null;
+    genres: Array<{ __typename?: "Genre"; id: string; name?: string | null }>;
+    publisher: { __typename?: "Publisher"; id: string; name?: string | null };
+    platforms: Array<{
+      __typename?: "Platform";
       id: string;
-      title: string;
-      imageUrl?: string | null;
-      reviewsCount: number;
-      clipsCount: number;
-      publishedAt?: string | null;
-      ratingAverage: number;
-    } | null> | null;
+      name?: string | null;
+    }>;
+    reviews: Array<
+      { __typename?: "Review" } & {
+        " $fragmentRefs"?: {
+          ReviewListItemFragmentFragment: ReviewListItemFragmentFragment;
+        };
+      }
+    >;
   };
 };
 
-export type MeQueryVariables = Exact<{ [key: string]: never }>;
-
-export type MeQuery = {
-  __typename?: "Query";
-  me?: {
-    __typename?: "Profile";
-    id: string;
-    displayName: string;
-    photoUrl: string;
-  } | null;
-};
-
+export const ReviewListItemFragmentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "ReviewListItemFragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Review" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "body" } },
+          { kind: "Field", name: { kind: "Name", value: "rating" } },
+          { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "profile" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "displayName" } },
+                { kind: "Field", name: { kind: "Name", value: "photoUrl" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<ReviewListItemFragmentFragment, unknown>;
+export const MeDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "me" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "me" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "displayName" } },
+                { kind: "Field", name: { kind: "Name", value: "photoUrl" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<MeQuery, MeQueryVariables>;
 export const GameDocument = {
   kind: "Document",
   definitions: [
@@ -357,20 +417,49 @@ export const GameDocument = {
                   kind: "Field",
                   name: { kind: "Name", value: "ratingAverage" },
                 },
+                { kind: "Field", name: { kind: "Name", value: "price" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "genres" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "publisher" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "platforms" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                    ],
+                  },
+                },
                 {
                   kind: "Field",
                   name: { kind: "Name", value: "reviews" },
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
-                      { kind: "Field", name: { kind: "Name", value: "body" } },
                       {
-                        kind: "Field",
-                        name: { kind: "Name", value: "rating" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "createdAt" },
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "ReviewListItemFragment" },
                       },
                     ],
                   },
@@ -381,141 +470,23 @@ export const GameDocument = {
         ],
       },
     },
-  ],
-} as unknown as DocumentNode<GameQuery, GameQueryVariables>;
-export const GamesDocument = {
-  kind: "Document",
-  definitions: [
     {
-      kind: "OperationDefinition",
-      operation: "query",
-      name: { kind: "Name", value: "games" },
-      variableDefinitions: [
-        {
-          kind: "VariableDefinition",
-          variable: {
-            kind: "Variable",
-            name: { kind: "Name", value: "first" },
-          },
-          type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
-        },
-        {
-          kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "last" } },
-          type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
-        },
-        {
-          kind: "VariableDefinition",
-          variable: {
-            kind: "Variable",
-            name: { kind: "Name", value: "before" },
-          },
-          type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
-        },
-        {
-          kind: "VariableDefinition",
-          variable: {
-            kind: "Variable",
-            name: { kind: "Name", value: "after" },
-          },
-          type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
-        },
-      ],
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "games" },
-            arguments: [
-              {
-                kind: "Argument",
-                name: { kind: "Name", value: "first" },
-                value: {
-                  kind: "Variable",
-                  name: { kind: "Name", value: "first" },
-                },
-              },
-              {
-                kind: "Argument",
-                name: { kind: "Name", value: "last" },
-                value: {
-                  kind: "Variable",
-                  name: { kind: "Name", value: "last" },
-                },
-              },
-              {
-                kind: "Argument",
-                name: { kind: "Name", value: "before" },
-                value: {
-                  kind: "Variable",
-                  name: { kind: "Name", value: "before" },
-                },
-              },
-              {
-                kind: "Argument",
-                name: { kind: "Name", value: "after" },
-                value: {
-                  kind: "Variable",
-                  name: { kind: "Name", value: "after" },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "nodes" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      { kind: "Field", name: { kind: "Name", value: "id" } },
-                      { kind: "Field", name: { kind: "Name", value: "title" } },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "imageUrl" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "reviewsCount" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "clipsCount" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "publishedAt" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "ratingAverage" },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "ReviewListItemFragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Review" },
       },
-    },
-  ],
-} as unknown as DocumentNode<GamesQuery, GamesQueryVariables>;
-export const MeDocument = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "OperationDefinition",
-      operation: "query",
-      name: { kind: "Name", value: "me" },
       selectionSet: {
         kind: "SelectionSet",
         selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "body" } },
+          { kind: "Field", name: { kind: "Name", value: "rating" } },
+          { kind: "Field", name: { kind: "Name", value: "createdAt" } },
           {
             kind: "Field",
-            name: { kind: "Name", value: "me" },
+            name: { kind: "Name", value: "profile" },
             selectionSet: {
               kind: "SelectionSet",
               selections: [
@@ -529,4 +500,4 @@ export const MeDocument = {
       },
     },
   ],
-} as unknown as DocumentNode<MeQuery, MeQueryVariables>;
+} as unknown as DocumentNode<GameQuery, GameQueryVariables>;

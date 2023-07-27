@@ -77,7 +77,7 @@ const SideBarLayout: React.FC<Props> = ({ children }) => {
             </div>
           </div>
 
-          <main className="py-10">
+          <main className="mx-auto py-10 max-w-5xl">
             <div className="px-4 sm:px-6 lg:px-8">{children}</div>
           </main>
         </div>

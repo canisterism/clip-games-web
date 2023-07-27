@@ -4,7 +4,6 @@ module Types
   class PlatformType < Types::BaseObject
     implements GraphQL::Types::Relay::Node
     field :name, String
-    field :published_at, GraphQL::Types::ISO8601DateTime
     field :games, [Types::GameType], null: false
 
     def games
