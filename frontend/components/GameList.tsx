@@ -48,7 +48,7 @@ function Hit({ hit: game }: { hit: any }) {
         </h3>
         <div className="mt-3 flex flex-col items-start">
           <p className="sr-only">{game.ratingAverage} out of 5 stars</p>
-          <RatingStars ratingAverage={game.ratingTotal / game.ratingCount} />
+          <RatingStars rating={game.ratingTotal / game.ratingCount} size="sm" />
           <p className="mt-1 text-sm text-gray-500">
             {game.reviewCount || 0} reviews
           </p>
