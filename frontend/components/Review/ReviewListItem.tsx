@@ -41,9 +41,9 @@ export function ReviewListItem(props: Props) {
         </span>
       </div>
       <div className="gap-1">
-        <p>{review.body}</p>
+        <p className="text-gray-300">{review.body}</p>
         <span className="text-gray-400 text-sm">
-          投稿日：{format(new Date(review.createdAt), "yyyy-MM-dd")}
+          投稿日：{format(new Date(review.createdAt), "yyyy/MM/dd")}
         </span>
       </div>
     </div>

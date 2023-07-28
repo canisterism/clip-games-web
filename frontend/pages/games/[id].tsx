@@ -101,7 +101,7 @@ function GameInfoHero({ game }: { game: GameQuery["game"] }) {
           {/* PublishedAt */}
           {game.publishedAt && (
             <h3 className="text-lg">
-              発売日：{format(new Date(game.publishedAt), "yyyy-MM-dd")}
+              発売日：{format(new Date(game.publishedAt), "yyyy/MM/dd")}
             </h3>
           )}
         </div>
