@@ -109,7 +109,7 @@ function GameInfoHero({ game }: { game: GameQuery["game"] }) {
         <div className="flex gap-2 items-end">
           <RatingStars rating={game.ratingAverage} size="lg" />
           <div className="text-3xl font-bold">
-            {game.ratingAverage.toFixed(1)}
+            {game.ratingAverage?.toFixed(1) || "-"}
           </div>
         </div>
         <div className="flex flex-col gap-1">
