@@ -1,6 +1,7 @@
 import GameImage from "@/components/Game/GameImage";
 import RatingStars from "@/components/Game/RatingStars";
 import { ReviewListItem } from "@/components/Review/ReviewListItem";
+import PostReviewModal from "@/components/Review/ReviewModalPresentation";
 import StatButton from "@/components/StatButton";
 import { createApolloClient } from "@/graphql/client";
 import { GameDocument, GameQuery } from "@/graphql/generated/graphql";
@@ -10,6 +11,7 @@ import { format } from "date-fns";
 import { GetServerSideProps } from "next";
 import { withUserTokenSSR } from "next-firebase-auth";
 import Head from "next/head";
+import { useState } from "react";
 
 type PageProps = {
   game: GameQuery["game"];
@@ -64,6 +66,7 @@ export function Game({ game }: PageProps) {
 }
 
 function GameInfoHero({ game }: { game: GameQuery["game"] }) {
+  const [isReviewDialogOpen, setIsReviewDialogOpen] = useState(false);
   return (
     <div className="flex gap-10">
       <div className="w-2/5 flex flex-col gap-4">
@@ -78,9 +81,7 @@ function GameInfoHero({ game }: { game: GameQuery["game"] }) {
             }
             label="レビュー"
             stat={`${game.reviewsCount}`}
-            onClick={() => {
-              console.log("レビュー");
-            }}
+            onClick={() => setIsReviewDialogOpen(true)}
           />
           <StatButton
             icon={
@@ -137,6 +138,16 @@ function GameInfoHero({ game }: { game: GameQuery["game"] }) {
           </div>
         </div>
       </div>
+      {/* 後でコンテナでラップする */}
+      <PostReviewModal
+        body={undefined}
+        rating={undefined}
+        isOpen={isReviewDialogOpen}
+        setIsOpen={setIsReviewDialogOpen}
+        onSubmit={(review) => {
+          console.log({ review });
+        }}
+      />
     </div>
   );
 }
