@@ -309,6 +309,30 @@ export type UpdateReviewPayload = {
   review?: Maybe<Review>;
 };
 
+export type PostReviewMutationVariables = Exact<{
+  input: PostReviewInput;
+}>;
+
+export type PostReviewMutation = {
+  __typename?: "Mutation";
+  postReview?: {
+    __typename?: "PostReviewPayload";
+    review?: {
+      __typename?: "Review";
+      id: string;
+      body: string;
+      rating: number;
+      createdAt: string;
+      profile: {
+        __typename?: "Profile";
+        id: string;
+        displayName: string;
+        photoUrl: string;
+      };
+    } | null;
+  } | null;
+};
+
 export type ReviewListItemFragmentFragment = {
   __typename?: "Review";
   id: string;
@@ -402,6 +426,96 @@ export const ReviewListItemFragmentFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<ReviewListItemFragmentFragment, unknown>;
+export const PostReviewDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "postReview" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "input" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "PostReviewInput" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "postReview" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "input" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "input" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "review" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "body" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "rating" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "profile" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "displayName" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "photoUrl" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<PostReviewMutation, PostReviewMutationVariables>;
 export const MeDocument = {
   kind: "Document",
   definitions: [

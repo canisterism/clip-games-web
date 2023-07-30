@@ -1,7 +1,7 @@
 import GameImage from "@/components/Game/GameImage";
 import RatingStars from "@/components/Game/RatingStars";
+import PostReviewModal from "@/components/Review/PostReviewModal";
 import { ReviewListItem } from "@/components/Review/ReviewListItem";
-import PostReviewModal from "@/components/Review/ReviewModalPresentation";
 import StatButton from "@/components/StatButton";
 import { createApolloClient } from "@/graphql/client";
 import { GameDocument, GameQuery } from "@/graphql/generated/graphql";
@@ -140,13 +140,9 @@ function GameInfoHero({ game }: { game: GameQuery["game"] }) {
       </div>
       {/* 後でコンテナでラップする */}
       <PostReviewModal
-        body={undefined}
-        rating={undefined}
+        gameId={game.id}
         isOpen={isReviewDialogOpen}
         setIsOpen={setIsReviewDialogOpen}
-        onSubmit={(review) => {
-          console.log({ review });
-        }}
       />
     </div>
   );
