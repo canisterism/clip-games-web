@@ -60,6 +60,10 @@ export type Game = Node & {
   /** ID of the object. */
   id: Scalars["ID"];
   imageUrl?: Maybe<Scalars["String"]>;
+  /** クリップしたかどうか */
+  isClipped: Scalars["Boolean"];
+  /** 自分のレビュー */
+  myReview?: Maybe<Review>;
   platforms: Array<Platform>;
   price?: Maybe<Scalars["Float"]>;
   publishedAt?: Maybe<Scalars["ISO8601DateTime"]>;
@@ -309,6 +313,20 @@ export type UpdateReviewPayload = {
   review?: Maybe<Review>;
 };
 
+export type MyReviewFragmentFragment = {
+  __typename?: "Review";
+  id: string;
+  body: string;
+  rating: number;
+  createdAt: string;
+  profile: {
+    __typename?: "Profile";
+    id: string;
+    displayName: string;
+    photoUrl: string;
+  };
+} & { " $fragmentName"?: "MyReviewFragmentFragment" };
+
 export type PostReviewMutationVariables = Exact<{
   input: PostReviewInput;
 }>;
@@ -347,6 +365,30 @@ export type ReviewListItemFragmentFragment = {
   };
 } & { " $fragmentName"?: "ReviewListItemFragmentFragment" };
 
+export type UpdateReviewMutationVariables = Exact<{
+  input: UpdateReviewInput;
+}>;
+
+export type UpdateReviewMutation = {
+  __typename?: "Mutation";
+  updateReview?: {
+    __typename?: "UpdateReviewPayload";
+    review?: {
+      __typename?: "Review";
+      id: string;
+      body: string;
+      rating: number;
+      createdAt: string;
+      profile: {
+        __typename?: "Profile";
+        id: string;
+        displayName: string;
+        photoUrl: string;
+      };
+    } | null;
+  } | null;
+};
+
 export type MeQueryVariables = Exact<{ [key: string]: never }>;
 
 export type MeQuery = {
@@ -382,6 +424,13 @@ export type GameQuery = {
       id: string;
       name?: string | null;
     }>;
+    myReview?:
+      | ({ __typename?: "Review" } & {
+          " $fragmentRefs"?: {
+            MyReviewFragmentFragment: MyReviewFragmentFragment;
+          };
+        })
+      | null;
     reviews: Array<
       { __typename?: "Review" } & {
         " $fragmentRefs"?: {
@@ -392,6 +441,40 @@ export type GameQuery = {
   };
 };
 
+export const MyReviewFragmentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "MyReviewFragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Review" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "body" } },
+          { kind: "Field", name: { kind: "Name", value: "rating" } },
+          { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "profile" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "displayName" } },
+                { kind: "Field", name: { kind: "Name", value: "photoUrl" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<MyReviewFragmentFragment, unknown>;
 export const ReviewListItemFragmentFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -516,6 +599,99 @@ export const PostReviewDocument = {
     },
   ],
 } as unknown as DocumentNode<PostReviewMutation, PostReviewMutationVariables>;
+export const UpdateReviewDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "updateReview" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "input" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "UpdateReviewInput" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "updateReview" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "input" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "input" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "review" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "body" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "rating" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "profile" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "displayName" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "photoUrl" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  UpdateReviewMutation,
+  UpdateReviewMutationVariables
+>;
 export const MeDocument = {
   kind: "Document",
   definitions: [
@@ -631,6 +807,19 @@ export const GameDocument = {
                 },
                 {
                   kind: "Field",
+                  name: { kind: "Name", value: "myReview" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "MyReviewFragment" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
                   name: { kind: "Name", value: "reviews" },
                   selectionSet: {
                     kind: "SelectionSet",
@@ -642,6 +831,35 @@ export const GameDocument = {
                     ],
                   },
                 },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "MyReviewFragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Review" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "body" } },
+          { kind: "Field", name: { kind: "Name", value: "rating" } },
+          { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "profile" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "displayName" } },
+                { kind: "Field", name: { kind: "Name", value: "photoUrl" } },
               ],
             },
           },

@@ -2,6 +2,7 @@ import GameImage from "@/components/Game/GameImage";
 import RatingStars from "@/components/Game/RatingStars";
 import PostReviewModal from "@/components/Review/PostReviewModal";
 import { ReviewListItem } from "@/components/Review/ReviewListItem";
+import UpdateReviewModal from "@/components/Review/UpdateReviewModal";
 import StatButton from "@/components/StatButton";
 import { createApolloClient } from "@/graphql/client";
 import { GameDocument, GameQuery } from "@/graphql/generated/graphql";
@@ -40,6 +41,9 @@ export const gameWithReviewsQuery = gql`
       platforms {
         id
         name
+      }
+      myReview {
+        ...MyReviewFragment
       }
       reviews {
         ...ReviewListItemFragment
@@ -138,12 +142,19 @@ function GameInfoHero({ game }: { game: GameQuery["game"] }) {
           </div>
         </div>
       </div>
-      {/* 後でコンテナでラップする */}
-      <PostReviewModal
-        gameId={game.id}
-        isOpen={isReviewDialogOpen}
-        setIsOpen={setIsReviewDialogOpen}
-      />
+      {game.myReview ? (
+        <UpdateReviewModal
+          myReview={game.myReview}
+          isOpen={isReviewDialogOpen}
+          setIsOpen={setIsReviewDialogOpen}
+        />
+      ) : (
+        <PostReviewModal
+          gameId={game.id}
+          isOpen={isReviewDialogOpen}
+          setIsOpen={setIsReviewDialogOpen}
+        />
+      )}
     </div>
   );
 }
