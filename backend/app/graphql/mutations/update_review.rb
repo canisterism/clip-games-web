@@ -23,4 +23,7 @@ class Mutations::UpdateReview < Mutations::BaseMutation
       raise GraphQL::ExecutionError.new('ログインしてください', extensions: { "code" => "UNAUTHORIZED" })
     end
   end
+  def load_application_object_failed(error)
+    # なんかIDがGlobalIDで入ってこなくてぴえん
+  end
 end

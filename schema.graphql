@@ -48,6 +48,16 @@ type Game implements Node {
   """
   id: ID!
   imageUrl: String
+
+  """
+  クリップしたかどうか
+  """
+  isClipped: Boolean!
+
+  """
+  自分のレビュー
+  """
+  myReview: Review
   platforms: [Platform!]!
   price: Float
   publishedAt: ISO8601DateTime
