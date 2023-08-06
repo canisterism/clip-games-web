@@ -297,6 +297,11 @@ type Query {
   me: Profile
 
   """
+  Find a review by game and profile(from current_user)
+  """
+  myReview(gameId: ID!): Review
+
+  """
   Fetches an object given its ID.
   """
   node(
@@ -363,6 +368,10 @@ type Review implements Node {
   body: String!
   createdAt: ISO8601DateTime!
   game: Game!
+
+  """
+  ID of the object.
+  """
   id: ID!
   likeCount: Int!
   profile: Profile!

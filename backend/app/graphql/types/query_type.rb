@@ -63,6 +63,15 @@ module Types
       Review.find(id)
     end
 
+    field :my_review, Types::ReviewType, null: true do
+      description 'Find a review by game and profile(from current_user)'
+      argument :game_id, ID, required: true, loads: Types::GameType
+    end
+
+    def my_review(game:)
+      Review.find_by(game:, profile_id: context[:current_user]&.id)
+    end
+
     field :reviews, Types::ReviewType.connection_type, null: false do
       description 'Fetch all reviews. filtered by game or profile'
       argument :game_id, ID, required: false
