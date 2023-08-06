@@ -15,11 +15,11 @@ class GraphqlController < ApplicationController
     context = { current_user: }
     result = BackendSchema.execute(query, variables:, context:, operation_name:)
     render json: result
-  # rescue StandardError => e
-  #   Rails.logger.error e.message
-  #   raise e unless Rails.env.development?
+  rescue StandardError => e
+    Rails.logger.error e.message
+    raise e unless Rails.env.development?
 
-  #   handle_error_in_development(e)
+    handle_error_in_development(e)
   end
 
   private
@@ -35,7 +35,6 @@ class GraphqlController < ApplicationController
     # リクエストヘッダーからjwtを取得
     token = request.headers['Authorization'].split(' ').last
 
-    # TODO: あとでmiddlewareでキャッシュする実装にする
     jwks = JwtKeyFetcher.fetch_key
 
     # jwtを検証

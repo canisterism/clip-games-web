@@ -28,7 +28,7 @@ https://docs.gitguardian.com/ggshield-docs/integrations/git-hooks/pre-commit
 
 ```bash
 $ cd backend
-$ rails graphql:schema:dump 
+$ rails graphql:schema:idl 
 ```
 ※ /backendに生成されるが、ルートに移動させないとfrontend側で認識されないので注意
 ### graphqlのコード自動生成

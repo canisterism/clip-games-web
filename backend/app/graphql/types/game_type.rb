@@ -20,7 +20,9 @@ module Types
     field :rating_average, Float, null: false, description: 'レビューの平均評価'
 
     field :reviews, [Types::ReviewType], null: false
+    field :my_review, Types::ReviewType, null: true, description: '自分のレビュー'
     field :clips, [Types::ClipType], null: false
+    field :is_clipped, Boolean, null: false, description: 'クリップしたかどうか'
     field :platforms, [Types::PlatformType], null: false
     field :genres, [Types::GenreType], null: false
     field :publisher, Types::PublisherType, null: false
@@ -29,8 +31,20 @@ module Types
       dataloader.with(Sources::BatchedAssociationsByForeignKey, Review, :game_id).load(object.id)
     end
 
+    def my_review
+      dataloader.with(Sources::BatchedAssociationsByForeignKey, Review, :game_id).load(object.id).then do |reviews|
+        reviews.find { |review| review.profile_id == context[:current_user]&.id }
+      end
+    end
+
     def clips
       dataloader.with(Sources::BatchedAssociationsByForeignKey, Clip, :game_id).load(object.id)
+    end
+
+    def is_clipped
+      dataloader.with(Sources::BatchedAssociationsByForeignKey, Clip, :game_id).load(object.id).then do |clips|
+        clips.any? { |clip| clip.profile_id == context[:current_user]&.id }
+      end
     end
 
     def platforms

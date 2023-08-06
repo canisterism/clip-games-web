@@ -3,7 +3,6 @@
 module Types
   class ReviewType < Types::BaseObject
     implements GraphQL::Types::Relay::Node
-    field :id, ID, null: false
     field :rating, Float, null: false
     field :body, String, null: false
     field :game, Types::GameType, null: false
