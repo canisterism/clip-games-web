@@ -1,21 +1,9 @@
+import { ReviewListItemFragment } from "@/components/Review/ReviewListItem";
 import ReviewModalPresentation from "@/components/Review/ReviewModalPresentation";
-import { FragmentType, graphql, useFragment } from "@/graphql/generated";
+import { FragmentType, useFragment } from "@/graphql/generated";
 import { useMutation } from "@apollo/client";
 import gql from "graphql-tag";
 
-export const MyReviewFragment = graphql(`
-  fragment MyReviewFragment on Review {
-    id
-    body
-    rating
-    createdAt
-    profile {
-      id
-      displayName
-      photoUrl
-    }
-  }
-`);
 export const updateReviewModalMutation = gql`
   mutation updateReview($input: UpdateReviewInput!) {
     updateReview(input: $input) {
@@ -35,17 +23,19 @@ export const updateReviewModalMutation = gql`
 `;
 
 type Props = {
-  myReview: FragmentType<typeof MyReviewFragment>;
+  myReview: FragmentType<typeof ReviewListItemFragment>;
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
+  onSubmitComplete?: () => void;
 };
 
 export default function UpdateReviewModal({
   myReview: myReviewFragment,
   isOpen,
   setIsOpen,
+  onSubmitComplete,
 }: Props) {
-  const myReview = useFragment(MyReviewFragment, myReviewFragment);
+  const myReview = useFragment(ReviewListItemFragment, myReviewFragment);
   console.log({ myReview });
   const [updateReview, { error, data }] = useMutation(
     updateReviewModalMutation
@@ -61,6 +51,7 @@ export default function UpdateReviewModal({
           },
         },
       });
+      onSubmitComplete && onSubmitComplete();
     } catch (error) {
       console.log({ error });
     }

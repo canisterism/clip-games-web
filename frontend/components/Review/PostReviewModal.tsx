@@ -25,10 +25,12 @@ export default function PostReviewModal({
   gameId,
   isOpen,
   setIsOpen,
+  onSubmitComplete,
 }: {
   gameId: string;
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
+  onSubmitComplete?: () => void;
 }) {
   const [postReview, { error, data }] = useMutation(PostReviewDocument);
 
@@ -43,6 +45,7 @@ export default function PostReviewModal({
           },
         },
       });
+      onSubmitComplete && onSubmitComplete();
     } catch (error) {
       console.log({ error });
     }
